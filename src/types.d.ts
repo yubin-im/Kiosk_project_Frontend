@@ -18,10 +18,3 @@ type UserUpdate = {
   userJoinDate: Date;
   userPoint: number;
 };
-
-type Message = {
-  status: string;
-  code: string;
-  message: string;
-  result: null | undefined | { token: string; userId: string };
-};

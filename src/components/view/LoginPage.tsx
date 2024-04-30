@@ -38,7 +38,7 @@ export const LoginPage = () => {
     const status = response.status;
     const code = response.code;
     const message = response.message;
-    const result = response.result;
+    const result: UserToken = response.result as UserToken;
 
     //로그인 성공
     if (status == 'USER_LOGIN') {
