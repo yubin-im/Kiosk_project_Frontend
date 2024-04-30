@@ -1,10 +1,30 @@
-// import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
-// export const Order = () => {
-//   useEffect(() => {
-//     fetch('http://localhost:8080/order')
-//     .
-//     ;
-//   }, []);
-//   return <></>;
-// };
+type Product = {
+  productName: string;
+  productCode: string;
+  productPrice: number;
+};
+export const Order = () => {
+  const [data, setData] = useState<Product[] | null>(null);
+  useEffect(() => {
+    fetch('http://localhost8080/order')
+      .then((res) => {
+        return res.json();
+      })
+      .then((json) => {
+        const dat: Product[] = json.result;
+        setData(dat);
+      });
+  }, []);
+
+  return (
+    <>
+      <ul>
+        {data?.map((item) => (
+          <li key={item.productName}>{item.productName}</li>
+        ))}
+      </ul>
+    </>
+  );
+};

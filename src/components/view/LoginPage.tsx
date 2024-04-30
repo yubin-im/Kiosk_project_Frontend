@@ -34,19 +34,18 @@ export const LoginPage = () => {
     });
 
     const response: Message = await res.json();
-
-    const status = response.status;
-    const code = response.code;
-    const message = response.message;
-    const result: UserToken = response.result as UserToken;
+    const { status, code, message, result: token } = response;
 
     //로그인 성공
     if (status == 'USER_LOGIN') {
-      setStorage('AUTH-TOKEN', result?.token);
-      setStorage('userId', result?.userId);
-      alert(message);
-      navigation('/order');
-      return;
+      //type narrowing
+      if ('token' in token!) {
+        setStorage('AUTH-TOKEN', token.token);
+        setStorage('userId', token?.userId);
+        alert(message);
+        navigation('/order');
+        return;
+      }
     }
 
     alert('error code : ' + code + '\nmessage : ' + message);
