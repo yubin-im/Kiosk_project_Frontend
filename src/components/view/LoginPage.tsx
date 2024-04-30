@@ -75,6 +75,9 @@ export const LoginPage = () => {
         </div>
         <button type='submit'>버튼</button>
       </form>
+      <button type='button' onClick={() => navigation('/register')}>
+        Register
+      </button>
     </div>
   );
 };

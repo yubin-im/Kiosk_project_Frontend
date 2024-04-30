@@ -23,5 +23,5 @@ type Message = {
   status: string;
   code: string;
   message: string;
-  result: undefined | { token: string; userId: string };
+  result: null | undefined | { token: string; userId: string };
 };
