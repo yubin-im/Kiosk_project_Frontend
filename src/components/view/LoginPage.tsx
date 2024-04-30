@@ -1,6 +1,5 @@
 import { FormEvent, useRef } from 'react';
 import { setStorage } from '../util/setStorage';
-import { removeFromStorage } from '../util/removeFromStorage';
 import { useNavigate } from 'react-router';
 
 export const LoginPage = () => {
@@ -12,6 +11,17 @@ export const LoginPage = () => {
     e.preventDefault();
     const id = String(idRef.current?.value);
     const pw = String(pwRef.current?.value);
+
+    if (!id) {
+      alert('아이디를 입력해주세요');
+      idRef.current?.focus();
+      return;
+    }
+    if (!pw) {
+      alert('비밀번호를 입력해주세요');
+      pwRef.current?.focus();
+      return;
+    }
 
     const data = new URLSearchParams();
     data.append('userId', id);
