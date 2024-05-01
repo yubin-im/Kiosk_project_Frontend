@@ -1,8 +1,9 @@
 import { FormEvent, useRef } from 'react';
-import { setStorage } from '../util/setStorage';
 import { useNavigate } from 'react-router';
+import { useStorage } from '../context/storage-context';
 
 export const LoginPage = () => {
+  const { login } = useStorage();
   const idRef = useRef<HTMLInputElement | null>(null);
   const pwRef = useRef<HTMLInputElement | null>(null);
   const navigation = useNavigate();
@@ -36,20 +37,30 @@ export const LoginPage = () => {
     const response: Message = await res.json();
     const { status, code, message, result: token } = response;
 
+    console.log(token);
     //로그인 성공
     if (status == 'USER_LOGIN') {
+      console.log('1');
       //type narrowing
-      if ('token' in token!) {
-        setStorage('AUTH-TOKEN', token.token);
-        setStorage('userId', token?.userId);
-        alert(message);
-        navigation('/order');
-        return;
-      }
-    }
+      if (token) {
+        console.log('2');
+        if ('token' in token) {
+          console.log('3');
 
-    alert('error code : ' + code + '\nmessage : ' + message);
-    localStorage.clear();
+          login(token.token!, token.userId!);
+          if (login(token.token!, token.userId!)) {
+            console.log('4');
+            alert(message);
+            navigation('/order');
+            return;
+          }
+          console.log('3.5', login(token.token!, token.userId!));
+        }
+      }
+    } else {
+      alert('error code : ' + code + '\nmessage : ' + message);
+      localStorage.clear();
+    }
   };
 
   return (

@@ -11,7 +11,7 @@ type UserRegister = {
 
 type UserRole = 'ROLE_USER' | 'ROLE_ADMIN';
 
-type UserUpdate = {
+export type UserUpdate = {
   userId: string;
   userPw: string;
   userRole: UserRole;
