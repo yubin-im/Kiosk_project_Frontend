@@ -7,6 +7,7 @@ import { Order } from './components/view/OrderPage';
 import { RegistrationPage } from './components/view/RegistrationPage';
 import { StorageProvider } from './components/context/storage-context';
 import OrderSubmit from './components/view/OrderSubmit';
+import OrderPayment from './components/view/OrderPayment';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <Route path='/order' element={<Order />} />
           <Route path='/register' element={<RegistrationPage />} />
           <Route path='/order/submit' element={<OrderSubmit />} />
+          <Route path='/order/payment' element={<OrderPayment />} />
         </Routes>
       </div>
     </StorageProvider>
