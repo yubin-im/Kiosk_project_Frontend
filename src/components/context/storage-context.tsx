@@ -27,7 +27,7 @@ type Action =
       payload: UserToken | null;
     }
   | { type: ACTION.SET; payload: Storage }
-  | { type: ACTION.EMPTY_CART; payload: null }
+  | { type: ACTION.EMPTY_CART; payload: [] }
   | {
       type: ACTION.UPDATE_CART;
       payload: Order[];
@@ -57,7 +57,7 @@ type StorageContextProp = {
   login: (token: string, userId: string) => boolean;
   logout: () => boolean;
   addOrder: (product: Product, productAmount: number) => void;
-  updateOrder: (order: Order[]) => void;
+  removeOrder: (orderId: number) => void;
   emptyCart: () => boolean;
 };
 
@@ -70,7 +70,7 @@ const SessionContext = createContext<StorageContextProp>({
     return false;
   },
   addOrder: () => {},
-  updateOrder: () => {},
+  removeOrder: () => {},
   emptyCart: () => {
     return false;
   },
@@ -101,12 +101,17 @@ const reducer = (storage: Storage, { type, payload }: Action) => {
       newer = { ...storage, cart: { ...storage.cart, ...payload } };
       break;
 
+    case ACTION.EMPTY_CART:
+      newer = { ...storage, cart: [] };
+      break;
+
     default:
       return storage;
   }
 
   setStorage<string | undefined>('AUTH-TOKEN', newer.token?.token);
   setStorage<string | undefined>('userId', newer.token?.userId);
+  setStorage<Order[]>('cart', newer.cart);
   return newer;
 };
 
@@ -124,8 +129,17 @@ export const StorageProvider = ({ children }: providerProps) => {
     return true;
   }, []);
 
-  const updateOrder = () => {};
+  const removeOrder = (orderId: number) => {
+    const storedOrder = { ...storage.cart };
+    const updatedOrder = {
+      ...storedOrder.slice(0, orderId),
+      ...storage.cart.slice(orderId + 1),
+    };
+
+    dispatch({ type: ACTION.UPDATE_CART, payload: updatedOrder });
+  };
   const emptyCart = () => {
+    dispatch({ type: ACTION.EMPTY_CART, payload: [] });
     return false;
   };
 
@@ -146,7 +160,7 @@ export const StorageProvider = ({ children }: providerProps) => {
   return (
     <>
       <SessionContext.Provider
-        value={{ storage, login, logout, addOrder, updateOrder, emptyCart }}
+        value={{ storage, login, logout, addOrder, removeOrder, emptyCart }}
       >
         {children}
       </SessionContext.Provider>

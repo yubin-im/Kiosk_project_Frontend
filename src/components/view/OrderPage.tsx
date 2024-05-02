@@ -1,15 +1,17 @@
 import { useEffect, useState } from 'react';
 
-type Product = {
+interface Product {
+  productId: number;
   productName: string;
   productCode: string;
   productPrice: number;
-};
+}
+
 export const Order = () => {
   const [data, setData] = useState<Product[] | null>(null);
 
   useEffect(() => {
-    fetch('http://localhost8080/order', {
+    fetch('http://localhost:8080/order', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ category: 'BURGER_SET', page: 0 }),
@@ -18,20 +20,17 @@ export const Order = () => {
         return res.json();
       })
       .then((json) => {
-        const response: Message = json;
-        const { status, result: dto } = response;
-
+        console.log(json);
+        console.log(json.result);
+        const { status, code, result: dtos } = json;
         if (status == 'PRODUCT_CHECK_SUCCESS') {
-          if ('productName' in dto!) {
-            const dat: Product[] = json.result;
-            setData(dat);
-          } else throw new Error();
-        } else throw new Error();
+          setData(dtos);
+        }
       })
       .catch((err) => {
         console.error(err);
       });
-  }, [data]);
+  }, []);
 
   return (
     <>
