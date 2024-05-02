@@ -10,6 +10,7 @@ import OrderSubmit from './components/view/OrderSubmit';
 import OrderPayment from './components/view/OrderPayment';
 import OrderRecommend from './components/view/OrderRecommend';
 import OrderDetail from './components/view/OrderDetail';
+import OrderProducts from './components/view/OrderProducts';
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
           <Route path='/order/payment' element={<OrderPayment />} />
           <Route path='/order/recommend' element={<OrderRecommend />} />
           <Route path='/order/detail' element={<OrderDetail />} />
+          <Route path='/order/products' element={<OrderProducts />} />
         </Routes>
       </div>
     </StorageProvider>
