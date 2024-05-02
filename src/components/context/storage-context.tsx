@@ -49,7 +49,7 @@ type Order = {
 
 type Storage = {
   token: UserToken | null;
-  cart: Order[] | null;
+  cart: Order[];
 };
 
 type StorageContextProp = {
