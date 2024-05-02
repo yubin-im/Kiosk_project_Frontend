@@ -8,6 +8,7 @@ import { RegistrationPage } from './components/view/RegistrationPage';
 import { StorageProvider } from './components/context/storage-context';
 import OrderSubmit from './components/view/OrderSubmit';
 import OrderPayment from './components/view/OrderPayment';
+import OrderRecommend from './components/view/OrderRecommend';
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
           <Route path='/register' element={<RegistrationPage />} />
           <Route path='/order/submit' element={<OrderSubmit />} />
           <Route path='/order/payment' element={<OrderPayment />} />
+          <Route path='/order/recommend' element={<OrderRecommend />} />
         </Routes>
       </div>
     </StorageProvider>
