@@ -1,7 +1,6 @@
 import { FormEvent, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router';
 import { useStorage } from '../context/storage-context';
-import { getStorage } from '../util/getStorage';
 
 export const LoginPage = () => {
   const { login } = useStorage();
@@ -109,7 +108,7 @@ export const LoginPage = () => {
             </div>
             <button
               type='button'
-              onClick={() => navigation('/order')}
+              onClick={() => navigation('/placeselection')}
               className='border  bg-mcred text-white rounded-xl px-5 py-1'
             >
               비회원 주문

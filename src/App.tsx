@@ -10,6 +10,8 @@ import { PlaceSelectionPage } from './components/view/placeSelectionPage';
 import { AdminPage } from './components/view/AdminPage';
 import { AdminPageList } from './components/view/AdminPageList';
 import OrderProducts from './components/view/OrderProducts';
+import OrderPayment from './components/view/OrderPayment';
+import OrderSubmit from './components/view/OrderSubmit';
 
 function App() {
   return (
@@ -20,9 +22,10 @@ function App() {
           <Route path='/' element={<LandingPage />} />
           <Route path='/login' element={<LoginPage />} />
           <Route path='/placeselection' element={<PlaceSelectionPage />} />
-          <Route path='/order' element={<Order />} />
           <Route path='/register' element={<RegistrationPage />} />
           <Route path='/order/products' element={<OrderProducts />} />
+          <Route path='/order/payment' element={<OrderPayment />} />
+          <Route path='/order/submit' element={<OrderSubmit />} />
           <Route path='/admin/*' element={<AdminPage />}>
             {/* <Route index element={<AdminPageList />} /> */}
             <Route path=':category' element={<AdminPageList />} />

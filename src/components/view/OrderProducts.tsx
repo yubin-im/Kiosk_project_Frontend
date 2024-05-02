@@ -1,6 +1,7 @@
 import clsx from 'clsx';
 import React, { useState, useEffect } from 'react';
 import { useStorage } from '../context/storage-context';
+import { useNavigate } from 'react-router-dom';
 
 interface ProductsByCategoryDto {
   productId: number;
@@ -17,8 +18,9 @@ interface ProductsResDto {
 }
 
 const OrderProducts = () => {
+  const navigation = useNavigate();
   const {
-    storage: { token, userId },
+    storage: { token },
   } = useStorage();
   const [data, setData] = useState<ProductsResDto | null>(null);
   const [category, setCategory] = useState<string | null>('BURGER_SET');
@@ -97,7 +99,12 @@ const OrderProducts = () => {
             `님
           환영합니다`}
         </h2>
-        <button className='bg-mcblack text-white text-lg font-bold rounded-lg px-8'>
+        <button
+          onClick={() => {
+            navigation('/placeselection');
+          }}
+          className='bg-mcblack text-white text-lg font-bold rounded-lg px-8 m-2'
+        >
           이전
         </button>
       </div>
