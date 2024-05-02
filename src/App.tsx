@@ -9,6 +9,7 @@ import { StorageProvider } from './components/context/storage-context';
 import OrderSubmit from './components/view/OrderSubmit';
 import OrderPayment from './components/view/OrderPayment';
 import OrderRecommend from './components/view/OrderRecommend';
+import OrderDetail from './components/view/OrderDetail';
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
           <Route path='/order/submit' element={<OrderSubmit />} />
           <Route path='/order/payment' element={<OrderPayment />} />
           <Route path='/order/recommend' element={<OrderRecommend />} />
+          <Route path='/order/detail' element={<OrderDetail />} />
         </Routes>
       </div>
     </StorageProvider>
