@@ -1,17 +1,77 @@
-import { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+
+type UserRole = 'USER' | 'ADMIN';
+
+type ProductCategory =
+  | 'BURGER_SET'
+  | 'BURGER_SINGLE'
+  | 'HAPPY_MEAL'
+  | 'DRINK'
+  | 'DESSERT';
+
+type User = {
+  userId: string;
+  userJoinDate: Date;
+  userName: string;
+  userPoint: number;
+  userPw: string;
+  userRole: UserRole;
+};
+
+export type Product = {
+  productName: string;
+  productPrice: number;
+  productCode: string;
+  productImgUrl: string;
+  category: ProductCategory;
+};
 
 export const AdminPageList = () => {
   const { category } = useParams();
+  const [data, setData] = useState<User[]>([]);
+  const navigation = useNavigate();
 
   useEffect(() => {
-    fetch(`http://localhost:8080/admin/user?`)
+    console.log('cat', category);
+    fetch(`http://localhost:8080/admin/${category}`)
       .then((res) => {
         return res.json();
       })
       .then((json) => {
-        console.log(json.result.userDtoList);
+        console.log(json.result);
+        console.log(json.result.content);
+        setData(json.result.content);
       });
-  }, []);
-  return <div>왜 아무것도 안 뜰까</div>;
+  }, [category]);
+
+  return (
+    <table className='min-w-full text-left text-sm font-light text-surface dark:text-white'>
+      <thead className='border-b border-neutral-200 font-medium dark:border-white/10'>
+        <tr>
+          <th>userId</th>
+          <th>userPw</th>
+          <th>userName</th>
+          <th>userPoint</th>
+          <th>userRole</th>
+          <th>userJoinDate</th>
+        </tr>
+      </thead>
+      <tbody>
+        {data?.map((item) => (
+          <tr
+            key={item.userId}
+            className='border-b border-neutral-200 dark:border-white/10 h-20'
+          >
+            <td>{item.userId}</td>
+            <td>{item.userPw}</td>
+            <td>{item.userName}</td>
+            <td>{item.userPoint}</td>
+            <td>{item.userRole}</td>
+            <td>{item.userJoinDate.toString()}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
 };

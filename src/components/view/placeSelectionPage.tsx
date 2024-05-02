@@ -1,5 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { setStorage } from '../util/setStorage';
+import { useEffect } from 'react';
+import { removeFromStorage } from '../util/removeFromStorage';
 
 enum RECIEVE {
   TO_GO = 'to-go',
@@ -27,6 +29,10 @@ export const PlaceSelectionPage = () => {
     setStorage<string>('place', rplace);
     navigation('/order');
   };
+
+  useEffect(() => {
+    removeFromStorage('place');
+  }, []);
 
   return (
     <>

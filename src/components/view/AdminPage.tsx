@@ -51,6 +51,7 @@ export const AdminPage = () => {
 
   useEffect(() => {
     dispatch({ type: PAGE.USER });
+    navigation('/admin/user');
   }, []);
   return (
     <>
@@ -98,7 +99,7 @@ export const AdminPage = () => {
               Order
             </button>
           </div>
-          <div className='col-span-7 bg-white ml-5 rounded-3xl'>
+          <div className='col-span-7 bg-white ml-5 rounded-3xl p-10'>
             <Outlet />
           </div>
         </div>
