@@ -1,6 +1,7 @@
-import { FormEvent, useRef } from 'react';
+import { FormEvent, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router';
 import { useStorage } from '../context/storage-context';
+import { getStorage } from '../util/getStorage';
 
 export const LoginPage = () => {
   const { login } = useStorage();
@@ -53,6 +54,13 @@ export const LoginPage = () => {
       return;
     }
   };
+
+  useEffect(() => {
+    const userToken = getStorage<string>('AUTH-TOKEN', '');
+    if (userToken) {
+      localStorage.clear();
+    }
+  }, [navigation]);
 
   return (
     <div>
