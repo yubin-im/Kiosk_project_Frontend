@@ -56,10 +56,7 @@ export const LoginPage = () => {
   };
 
   useEffect(() => {
-    const userToken = getStorage<string>('AUTH-TOKEN', '');
-    if (userToken) {
-      localStorage.clear();
-    }
+    localStorage.clear();
   }, [navigation]);
 
   return (

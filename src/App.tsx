@@ -9,6 +9,7 @@ import { StorageProvider } from './components/context/storage-context';
 import { PlaceSelectionPage } from './components/view/placeSelectionPage';
 import { AdminPage } from './components/view/AdminPage';
 import { AdminPageList } from './components/view/AdminPageList';
+import OrderProducts from './components/view/OrderProducts';
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
           <Route path='/placeselection' element={<PlaceSelectionPage />} />
           <Route path='/order' element={<Order />} />
           <Route path='/register' element={<RegistrationPage />} />
+          <Route path='/order/products' element={<OrderProducts />} />
           <Route path='/admin/*' element={<AdminPage />}>
             {/* <Route index element={<AdminPageList />} /> */}
             <Route path=':category' element={<AdminPageList />} />
