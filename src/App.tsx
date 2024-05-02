@@ -6,6 +6,7 @@ import { LoginPage } from './components/view/LoginPage';
 import { Order } from './components/view/OrderPage';
 import { RegistrationPage } from './components/view/RegistrationPage';
 import { StorageProvider } from './components/context/storage-context';
+import { PlaceSelectionPage } from './components/view/placeSelectionPage';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Routes>
           <Route path='/' element={<LandingPage />} />
           <Route path='/login' element={<LoginPage />} />
+          <Route path='/placeselection' element={<PlaceSelectionPage />} />
           <Route path='/order' element={<Order />} />
           <Route path='/register' element={<RegistrationPage />} />
         </Routes>

@@ -43,7 +43,7 @@ export const LoginPage = () => {
       if (token && 'token' in token) {
         if (login(token.token!, token.userId!)) {
           alert(message);
-          navigation('/order');
+          navigation('/placeselection');
           return;
         }
       }
