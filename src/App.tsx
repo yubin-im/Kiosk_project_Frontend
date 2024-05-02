@@ -7,6 +7,7 @@ import { Order } from './components/view/OrderPage';
 import { RegistrationPage } from './components/view/RegistrationPage';
 import { StorageProvider } from './components/context/storage-context';
 import { PlaceSelectionPage } from './components/view/placeSelectionPage';
+import { AdminOrder } from './components/view/AdminOrder';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Route path='/placeselection' element={<PlaceSelectionPage />} />
         <Route path='/order' element={<Order />} />
         <Route path='/register' element={<RegistrationPage />} />
+        <Route path='/admin/order' element={<AdminOrder />} />
       </Routes>
     </StorageProvider>
   );
