@@ -37,29 +37,20 @@ export const LoginPage = () => {
     const response: Message = await res.json();
     const { status, code, message, result: token } = response;
 
-    console.log(token);
     //로그인 성공
     if (status == 'USER_LOGIN') {
-      console.log('1');
       //type narrowing
-      if (token) {
-        console.log('2');
-        if ('token' in token) {
-          console.log('3');
-
-          login(token.token!, token.userId!);
-          if (login(token.token!, token.userId!)) {
-            console.log('4');
-            alert(message);
-            navigation('/order');
-            return;
-          }
-          console.log('3.5', login(token.token!, token.userId!));
+      if (token && 'token' in token) {
+        if (login(token.token!, token.userId!)) {
+          alert(message);
+          navigation('/order');
+          return;
         }
       }
     } else {
       alert('error code : ' + code + '\nmessage : ' + message);
       localStorage.clear();
+      return;
     }
   };
 
