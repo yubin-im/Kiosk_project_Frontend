@@ -11,16 +11,14 @@ import { PlaceSelectionPage } from './components/view/placeSelectionPage';
 function App() {
   return (
     <StorageProvider>
-      <div>
-        <Nav />
-        <Routes>
-          <Route path='/' element={<LandingPage />} />
-          <Route path='/login' element={<LoginPage />} />
-          <Route path='/placeselection' element={<PlaceSelectionPage />} />
-          <Route path='/order' element={<Order />} />
-          <Route path='/register' element={<RegistrationPage />} />
-        </Routes>
-      </div>
+      <Nav />
+      <Routes>
+        <Route path='/' element={<LandingPage />} />
+        <Route path='/login' element={<LoginPage />} />
+        <Route path='/placeselection' element={<PlaceSelectionPage />} />
+        <Route path='/order' element={<Order />} />
+        <Route path='/register' element={<RegistrationPage />} />
+      </Routes>
     </StorageProvider>
   );
 }
