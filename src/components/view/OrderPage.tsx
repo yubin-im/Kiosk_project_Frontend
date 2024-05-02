@@ -20,9 +20,8 @@ export const Order = () => {
         return res.json();
       })
       .then((json) => {
-        console.log(json);
-        console.log(json.result);
-        const { status, code, result: dtos } = json;
+        console.log('상품목록 json :', json.result);
+        const { status, result: dtos } = json;
         if (status == 'PRODUCT_CHECK_SUCCESS') {
           setData(dtos);
         }

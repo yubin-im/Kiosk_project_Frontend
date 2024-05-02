@@ -73,46 +73,58 @@ export const RegistrationPage = () => {
 
   return (
     <>
-      <form onSubmit={registrationHandler}>
-        <table>
-          <tbody>
-            <tr>
-              <td>ID</td>
-              <td>
-                <input
-                  type='text'
-                  placeholder='아이디를 입력해주세요'
-                  name='userId'
-                  ref={idRef}
-                />
-              </td>
-            </tr>
-            <tr>
-              <td>PW</td>
-              <td>
-                <input
-                  type='password'
-                  placeholder='비밀번호를 입력해주세요'
-                  name='userPw'
-                  ref={pwRef}
-                />
-              </td>
-            </tr>
-            <tr>
-              <td>NAME</td>
-              <td>
-                <input
-                  type='text'
-                  placeholder='실명을 기입해주세요'
-                  name='userName'
-                  ref={nameRef}
-                />
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <button type='submit'>가입하기</button>
-      </form>
+      <div className='flex flex-col max-w-screen-sm sm min-h-screen bg-mcred justify-between mx-auto p-20'>
+        <div className='flex flex-col gap-2 bg-white rounded-3xl px-2 py-10 pt-2'>
+          <button
+            type='button'
+            onClick={() => navigation('/login')}
+            className='text-mcred font-black w-fit px-3 py-2 rounded-3xl'
+          >
+            ◀️이전화면
+          </button>
+          <form
+            onSubmit={registrationHandler}
+            className='flex flex-col items-center justify-center '
+          >
+            <span className='font-bold text-4xl text-mcblack col-span-4 mb-5'>
+              Registration
+            </span>
+            <br></br>
+            <div className='grid grid-cols-4 items-center'>
+              ID
+              <input
+                type='text'
+                placeholder='아이디를 입력해주세요'
+                name='userId'
+                ref={idRef}
+                className='border-b-2 border-mcyellow h-11 w-56 px-1 col-span-3'
+              />
+              PW
+              <input
+                type='password'
+                placeholder='비밀번호를 입력해주세요'
+                name='userPw'
+                ref={pwRef}
+                className='border-b-2 border-mcyellow h-11 w-56 px-1 col-span-3'
+              />
+              NAME
+              <input
+                type='text'
+                placeholder='실명을 기입해주세요'
+                name='userName'
+                ref={nameRef}
+                className='border-b-2 border-mcyellow h-11 w-56 px-1 col-span-3'
+              />
+              <button
+                type='submit'
+                className='grid col-span-4 bg-mcred text-white px-2 py-1 rounded-xl mt-10'
+              >
+                가입하기
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
     </>
   );
 };
