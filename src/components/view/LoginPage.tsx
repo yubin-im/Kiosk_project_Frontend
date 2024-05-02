@@ -113,7 +113,7 @@ export const LoginPage = () => {
             <button
               type='button'
               onClick={() => navigation('/order')}
-              className='border border-2 bg-mcred text-white rounded-xl px-5 py-1'
+              className='border  bg-mcred text-white rounded-xl px-5 py-1'
             >
               비회원 주문
             </button>
