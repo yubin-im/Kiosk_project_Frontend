@@ -18,7 +18,9 @@ export const LandingPage = () => {
         <p className='text-xl mb-10'>We're here to support</p>
         <br></br>
 
-        <p className='text-2xl text-mcyellow mt-5'>Please click to order</p>
+        <p className='text-2xl text-mcyellow mt-5 animate-bounce'>
+          Please click to order
+        </p>
       </button>
     </div>
   );
