@@ -13,6 +13,9 @@ enum ACTION {
   LOG_IN = 'login',
   LOG_OUT = 'logout',
   SET = 'set',
+  EMPTY_CART = 'empty-cart',
+  UPDATE_CART = 'update-cart',
+  ADD_ORDER = 'add-order',
 }
 type providerProps = {
   children: ReactNode;
@@ -23,33 +26,63 @@ type Action =
       type: ACTION.LOG_IN | ACTION.LOG_OUT;
       payload: UserToken | null;
     }
-  | { type: ACTION.SET; payload: Storage };
+  | { type: ACTION.SET; payload: Storage }
+  | { type: ACTION.EMPTY_CART; payload: null }
+  | {
+      type: ACTION.UPDATE_CART;
+      payload: Order[];
+    }
+  | { type: ACTION.ADD_ORDER; payload: Order };
+
+type Product = {
+  productCode: string;
+  productName: string;
+  productPrice: number;
+};
+
+type Order = {
+  orderId: number;
+  product: Product;
+  productAmount: number;
+  totalPrice: number;
+};
 
 type Storage = {
   token: UserToken | null;
+  cart: Order[] | null;
 };
 
 type StorageContextProp = {
   storage: Storage;
   login: (token: string, userId: string) => boolean;
   logout: () => boolean;
+  addOrder: (product: Product, productAmount: number) => void;
+  updateOrder: (order: Order[]) => void;
+  emptyCart: () => boolean;
 };
 
 const SessionContext = createContext<StorageContextProp>({
-  storage: { token: null },
+  storage: { token: null, cart: [] },
   login: () => {
     return false;
   },
   logout: () => {
     return false;
   },
+  addOrder: () => {},
+  updateOrder: () => {},
+  emptyCart: () => {
+    return false;
+  },
 });
 
 const DefaultStorage: Storage = {
   token: null,
+  cart: [],
 };
 
 const reducer = (storage: Storage, { type, payload }: Action) => {
+  console.log(payload);
   let newer: Storage;
   switch (type) {
     case ACTION.LOG_IN:
@@ -62,6 +95,10 @@ const reducer = (storage: Storage, { type, payload }: Action) => {
 
     case ACTION.SET:
       newer = { ...payload };
+      break;
+
+    case ACTION.ADD_ORDER:
+      newer = { ...storage, cart: { ...storage.cart, ...payload } };
       break;
 
     default:
@@ -87,21 +124,30 @@ export const StorageProvider = ({ children }: providerProps) => {
     return true;
   }, []);
 
+  const updateOrder = () => {};
+  const emptyCart = () => {
+    return false;
+  };
+
+  const addOrder = () => {};
   useEffect(() => {
     const storedToken = getStorage<string>('AUTH-TOKEN', '');
     const storedUserId = getStorage<string>('userId', '');
+    const storedCart = getStorage<Order[]>('cart', []);
 
     const userToken: UserToken = { token: storedToken, userId: storedUserId };
 
     dispatch({
       type: ACTION.SET,
-      payload: { token: userToken },
+      payload: { token: userToken, cart: storedCart },
     });
   }, []);
 
   return (
     <>
-      <SessionContext.Provider value={{ storage, login, logout }}>
+      <SessionContext.Provider
+        value={{ storage, login, logout, addOrder, updateOrder, emptyCart }}
+      >
         {children}
       </SessionContext.Provider>
     </>
