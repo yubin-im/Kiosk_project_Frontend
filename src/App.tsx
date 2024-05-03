@@ -30,6 +30,7 @@ function App() {
           <Route path='/order/payment' element={<OrderPayment />} />
           <Route path='/order/submit' element={<OrderSubmit />} />
           <Route path='/order/recommendation' element={<OrderRecommend />} />
+          <Route path='/order/payment' element={<OrderPayment />} />
           <Route path='/admin/*' element={<AdminPage />}>
             {/* <Route index element={<AdminPageList />} /> */}
             <Route path=':category' element={<AdminPageList />} />

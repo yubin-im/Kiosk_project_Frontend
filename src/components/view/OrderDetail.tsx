@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import { Button } from 'react-bootstrap';
+import { useEffect, useState } from 'react';
 
 interface OrderDetailItemDto {
   productName: string;
@@ -57,14 +56,9 @@ const OrderDetail = () => {
           <div key={index}>
             <div className='my-3'>
               {product.productName} - {product.orderPrice}원{' '}
-              <Button className='mx-2' variant='light'>
-                -
-              </Button>
-              {product.orderAmount}개
-              <Button className='mx-2' variant='light'>
-                +
-              </Button>
-              <Button variant='light'>삭제</Button>
+              <button className='mx-2'>-</button>
+              {product.orderAmount}개<button className='mx-2'>+</button>
+              <button>삭제</button>
               <hr />
             </div>
           </div>
@@ -79,10 +73,8 @@ const OrderDetail = () => {
       <hr />
 
       <div>
-        <Button className='mx-3' variant='danger'>
-          추가 주문
-        </Button>
-        <Button variant='success'>결제하기</Button>
+        <button className='mx-3'>추가 주문</button>
+        <button>결제하기</button>
       </div>
     </div>
   );

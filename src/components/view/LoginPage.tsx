@@ -44,6 +44,7 @@ export const LoginPage = () => {
         if (login(token.token!, token.userId!)) {
           alert(message);
           navigation('/placeselection');
+
           return;
         }
       }

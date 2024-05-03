@@ -274,7 +274,10 @@ const OrderProducts = () => {
         <button className='bg-red-500 text-white text-lg font-bold rounded-lg w-full'>
           주문 취소
         </button>
-        <button className='bg-green-700 text-white text-lg font-bold rounded-lg w-full'>
+        <button
+          className='bg-green-700 text-white text-lg font-bold rounded-lg w-full'
+          onClick={() => navigation('/order/recommendation')}
+        >
           주문 완료
         </button>
       </div>

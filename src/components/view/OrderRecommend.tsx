@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 interface RecommendProductDto {
   id: number;
@@ -8,6 +9,7 @@ interface RecommendProductDto {
 }
 
 const OrderRecommend = () => {
+  const navigation = useNavigate();
   const [data, setData] = useState<RecommendProductDto[] | null>(null);
 
   useEffect(() => {
@@ -43,9 +45,9 @@ const OrderRecommend = () => {
           {data.map((product, index) => (
             <div
               key={index}
-              className='shadow-sm shadow-slate-400 rounded-lg w-full h-32'
+              className='shadow-sm shadow-slate-400 rounded-lg w-full h-32 overflow-hidden'
             >
-              <div style={{ height: '60%' }}>
+              <div style={{ height: '50%' }}>
                 <img
                   src={product.productImgUrl}
                   alt={product.productName}
@@ -66,10 +68,16 @@ const OrderRecommend = () => {
 
         <br />
         <div className='flex gap-2 justify-center'>
-          <button className='bg-mcblack px-8 text-white rounded-lg'>
+          <button
+            className='bg-mcblack px-8 text-white rounded-lg'
+            onClick={() => history.back()}
+          >
             이전
           </button>
-          <button className='bg-mcred px-8 text-white rounded-lg'>
+          <button
+            className='bg-mcred px-8 text-white rounded-lg'
+            onClick={() => navigation('/order/payment')}
+          >
             선택안함
           </button>
         </div>
