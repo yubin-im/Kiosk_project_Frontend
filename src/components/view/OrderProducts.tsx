@@ -4,6 +4,9 @@ import { useStorage } from '../context/storage-context';
 import { useNavigate } from 'react-router-dom';
 import { Product } from './AdminPageList';
 import { useCount } from '../util/use-count';
+import { ProductBox } from '../util/ProductBox';
+import { getTotalPrice } from '../util/getTotalPrice';
+import { getStorage } from '../util/getStorage';
 
 enum CATEGORY {
   BURGER_SET = 'BURGER_SET',
@@ -24,7 +27,6 @@ interface Message {
 const OrderProducts = () => {
   const navigation = useNavigate();
   const {
-    getCount,
     storage: { token, cart },
     setOrders,
     emptyCart,
@@ -47,10 +49,9 @@ const OrderProducts = () => {
   }, [category, page]);
 
   useEffect(() => {
-    if (cart.length) {
-      setMyCart(cart);
-    }
-  }, [cart]);
+    const stored = getStorage<Order[]>('cart', []);
+    setMyCart(stored);
+  }, [cart, navigation]);
 
   // 카테고리 별 메뉴 출력
   const fetchData = () => {
@@ -99,18 +100,6 @@ const OrderProducts = () => {
 
     setMyCart((pre) => [...pre, newOrder]);
     updateCount(1);
-  };
-
-  const getTotalPrice = (cart: Order[]) => {
-    const prices: number[] = cart.map((item) => item.product.productPrice);
-
-    const totalPrice = prices.length
-      ? prices?.reduce((acc, curr) => {
-          return acc + curr;
-        })
-      : 0;
-
-    return totalPrice.toLocaleString();
   };
 
   const addAmount = (orderIndex: number) => {
@@ -269,7 +258,33 @@ const OrderProducts = () => {
               {!products ? (
                 <span className='self-center'>isloading</span>
               ) : (
-                products?.map((product) => (
+                products?.map((product, index) => (
+                  // <button
+                  //   key={product.productCode}
+                  //   className='flex flex-col items-center shadow-md shadow-slate-200 bg-white rounded-lg w-32 h-32'
+                  //   onClick={() => {
+                  //     console.log('hihi', product.productCode);
+                  //     addItem(product);
+                  //   }}
+                  // >
+                  //   <div style={{ height: '50%' }}>
+                  //     <img
+                  //       src={product.productImgUrl}
+                  //       alt={product.productName}
+                  //       style={{
+                  //         width: '100%',
+                  //         height: '100%',
+                  //         objectFit: 'fill',
+                  //       }}
+                  //     />
+                  //   </div>
+
+                  //   <div className='text-sm overflow-hidden'>
+                  //     <p>{product.productName}</p>
+                  //     <p>{product.productPrice}원</p>
+                  //   </div>
+                  // </button>
+
                   <button
                     key={product.productCode}
                     className='flex flex-col items-center shadow-md shadow-slate-200 bg-white rounded-lg w-32 h-32'
@@ -278,22 +293,7 @@ const OrderProducts = () => {
                       addItem(product);
                     }}
                   >
-                    <div style={{ height: '50%' }}>
-                      <img
-                        src={product.productImgUrl}
-                        alt={product.productName}
-                        style={{
-                          width: '100%',
-                          height: '100%',
-                          objectFit: 'fill',
-                        }}
-                      />
-                    </div>
-
-                    <div className='text-sm overflow-hidden'>
-                      <p>{product.productName}</p>
-                      <p>{product.productPrice}원</p>
-                    </div>
+                    <ProductBox product={product} key={index} id={index} />
                   </button>
                 ))
               )}
@@ -336,7 +336,7 @@ const OrderProducts = () => {
         </div>
         <div>
           <p className='mx-3 text-md'>
-            총 가격: 원 수량: {getTotalPrice(myCart)}
+            총 가격: 원 수량: {getTotalPrice(myCart).toLocaleString()}
           </p>
         </div>
       </div>

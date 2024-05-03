@@ -1,18 +1,19 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { McFrame } from '../util/mcFrame';
-import { ProductBox } from '../util/\bProductBox';
-
-interface RecommendProduct {
-  productCode: string;
-  productName: string;
-  productPrice: number;
-  productImgUrl: string;
-}
+import { ProductBox } from '../util/ProductBox';
+import { Product } from './AdminUserListPage';
+import { useStorage } from '../context/storage-context';
+import { getTotalPrice } from '../util/getTotalPrice';
 
 const OrderRecommend = () => {
   const navigation = useNavigate();
-  const [data, setData] = useState<RecommendProduct[] | null>(null);
+  const [data, setData] = useState<Product[]>([]);
+
+  const {
+    storage: { cart },
+    addOrder,
+  } = useStorage();
 
   useEffect(() => {
     fetchData();
@@ -31,9 +32,18 @@ const OrderRecommend = () => {
       });
   };
 
-  if (!data) {
-    return <div>Loading...</div>;
-  }
+  const addItem = async (product: Product) => {
+    console.log(cart);
+    await addOrder(product, 1);
+    const totalPrice = getTotalPrice(cart);
+    alert(
+      '상품 추가되었습니다.\n 총 결제 금액은 ' +
+        (totalPrice + product.productPrice).toLocaleString() +
+        ' 원 입니다'
+    );
+
+    navigation('/order/payment');
+  };
 
   return (
     <McFrame color='yellow'>
@@ -43,32 +53,21 @@ const OrderRecommend = () => {
       <br />
 
       <div className='grid grid-cols-3 gap-2 place-items-center max-h-96'>
-        {!data ? (
-          <span>isLoading</span>
-        ) : (
+        {data ? (
           data.map((product, index) => (
-            <ProductBox item={product} key={index} />
-            // <div
-            //   key={index}
-            //   className='shadow-sm shadow-slate-400 rounded-lg w-full h-32 overflow-hidden'
-            // >
-            //   <div style={{ height: '50%' }}>
-            //     <img
-            //       src={product.productImgUrl}
-            //       alt={product.productName}
-            //       style={{
-            //         width: '100%',
-            //         height: '100%',
-            //         objectFit: 'fill',
-            //       }}
-            //     />
-            //   </div>
-            //   <div className='text-center text-sm'>
-            //     <p>{product.productName}</p>
-            //     <p>{product.productPrice}원</p>
-            //   </div>
-            // </div>
+            <button
+              key={index}
+              className='flex flex-col items-center shadow-md shadow-slate-200 bg-white rounded-lg w-32 h-32'
+              onClick={() => {
+                console.log('hihi', product.productCode);
+                addItem(product);
+              }}
+            >
+              <ProductBox product={product} key={index} />
+            </button>
           ))
+        ) : (
+          <span>isLoading</span>
         )}
       </div>
 

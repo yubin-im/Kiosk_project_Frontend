@@ -9,6 +9,7 @@ import {
 import { setStorage } from '../util/setStorage';
 import { getStorage } from '../util/getStorage';
 import { useCount } from '../util/use-count';
+import { useNavigate } from 'react-router-dom';
 
 enum ACTION {
   LOG_IN = 'login',
@@ -57,7 +58,7 @@ type StorageContextProp = {
   storage: Storage;
   login: (token: string, userId: string) => boolean;
   logout: () => boolean;
-  addOrder: (product: Product, productAmount: number) => void;
+  addOrder: (product: Product, productAmount: number) => boolean;
   removeOrder: (orderId: number) => void;
   emptyCart: () => boolean;
   getCount: () => number;
@@ -73,7 +74,7 @@ const SessionContext = createContext<StorageContextProp>({
   logout: () => {
     return false;
   },
-  addOrder: () => {},
+  addOrder: () => false,
   removeOrder: () => {},
   emptyCart: () => {
     return false;
@@ -127,6 +128,7 @@ const reducer = (storage: Storage, { type, payload }: Action) => {
 };
 
 export const StorageProvider = ({ children }: providerProps) => {
+  const navigation = useNavigate();
   const [storage, dispatch] = useReducer(reducer, DefaultStorage);
   const [totalCount, updateCount] = useCount();
 
@@ -159,12 +161,13 @@ export const StorageProvider = ({ children }: providerProps) => {
   const addOrder = (product: Product, amount: number) => {
     const order: Order = {
       orderId: totalCount,
-      product: { ...product },
+      product: product,
       productAmount: amount,
       totalPrice: product.productPrice * amount,
     };
-    dispatch({ type: ACTION.ADD_ORDER, payload: order });
     updateCount(1);
+    dispatch({ type: ACTION.ADD_ORDER, payload: order });
+    return true;
   };
 
   const getCount = () => {
@@ -191,16 +194,12 @@ export const StorageProvider = ({ children }: providerProps) => {
     const storedUserId = getStorage<string>('userId', '');
     const storedCart = getStorage<Order[]>('cart', []);
 
-    if (!storedToken.length) {
-      localStorage.clear();
-    } else {
-      const userToken: UserToken = { token: storedToken, userId: storedUserId };
-      dispatch({
-        type: ACTION.SET,
-        payload: { token: userToken, cart: storedCart },
-      });
-    }
-  }, []);
+    const userToken: UserToken = { token: storedToken, userId: storedUserId };
+    dispatch({
+      type: ACTION.SET,
+      payload: { token: userToken, cart: storedCart },
+    });
+  }, [navigation, totalCount]);
 
   return (
     <>
