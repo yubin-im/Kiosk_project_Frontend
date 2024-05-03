@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Button, Row, Col } from 'react-bootstrap';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 interface RecommendProductDto {
   id: number;
@@ -9,6 +9,7 @@ interface RecommendProductDto {
 }
 
 const OrderRecommend = () => {
+  const navigation = useNavigate();
   const [data, setData] = useState<RecommendProductDto[] | null>(null);
 
   useEffect(() => {
@@ -33,25 +34,58 @@ const OrderRecommend = () => {
   }
 
   return (
-    <div>
-      <h1>함께 즐기시면 더욱 좋습니다!</h1>
-      <br />
+    <div className='flex flex-col max-w-screen-sm max-h-screen sm min-h-screen bg-mcyellow justify-between mx-auto p-20'>
+      <div className='flex flex-col gap-2 max-h-fit object-fill bg-white rounded-3xl px-10 py-10 '>
+        <span className='font-bold text-2xl text-mcblack'>
+          함께 즐기시면 더욱 좋습니다!
+        </span>
+        <br />
 
-      <Row>
-        {data.map((product, index) => (
-          <Col md={4} key={index}>
-            <div className='text-center'>
-              <img src={product.productImgUrl} alt={product.productName} />
-              <p>{product.productName}</p>
-              <p>{product.productPrice}원</p>
-            </div>
-          </Col>
-        ))}
-      </Row>
+        <div className='grid grid-cols-3 gap-2 place-items-center max-h-96'>
+          {!data ? (
+            <span>isLoading</span>
+          ) : (
+            data.map((product, index) => (
+              <div
+                key={index}
+                className='shadow-sm shadow-slate-400 rounded-lg w-full h-32 overflow-hidden'
+              >
+                <div style={{ height: '50%' }}>
+                  <img
+                    src={product.productImgUrl}
+                    alt={product.productName}
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      objectFit: 'fill',
+                    }}
+                  />
+                </div>
+                <div className='text-center text-sm'>
+                  <p>{product.productName}</p>
+                  <p>{product.productPrice}원</p>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
 
-      <br />
-      <Button className='mx-3'>이전</Button>
-      <Button>선택안함</Button>
+        <br />
+        <div className='flex gap-2 justify-center'>
+          <button
+            className='bg-mcblack px-8 text-white rounded-lg'
+            onClick={() => history.back()}
+          >
+            이전
+          </button>
+          <button
+            className='bg-mcred px-8 text-white rounded-lg'
+            onClick={() => navigation('/order/payment')}
+          >
+            선택안함
+          </button>
+        </div>
+      </div>
     </div>
   );
 };

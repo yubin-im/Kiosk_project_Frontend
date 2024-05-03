@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 interface PaymentResDto {
   orderItemTotalAmount: number;
@@ -6,6 +7,7 @@ interface PaymentResDto {
 }
 
 const OrderPayment = () => {
+  const navigation = useNavigate();
   const [data, setData] = useState<PaymentResDto | null>(null);
   const [orderListId, setOrderListId] = useState<number | null>(null);
 
@@ -54,6 +56,13 @@ const OrderPayment = () => {
         src='https://media.licdn.com/dms/image/D4D12AQFym_70hWOyZg/article-cover_image-shrink_600_2000/0/1685446331482?e=2147483647&v=beta&t=fuITp9VITQaAdGNjomWZkykJGMIoho2qh2SIdDOD1eE'
         alt='pay'
       ></img>
+      <button
+        onClick={() => {
+          navigation('/order/submit');
+        }}
+      >
+        결제 완료
+      </button>
     </div>
   );
 };
