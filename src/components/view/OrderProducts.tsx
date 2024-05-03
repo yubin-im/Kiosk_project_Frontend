@@ -80,10 +80,6 @@ const OrderProducts = ({ orderId }: OrderProductsProps) => {
       });
   };
 
-  if (!data) {
-    return <div>Loading...</div>;
-  }
-
   return (
     <div className='flex flex-col max-w-screen-sm sm min-h-screen  justify-between mx-auto'>
       <img
@@ -197,29 +193,33 @@ const OrderProducts = ({ orderId }: OrderProductsProps) => {
           </div>
           <div className='col-span-9 border-2 border-mcred p-2 rounded-lg ml-2'>
             <div className='grid grid-cols-3 min-h-full gap-2 '>
-              {data.productDtos?.map((product, index) => (
-                <div
-                  key={index}
-                  className='flex flex-col shadow-md shadow-slate-200 bg-white rounded-lg justify-self-center min-w-full'
-                >
-                  <div style={{ height: '100px' }}>
-                    <img
-                      src={product.productImgUrl}
-                      alt={product.productName}
-                      style={{
-                        width: '100%',
-                        height: '100%',
-                        objectFit: 'fill',
-                      }}
-                    />
-                  </div>
+              {!data ? (
+                <span className='self-center'>isloading</span>
+              ) : (
+                data.productDtos?.map((product, index) => (
+                  <div
+                    key={index}
+                    className='flex flex-col shadow-md shadow-slate-200 bg-white rounded-lg justify-self-center min-w-full'
+                  >
+                    <div style={{ height: '100px' }}>
+                      <img
+                        src={product.productImgUrl}
+                        alt={product.productName}
+                        style={{
+                          width: '100%',
+                          height: '100%',
+                          objectFit: 'fill',
+                        }}
+                      />
+                    </div>
 
-                  <div className=''>
-                    <p>{product.productName}</p>
-                    <p>{product.productPrice}원</p>
+                    <div className=''>
+                      <p>{product.productName}</p>
+                      <p>{product.productPrice}원</p>
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))
+              )}
             </div>
           </div>
         </div>
@@ -259,8 +259,8 @@ const OrderProducts = ({ orderId }: OrderProductsProps) => {
         </div>
         <div>
           <p className='mx-3'>
-            총 가격: {data.orderListTotalPrice}원 수량:{' '}
-            {data.orderListTotalAmount}
+            총 가격: {data?.orderListTotalPrice}원 수량:{' '}
+            {data?.orderListTotalAmount}
           </p>
         </div>
       </div>
