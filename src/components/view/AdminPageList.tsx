@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 type UserRole = 'USER' | 'ADMIN';
 
@@ -30,7 +30,6 @@ export interface Product {
 export const AdminPageList = () => {
   const { category } = useParams();
   const [data, setData] = useState<User[]>([]);
-  const navigation = useNavigate();
 
   useEffect(() => {
     console.log('cat', category);

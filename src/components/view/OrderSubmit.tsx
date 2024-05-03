@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useStorage } from '../context/storage-context';
 
 interface SuccessOrderResDto {
   userPoint: number;
@@ -9,25 +10,26 @@ interface SuccessOrderResDto {
 const OrderSubmit = () => {
   const navigation = useNavigate();
   const [data, setData] = useState<SuccessOrderResDto | null>(null);
-  const [userId, setUserId] = useState<number | null>(null);
+  const {
+    storage: { token },
+  } = useStorage();
   const [orderListId, setOrderListId] = useState<number | null>(null);
 
   useEffect(() => {
     // Todo: 사용자 ID와 OrderList ID 받아오기
-    setUserId(20);
     setOrderListId(20);
 
-    if (userId !== null && orderListId !== null) {
+    if (token?.userId !== null && orderListId !== null) {
       fetchData();
     }
-  }, [userId, orderListId]);
+  }, [orderListId]);
 
   const fetchData = () => {
     fetch('http://localhost:8080/order/submit', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        userId: userId,
+        userId: token?.userId,
         orderListId: orderListId,
       }),
     })

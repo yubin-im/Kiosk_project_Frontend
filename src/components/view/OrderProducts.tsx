@@ -27,6 +27,7 @@ const OrderProducts = () => {
     getCount,
     storage: { token, cart },
     setOrders,
+    emptyCart,
   } = useStorage();
 
   const [products, setProducts] = useState<Product[] | null>(null);
@@ -49,7 +50,7 @@ const OrderProducts = () => {
     if (cart.length) {
       setMyCart(cart);
     }
-  }, []);
+  }, [cart]);
 
   // 카테고리 별 메뉴 출력
   const fetchData = () => {
@@ -67,7 +68,6 @@ const OrderProducts = () => {
       .then((json) => {
         const message: Message = json;
         const { status, result: products } = message;
-        console.log(products);
         if (status == 'PRODUCT_CHECK_SUCCESS') {
           setProducts(products);
         }
@@ -96,50 +96,53 @@ const OrderProducts = () => {
       productAmount: 1,
       totalPrice: product.productPrice,
     };
-    updateCount(1);
 
     setMyCart((pre) => [...pre, newOrder]);
-    console.log('count', getCount());
+    updateCount(1);
   };
 
   const getTotalPrice = (cart: Order[]) => {
     const prices: number[] = cart.map((item) => item.product.productPrice);
 
-    return !prices.length
-      ? 0
-      : prices
-          ?.reduce((acc, curr) => {
-            return acc + curr;
-          })
-          .toLocaleString();
+    const totalPrice = prices.length
+      ? prices?.reduce((acc, curr) => {
+          return acc + curr;
+        })
+      : 0;
+
+    return totalPrice.toLocaleString();
   };
 
-  const addAmount = (index: number) => {
-    const order: Order = myCart[index];
+  const addAmount = (orderIndex: number) => {
+    const order: Order = myCart[orderIndex];
 
     const newAmount = ++order.productAmount;
     const newOrder: Order = { ...order, productAmount: newAmount };
 
     setMyCart((pre) => [
-      ...pre.slice(0, index),
+      ...pre.slice(0, orderIndex),
       newOrder,
-      ...pre.slice(index + 1),
+      ...pre.slice(orderIndex + 1),
     ]);
   };
 
-  const subAmount = (index: number) => {
-    const order: Order = myCart[index];
+  const subAmount = (orderIndex: number) => {
+    const order: Order = myCart[orderIndex];
+
     if (order.productAmount == 1) {
-      setMyCart((pre) => [...pre.slice(0, index), ...pre.slice(index + 1)]);
+      setMyCart((pre) => [
+        ...pre.slice(0, orderIndex),
+        ...pre.slice(orderIndex + 1),
+      ]);
       return;
     }
     const newAmount = --order.productAmount;
     const newOrder: Order = { ...order, productAmount: newAmount };
 
     setMyCart((pre) => [
-      ...pre.slice(0, index),
+      ...pre.slice(0, orderIndex),
       newOrder,
-      ...pre.slice(index + 1),
+      ...pre.slice(orderIndex + 1),
     ]);
   };
 
@@ -390,6 +393,7 @@ const OrderProducts = () => {
         <button
           className='bg-red-500 text-white font-bold rounded-lg w-full'
           onClick={() => {
+            emptyCart();
             navigation('/placeselection');
           }}
         >
@@ -399,6 +403,10 @@ const OrderProducts = () => {
           className='bg-green-700 text-white font-bold rounded-lg w-full'
           onClick={() => {
             setOrders(myCart);
+            if (myCart.length == 0) {
+              alert('상품을 선택해주세요');
+              return;
+            }
             navigation('/order/recommend');
           }}
         >
