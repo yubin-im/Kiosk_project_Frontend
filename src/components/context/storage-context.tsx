@@ -93,7 +93,7 @@ const reducer = (storage: Storage, { type, payload }: Action) => {
   let newer: Storage;
   switch (type) {
     case ACTION.LOG_IN:
-      newer = { ...storage, token: payload };
+      newer = { cart: [], token: payload };
       break;
 
     case ACTION.LOG_OUT:

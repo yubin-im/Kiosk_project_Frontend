@@ -266,7 +266,7 @@ const OrderProducts = () => {
               {!products ? (
                 <span className='self-center'>isloading</span>
               ) : (
-                products?.map((product, index) => (
+                products?.map((product) => (
                   <button
                     key={product.productCode}
                     className='flex flex-col items-center shadow-md shadow-slate-200 bg-white rounded-lg w-32 h-32'

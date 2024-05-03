@@ -3,7 +3,6 @@ import { setStorage } from '../util/setStorage';
 import { useEffect, useState } from 'react';
 import { removeFromStorage } from '../util/removeFromStorage';
 import { useStorage } from '../context/storage-context';
-import OrderProducts from './OrderProducts';
 
 enum RECIEVE {
   TO_GO = 'to-go',
@@ -36,31 +35,8 @@ export const PlaceSelectionPage = () => {
   };
 
   useEffect(() => {
-    fetchData();
-    console.log('useEffect 실행');
-
     removeFromStorage('place');
   }, []);
-
-  const fetchData = () => {
-    const userId = storage.token?.userId;
-
-    fetch('http://localhost:8080/order/place', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        userId: userId,
-      }),
-    })
-      .then((res) => res.json())
-      .then((json) => {
-        const orderId = json.result.id;
-        setOrderListId(orderId);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  };
 
   return (
     <>
