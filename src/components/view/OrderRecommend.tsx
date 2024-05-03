@@ -32,16 +32,15 @@ const OrderRecommend = () => {
       });
   };
 
-  const addItem = async (product: Product) => {
+  const addItem = (product: Product) => {
     console.log(cart);
-    await addOrder(product, 1);
+    addOrder(product, 1);
     const totalPrice = getTotalPrice(cart);
     alert(
       '상품 추가되었습니다.\n 총 결제 금액은 ' +
         (totalPrice + product.productPrice).toLocaleString() +
         ' 원 입니다'
     );
-
     navigation('/order/payment');
   };
 

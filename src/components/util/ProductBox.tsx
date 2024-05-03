@@ -1,11 +1,10 @@
-import { useStorage } from '../context/storage-context';
 import { Product } from '../view/AdminPageList';
 
 type Prop = {
   product: Product;
   id?: undefined | number | string;
 };
-export const ProductBox = ({ product, id }: Prop) => {
+export const ProductBox = ({ product }: Prop) => {
   return (
     <div className='w-32 h-32'>
       <div style={{ height: '50%' }}>

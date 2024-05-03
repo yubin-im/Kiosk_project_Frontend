@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useStorage } from '../context/storage-context';
 
 interface PaymentResDto {
   orderItemTotalAmount: number;
@@ -11,9 +10,6 @@ const OrderPayment = () => {
   const navigation = useNavigate();
   const [data, setData] = useState<PaymentResDto | null>(null);
   const [orderListId, setOrderListId] = useState<number | null>(null);
-  const {
-    storage: { token },
-  } = useStorage();
 
   useEffect(() => {
     // Todo: OrderListID 받아오기
