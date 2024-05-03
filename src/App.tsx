@@ -3,7 +3,6 @@ import './App.css';
 import { Nav } from './Nav';
 import { LandingPage } from './components/view/LandingPage';
 import { LoginPage } from './components/view/LoginPage';
-import { Order } from './components/view/OrderPage';
 import { RegistrationPage } from './components/view/RegistrationPage';
 import { StorageProvider } from './components/context/storage-context';
 import { PlaceSelectionPage } from './components/view/placeSelectionPage';

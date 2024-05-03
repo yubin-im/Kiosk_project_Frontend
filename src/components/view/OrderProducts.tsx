@@ -197,11 +197,18 @@ const OrderProducts = () => {
                   key={index}
                   className='flex flex-col shadow-md shadow-slate-200 bg-white rounded-lg justify-self-center min-w-full'
                 >
-                  <img
-                    src={product.productImgUrl}
-                    alt={product.productName}
-                    className='overflow-y-hidden'
-                  />
+                  <div style={{ height: '100px' }}>
+                    <img
+                      src={product.productImgUrl}
+                      alt={product.productName}
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        objectFit: 'fill',
+                      }}
+                    />
+                  </div>
+
                   <div className=''>
                     <p>{product.productName}</p>
                     <p>{product.productPrice}원</p>
