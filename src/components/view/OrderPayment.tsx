@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 interface PaymentResDto {
   orderItemTotalAmount: number;
@@ -6,6 +7,7 @@ interface PaymentResDto {
 }
 
 const OrderPayment = () => {
+  const navigation = useNavigate();
   const [data, setData] = useState<PaymentResDto | null>(null);
   const [orderListId, setOrderListId] = useState<number | null>(null);
 

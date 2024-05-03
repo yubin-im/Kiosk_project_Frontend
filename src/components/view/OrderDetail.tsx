@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 interface OrderDetailItemDto {
   productName: string;
@@ -13,6 +14,7 @@ interface OrderDetailResDto {
 }
 
 const OrderDetail = () => {
+  const navigation = useNavigate();
   const [data, setData] = useState<OrderDetailResDto | null>(null);
   const [orderListId, setOrderListId] = useState<number | null>(null);
 
@@ -73,8 +75,21 @@ const OrderDetail = () => {
       <hr />
 
       <div>
-        <button className='mx-3'>추가 주문</button>
-        <button>결제하기</button>
+        <button
+          className='mx-3'
+          onClick={() => {
+            navigation('/order/products');
+          }}
+        >
+          추가 주문
+        </button>
+        <button
+          onClick={() => {
+            navigation('/order/recommend');
+          }}
+        >
+          결제하기
+        </button>
       </div>
     </div>
   );
