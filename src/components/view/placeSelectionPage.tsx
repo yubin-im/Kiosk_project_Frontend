@@ -1,7 +1,9 @@
 import { useNavigate } from 'react-router-dom';
 import { setStorage } from '../util/setStorage';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { removeFromStorage } from '../util/removeFromStorage';
+import { useStorage } from '../context/storage-context';
+import OrderProducts from './OrderProducts';
 
 enum RECIEVE {
   TO_GO = 'to-go',
@@ -9,6 +11,9 @@ enum RECIEVE {
 }
 
 export const PlaceSelectionPage = () => {
+  const { storage } = useStorage();
+  const [orderListId, setOrderListId] = useState<number | null>(null);
+
   const navigation = useNavigate();
   const setPlace = (place: RECIEVE) => {
     let rplace: string;
@@ -31,8 +36,31 @@ export const PlaceSelectionPage = () => {
   };
 
   useEffect(() => {
+    fetchData();
+    console.log('useEffect 실행');
+
     removeFromStorage('place');
   }, []);
+
+  const fetchData = () => {
+    const userId = storage.token?.userId;
+
+    fetch('http://localhost:8080/order/place', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        userId: userId,
+      }),
+    })
+      .then((res) => res.json())
+      .then((json) => {
+        const orderId = json.result.id;
+        setOrderListId(orderId);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
 
   return (
     <>

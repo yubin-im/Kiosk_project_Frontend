@@ -22,6 +22,7 @@ const OrderProducts = () => {
   const {
     storage: { token },
   } = useStorage();
+
   const [data, setData] = useState<ProductsResDto | null>(null);
   const [category, setCategory] = useState<string | null>('BURGER_SET');
   const [page, setPage] = useState(0);
@@ -75,10 +76,6 @@ const OrderProducts = () => {
       });
   };
 
-  if (!data) {
-    return <div>Loading...</div>;
-  }
-
   return (
     <div className='flex flex-col max-w-screen-sm sm min-h-screen  justify-between mx-auto'>
       <div>
@@ -88,6 +85,7 @@ const OrderProducts = () => {
           className='object-fill w-full h-20'
         ></img>
       </div>
+
 
       <div
         style={{
@@ -194,30 +192,34 @@ const OrderProducts = () => {
             </button>
           </div>
           <div className='col-span-9 border-2 border-mcred p-2 rounded-lg ml-2'>
-            <div className='grid grid-cols-3 min-h-full gap-2 '>
-              {data.productDtos?.map((product, index) => (
-                <div
-                  key={index}
-                  className='flex flex-col shadow-md shadow-slate-200 bg-white rounded-lg justify-self-center min-w-full'
-                >
-                  <div style={{ height: '100px' }}>
-                    <img
-                      src={product.productImgUrl}
-                      alt={product.productName}
-                      style={{
-                        width: '100%',
-                        height: '100%',
-                        objectFit: 'fill',
-                      }}
-                    />
-                  </div>
+            <div className='grid grid-cols-3 gap-2 p-2 '>
+              {!data ? (
+                <span className='self-center'>isloading</span>
+              ) : (
+                data.productDtos?.map((product, index) => (
+                  <div
+                    key={index}
+                    className='flex flex-col shadow-md shadow-slate-200 bg-white rounded-lg justify-self-center w-32 h-32'
+                  >
+                    <div style={{ height: '50%' }}>
+                      <img
+                        src={product.productImgUrl}
+                        alt={product.productName}
+                        style={{
+                          width: '100%',
+                          height: '100%',
+                          objectFit: 'fill',
+                        }}
+                      />
+                    </div>
 
-                  <div className=''>
-                    <p className='text-sm'>{product.productName}</p>
-                    <p>{product.productPrice}원</p>
+                    <div className='text-sm overflow-hidden'>
+                      <p>{product.productName}</p>
+                      <p>{product.productPrice}원</p>
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))
+              )}
             </div>
           </div>
         </div>
@@ -256,15 +258,24 @@ const OrderProducts = () => {
           <p className='mx-3 text-md'>주문 내역</p>
         </div>
         <div>
+
           <p className='mx-3 text-sm'>
             총 가격: {data.orderListTotalPrice}원 수량:{' '}
             {data.orderListTotalAmount}
+
           </p>
         </div>
       </div>
 
       <div style={{ textAlign: 'right' }}>
-        <button type='button' className='font-bold text-sm'>
+
+        <button
+          type='button'
+          className='font-bold text-sm'
+          onClick={() => {
+            navigation('/order/detail');
+          }}
+        >
           주문 상세보기
         </button>
         <br />
@@ -274,10 +285,20 @@ const OrderProducts = () => {
       </div>
 
       <div className='grid grid-cols-2 mt-1 gap-1'>
-        <button className='bg-red-500 text-white text-md font-bold rounded-lg w-full'>
+        <button
+          className='bg-red-500 text-white text-lg font-bold rounded-lg w-full'
+          onClick={() => {
+            navigation('/placeselection');
+          }}
+        >
           주문 취소
         </button>
-        <button className='bg-green-700 text-white text-md font-bold rounded-lg w-full'>
+        <button
+          className='bg-green-700 text-white text-md font-bold rounded-lg w-full'
+          onClick={() => {
+            navigation('/order/recommend');
+          }}
+        >
           주문 완료
         </button>
       </div>

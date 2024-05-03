@@ -29,7 +29,10 @@ function App() {
           <Route path='/order/products' element={<OrderProducts />} />
           <Route path='/order/payment' element={<OrderPayment />} />
           <Route path='/order/submit' element={<OrderSubmit />} />
-          <Route path='/order/recommendation' element={<OrderRecommend />} />
+          <Route path='/order/recommend' element={<OrderRecommend />} />
+          {/* <Route path='/order/detail' element={<OrderDetail />} /> */}
+          <Route path='/order/payment' element={<OrderPayment />} />
+          <Route path='/order/submit' element={<OrderSubmit />} />
           <Route path='/admin/*' element={<AdminPage />}>
             {/* <Route index element={<AdminPageList />} /> */}
             <Route path=':category' element={<AdminPageList />} />

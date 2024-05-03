@@ -34,7 +34,8 @@ export const AdminPageList = () => {
 
   useEffect(() => {
     console.log('cat', category);
-    fetch(`http://localhost:8080/admin/${category}`)
+
+    fetch(`http://localhost:8080/admin/user`)
       .then((res) => {
         return res.json();
       })
