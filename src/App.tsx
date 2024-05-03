@@ -7,13 +7,13 @@ import { RegistrationPage } from './components/view/RegistrationPage';
 import { StorageProvider } from './components/context/storage-context';
 import OrderSubmit from './components/view/OrderSubmit';
 import OrderPayment from './components/view/OrderPayment';
-import OrderRecommend from './components/view/OrderRecommend';
-import OrderDetail from './components/view/OrderDetail';
+
 import OrderProducts from './components/view/OrderProducts';
 import { PlaceSelectionPage } from './components/view/placeSelectionPage';
 
 import { AdminPage } from './components/view/AdminPage';
 import { AdminPageList } from './components/view/AdminPageList';
+import OrderRecommend from './components/view/OrderRecommend';
 
 function App() {
   return (
@@ -29,6 +29,7 @@ function App() {
           <Route path='/order/products' element={<OrderProducts />} />
           <Route path='/order/payment' element={<OrderPayment />} />
           <Route path='/order/submit' element={<OrderSubmit />} />
+          <Route path='/order/recommendation' element={<OrderRecommend />} />
           <Route path='/admin/*' element={<AdminPage />}>
             {/* <Route index element={<AdminPageList />} /> */}
             <Route path=':category' element={<AdminPageList />} />

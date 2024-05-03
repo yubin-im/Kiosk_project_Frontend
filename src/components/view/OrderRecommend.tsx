@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import { Button, Row, Col } from 'react-bootstrap';
+import { useEffect, useState } from 'react';
 
 interface RecommendProductDto {
   id: number;
@@ -37,21 +36,21 @@ const OrderRecommend = () => {
       <h1>함께 즐기시면 더욱 좋습니다!</h1>
       <br />
 
-      <Row>
+      <div>
         {data.map((product, index) => (
-          <Col md={4} key={index}>
+          <div key={index}>
             <div className='text-center'>
               <img src={product.productImgUrl} alt={product.productName} />
               <p>{product.productName}</p>
               <p>{product.productPrice}원</p>
             </div>
-          </Col>
+          </div>
         ))}
-      </Row>
+      </div>
 
       <br />
-      <Button className='mx-3'>이전</Button>
-      <Button>선택안함</Button>
+      <button className='mx-3'>이전</button>
+      <button>선택안함</button>
     </div>
   );
 };
