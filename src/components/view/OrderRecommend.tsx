@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { McFrame } from '../util/mcFrame';
+import { ProductBox } from '../util/\bProductBox';
 
-interface RecommendProductDto {
-  id: number;
+interface RecommendProduct {
+  productCode: string;
   productName: string;
   productPrice: number;
   productImgUrl: string;
@@ -11,7 +12,7 @@ interface RecommendProductDto {
 
 const OrderRecommend = () => {
   const navigation = useNavigate();
-  const [data, setData] = useState<RecommendProductDto[] | null>(null);
+  const [data, setData] = useState<RecommendProduct[] | null>(null);
 
   useEffect(() => {
     fetchData();
@@ -46,26 +47,27 @@ const OrderRecommend = () => {
           <span>isLoading</span>
         ) : (
           data.map((product, index) => (
-            <div
-              key={index}
-              className='shadow-sm shadow-slate-400 rounded-lg w-full h-32 overflow-hidden'
-            >
-              <div style={{ height: '50%' }}>
-                <img
-                  src={product.productImgUrl}
-                  alt={product.productName}
-                  style={{
-                    width: '100%',
-                    height: '100%',
-                    objectFit: 'fill',
-                  }}
-                />
-              </div>
-              <div className='text-center text-sm'>
-                <p>{product.productName}</p>
-                <p>{product.productPrice}원</p>
-              </div>
-            </div>
+            <ProductBox item={product} key={index} />
+            // <div
+            //   key={index}
+            //   className='shadow-sm shadow-slate-400 rounded-lg w-full h-32 overflow-hidden'
+            // >
+            //   <div style={{ height: '50%' }}>
+            //     <img
+            //       src={product.productImgUrl}
+            //       alt={product.productName}
+            //       style={{
+            //         width: '100%',
+            //         height: '100%',
+            //         objectFit: 'fill',
+            //       }}
+            //     />
+            //   </div>
+            //   <div className='text-center text-sm'>
+            //     <p>{product.productName}</p>
+            //     <p>{product.productPrice}원</p>
+            //   </div>
+            // </div>
           ))
         )}
       </div>
