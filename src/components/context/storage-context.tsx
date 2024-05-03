@@ -8,6 +8,7 @@ import {
 } from 'react';
 import { setStorage } from '../util/setStorage';
 import { getStorage } from '../util/getStorage';
+import { useCount } from '../util/use-count';
 
 enum ACTION {
   LOG_IN = 'login',
@@ -59,6 +60,7 @@ type StorageContextProp = {
   addOrder: (product: Product, productAmount: number) => void;
   removeOrder: (orderId: number) => void;
   emptyCart: () => boolean;
+  getCount: () => number;
 };
 
 const SessionContext = createContext<StorageContextProp>({
@@ -74,6 +76,7 @@ const SessionContext = createContext<StorageContextProp>({
   emptyCart: () => {
     return false;
   },
+  getCount: () => 0,
 });
 
 const DefaultStorage: Storage = {
@@ -98,7 +101,7 @@ const reducer = (storage: Storage, { type, payload }: Action) => {
       break;
 
     case ACTION.ADD_ORDER:
-      newer = { ...storage, cart: { ...storage.cart, ...payload } };
+      newer = { ...storage, cart: [...storage.cart, payload] };
       break;
 
     case ACTION.EMPTY_CART:
@@ -117,6 +120,7 @@ const reducer = (storage: Storage, { type, payload }: Action) => {
 
 export const StorageProvider = ({ children }: providerProps) => {
   const [storage, dispatch] = useReducer(reducer, DefaultStorage);
+  const [totalCount, updateCount] = useCount();
 
   const login = useCallback((token: string, userId: string) => {
     dispatch({ type: ACTION.LOG_IN, payload: { token, userId } });
@@ -137,13 +141,28 @@ export const StorageProvider = ({ children }: providerProps) => {
     };
 
     dispatch({ type: ACTION.UPDATE_CART, payload: updatedOrder });
+    updateCount(-1);
   };
   const emptyCart = () => {
     dispatch({ type: ACTION.EMPTY_CART, payload: [] });
     return false;
   };
 
-  const addOrder = () => {};
+  const addOrder = (product: Product, amount: number) => {
+    const order: Order = {
+      orderId: totalCount,
+      product: { ...product },
+      productAmount: amount,
+      totalPrice: product.productPrice * amount,
+    };
+    dispatch({ type: ACTION.ADD_ORDER, payload: order });
+    updateCount(1);
+  };
+
+  const getCount = () => {
+    const count = totalCount;
+    return count;
+  };
 
   useEffect(() => {
     const storedToken = getStorage<string>('AUTH-TOKEN', '');
@@ -164,7 +183,15 @@ export const StorageProvider = ({ children }: providerProps) => {
   return (
     <>
       <SessionContext.Provider
-        value={{ storage, login, logout, addOrder, removeOrder, emptyCart }}
+        value={{
+          storage,
+          login,
+          logout,
+          addOrder,
+          removeOrder,
+          emptyCart,
+          getCount,
+        }}
       >
         {children}
       </SessionContext.Provider>

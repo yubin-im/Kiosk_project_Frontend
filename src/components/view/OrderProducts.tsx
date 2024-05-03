@@ -2,42 +2,47 @@ import clsx from 'clsx';
 import { useState, useEffect } from 'react';
 import { useStorage } from '../context/storage-context';
 import { useNavigate } from 'react-router-dom';
+import { Product } from './AdminPageList';
 
-interface ProductsByCategoryDto {
-  productId: number;
-  productName: string;
-  productPrice: number;
-  productImgUrl: string;
+enum CATEGORY {
+  BURGER_SET = 'BURGER_SET',
+  BURGER_SINGLE = 'BURGER_SINGLE',
+  DESSERT = 'DESSERT',
+  DRINK = 'DRINK',
+  HAPPY_MEAL = 'HAPPY_MEAL',
+  RECOMMENDED = 'RECOMMENDED',
 }
 
-interface ProductsResDto {
-  productDtos: ProductsByCategoryDto[];
-  userName: string;
-  orderListTotalAmount: number;
-  orderListTotalPrice: number;
+interface Message {
+  status: string;
+  code: string;
+  message: string;
+  result: Product[];
 }
 
 const OrderProducts = () => {
   const navigation = useNavigate();
   const {
-    storage: { token },
+    addOrder,
+    removeOrder,
+    emptyCart,
+    getCount,
+    storage: { token, cart },
   } = useStorage();
 
-  const [data, setData] = useState<ProductsResDto | null>(null);
-  const [category, setCategory] = useState<string | null>('BURGER_SET');
-  const [page, setPage] = useState(0);
-  const [orderListId, setOrderListId] = useState<number | null>(20);
-  const [productDtos, setProductDtos] = useState<
-    ProductsByCategoryDto[] | null
-  >(null);
+  const [products, setProducts] = useState<Product[] | null>(null);
+  const [category, setCategory] = useState<CATEGORY>(CATEGORY.BURGER_SET);
+  const [page, setPage] = useState<number>(0);
 
   useEffect(() => {
-    if (category === 'RECOMMENDED') {
+    if (category == CATEGORY.RECOMMENDED) {
       fetchRecommendData();
     } else {
       fetchData();
     }
-  }, [category, page, orderListId]);
+
+    console.log('ccacarasdfsadfadscat : ', cart);
+  }, [category, page]);
 
   // 카테고리 별 메뉴 출력
   const fetchData = () => {
@@ -47,16 +52,20 @@ const OrderProducts = () => {
       body: JSON.stringify({
         category: category,
         page: page,
-        orderListId: orderListId,
       }),
     })
-      .then((res) => res.json())
-      .then((json) => {
-        setData(json.result);
+      .then((res) => {
+        return res.json();
       })
-      .catch((err) => {
-        console.error(err);
-      });
+      .then((json) => {
+        const message: Message = json;
+        const { status, result: products } = message;
+        console.log(products);
+        if (status == 'PRODUCT_CHECK_SUCCESS') {
+          setProducts(products);
+        }
+      })
+      .catch((err) => console.error(err));
   };
 
   // 추천 메뉴 눌렀을 때 랜덤 메뉴 출력
@@ -64,16 +73,18 @@ const OrderProducts = () => {
     fetch('http://localhost:8080/order/recommend', {
       method: 'POST',
     })
-      .then((res) => res.json())
-      .then((json) => {
-        setData((prevData) => ({
-          ...prevData!,
-          productDtos: json.result,
-        }));
+      .then((res) => {
+        return res.json();
       })
-      .catch((err) => {
-        console.error(err);
+      .then((json) => {
+        console.log(json.result);
+        setProducts(json.result);
       });
+  };
+
+  const addItem = (product: Product) => {
+    addOrder(product, 1);
+    console.log('count', getCount());
   };
 
   return (
@@ -85,7 +96,6 @@ const OrderProducts = () => {
           className='object-fill w-full h-20'
         ></img>
       </div>
-
 
       <div
         style={{
@@ -120,72 +130,72 @@ const OrderProducts = () => {
             <span className='bg-mcred h-0.5'></span>
             <button
               onClick={() => {
-                setCategory('RECOMMENDED');
+                setCategory(CATEGORY.RECOMMENDED);
                 setPage(0);
               }}
               className={clsx('font-bold rounded-lg py-3 text-sm', {
-                'drop-shadow-lg bg-white': category != 'RECOMMENDED',
-                'bg-mcred text-white ': category == 'RECOMMENDED',
+                'drop-shadow-lg bg-white': category != CATEGORY.RECOMMENDED,
+                'bg-mcred text-white ': category == CATEGORY.RECOMMENDED,
               })}
             >
               추천 메뉴
             </button>
             <button
               onClick={() => {
-                setCategory('BURGER_SET');
+                setCategory(CATEGORY.BURGER_SET);
                 setPage(0);
               }}
               className={clsx('font-bold rounded-lg py-3 text-sm', {
-                'drop-shadow-lg bg-white': category != 'BURGER_SET',
-                'bg-mcred text-white ': category == 'BURGER_SET',
+                'drop-shadow-lg bg-white': category != CATEGORY.BURGER_SET,
+                'bg-mcred text-white ': category == CATEGORY.BURGER_SET,
               })}
             >
               버거 & 세트
             </button>
             <button
               onClick={() => {
-                setCategory('BURGER_SINGLE');
+                setCategory(CATEGORY.BURGER_SINGLE);
                 setPage(0);
               }}
               className={clsx('font-bold rounded-lg py-3 text-sm', {
-                'drop-shadow-lg bg-white': category != 'BURGER_SINGLE',
-                'bg-mcred text-white ': category == 'BURGER_SINGLE',
+                'drop-shadow-lg bg-white': category != CATEGORY.BURGER_SINGLE,
+                'bg-mcred text-white ': category == CATEGORY.BURGER_SINGLE,
               })}
             >
               단품
             </button>
             <button
               onClick={() => {
-                setCategory('HAPPY_MEAL');
+                setCategory(CATEGORY.HAPPY_MEAL);
                 setPage(0);
               }}
               className={clsx('font-bold rounded-lg py-3 text-sm', {
-                'drop-shadow-lg bg-white': category != 'HAPPY_MEAL',
-                'bg-mcred text-white ': category == 'HAPPY_MEAL',
+                'drop-shadow-lg bg-white': category != CATEGORY.HAPPY_MEAL,
+                'bg-mcred text-white ': category == CATEGORY.HAPPY_MEAL,
               })}
             >
               해피밀
             </button>
             <button
               onClick={() => {
-                setCategory('DESSERT');
+                setCategory(CATEGORY.DESSERT);
                 setPage(0);
               }}
               className={clsx('font-bold rounded-lg py-3 text-sm', {
-                'drop-shadow-lg bg-white': category != 'DESSERT',
-                'bg-mcred text-white ': category == 'DESSERT',
+                'drop-shadow-lg bg-white': category != CATEGORY.DESSERT,
+                'bg-mcred text-white ': category == CATEGORY.DESSERT,
               })}
             >
               디저트
             </button>
             <button
               onClick={() => {
-                setCategory('DRINK');
+                setCategory(CATEGORY.DRINK);
                 setPage(0);
               }}
               className={clsx('font-bold rounded-lg py-3 text-sm', {
-                'drop-shadow-lg bg-white': category != 'DRINK',
-                'bg-mcred text-white ': category == 'DRINK',
+                'drop-shadow-lg bg-white': category != CATEGORY.DRINK,
+                'bg-mcred text-white ': category == CATEGORY.DRINK,
               })}
             >
               음료
@@ -193,13 +203,17 @@ const OrderProducts = () => {
           </div>
           <div className='col-span-9 border-2 border-mcred p-2 rounded-lg ml-2'>
             <div className='grid grid-cols-3 gap-2 p-2 '>
-              {!data ? (
+              {!products ? (
                 <span className='self-center'>isloading</span>
               ) : (
-                data.productDtos?.map((product, index) => (
-                  <div
-                    key={index}
-                    className='flex flex-col shadow-md shadow-slate-200 bg-white rounded-lg justify-self-center w-32 h-32'
+                products?.map((product, index) => (
+                  <button
+                    key={product.productCode}
+                    className='flex flex-col items-center shadow-md shadow-slate-200 bg-white rounded-lg w-32 h-32'
+                    onClick={() => {
+                      console.log('hihi', product.productCode);
+                      addItem(product);
+                    }}
                   >
                     <div style={{ height: '50%' }}>
                       <img
@@ -217,7 +231,7 @@ const OrderProducts = () => {
                       <p>{product.productName}</p>
                       <p>{product.productPrice}원</p>
                     </div>
-                  </div>
+                  </button>
                 ))
               )}
             </div>
@@ -258,17 +272,21 @@ const OrderProducts = () => {
           <p className='mx-3 text-md'>주문 내역</p>
         </div>
         <div>
-
-          <p className='mx-3 text-sm'>
-            총 가격: {data.orderListTotalPrice}원 수량:{' '}
-            {data.orderListTotalAmount}
-
-          </p>
+          {/* <p className='mx-3 text-sm'>
+            총 가격: {data?.orderListTotalPrice}원 수량:{' '}
+            {data?.orderListTotalAmount}
+          </p> */}
         </div>
       </div>
 
       <div style={{ textAlign: 'right' }}>
-
+        {cart?.map((item) => (
+          <div key={item.orderId} className='flex col-span-12'>
+            <span className='col-span-1'>{item.orderId}</span>
+            <span className='col-span-8'>{item.product.productName}</span>
+            <span className='col-span-3'>{item.product.productPrice}</span>
+          </div>
+        ))}
         <button
           type='button'
           className='font-bold text-sm'
@@ -279,7 +297,10 @@ const OrderProducts = () => {
           주문 상세보기
         </button>
         <br />
-        <button className='bg-mcblack text-white px-5 rounded-lg text-sm'>
+        <button
+          className='bg-mcblack text-white px-5 rounded-lg text-sm'
+          onClick={() => emptyCart()}
+        >
           비우기
         </button>
       </div>

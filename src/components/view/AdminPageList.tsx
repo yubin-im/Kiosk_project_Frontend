@@ -19,13 +19,13 @@ type User = {
   userRole: UserRole;
 };
 
-export type Product = {
+export interface Product {
   productName: string;
   productPrice: number;
   productCode: string;
   productImgUrl: string;
-  category: ProductCategory;
-};
+  category?: ProductCategory;
+}
 
 export const AdminPageList = () => {
   const { category } = useParams();
