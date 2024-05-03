@@ -104,7 +104,6 @@ export const PlaceSelectionPage = () => {
           </div>
         </div>
       </div>
-      <OrderProducts orderId={orderListId} />
     </>
   );
 };

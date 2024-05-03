@@ -17,11 +17,7 @@ interface ProductsResDto {
   orderListTotalPrice: number;
 }
 
-interface OrderProductsProps {
-  orderId: number | null;
-}
-
-const OrderProducts = ({ orderId }: OrderProductsProps) => {
+const OrderProducts = () => {
   const navigation = useNavigate();
   const {
     storage: { token },
@@ -81,7 +77,7 @@ const OrderProducts = ({ orderId }: OrderProductsProps) => {
   };
 
   return (
-    <div className='flex flex-col max-w-screen-sm sm min-h-screen  justify-between mx-auto'>
+    <div className='flex flex-col max-w-screen-sm sm min-h-screen  justify-between mx-auto pb-5'>
       <img
         src='https://img.insight.co.kr/static/2021/04/13/700/img_20210413151511_h3uakchh.webp'
         alt='title'
@@ -192,16 +188,16 @@ const OrderProducts = ({ orderId }: OrderProductsProps) => {
             </button>
           </div>
           <div className='col-span-9 border-2 border-mcred p-2 rounded-lg ml-2'>
-            <div className='grid grid-cols-3 min-h-full gap-2 '>
+            <div className='grid grid-cols-3 gap-2 p-2 '>
               {!data ? (
                 <span className='self-center'>isloading</span>
               ) : (
                 data.productDtos?.map((product, index) => (
                   <div
                     key={index}
-                    className='flex flex-col shadow-md shadow-slate-200 bg-white rounded-lg justify-self-center min-w-full'
+                    className='flex flex-col shadow-md shadow-slate-200 bg-white rounded-lg justify-self-center w-32 h-32'
                   >
-                    <div style={{ height: '100px' }}>
+                    <div style={{ height: '50%' }}>
                       <img
                         src={product.productImgUrl}
                         alt={product.productName}
@@ -213,7 +209,7 @@ const OrderProducts = ({ orderId }: OrderProductsProps) => {
                       />
                     </div>
 
-                    <div className=''>
+                    <div className='text-sm overflow-hidden'>
                       <p>{product.productName}</p>
                       <p>{product.productPrice}원</p>
                     </div>
