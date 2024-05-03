@@ -42,28 +42,32 @@ const OrderRecommend = () => {
         <br />
 
         <div className='grid grid-cols-3 gap-2 place-items-center max-h-96'>
-          {data.map((product, index) => (
-            <div
-              key={index}
-              className='shadow-sm shadow-slate-400 rounded-lg w-full h-32 overflow-hidden'
-            >
-              <div style={{ height: '50%' }}>
-                <img
-                  src={product.productImgUrl}
-                  alt={product.productName}
-                  style={{
-                    width: '100%',
-                    height: '100%',
-                    objectFit: 'fill',
-                  }}
-                />
+          {!data ? (
+            <span>isLoading</span>
+          ) : (
+            data.map((product, index) => (
+              <div
+                key={index}
+                className='shadow-sm shadow-slate-400 rounded-lg w-full h-32 overflow-hidden'
+              >
+                <div style={{ height: '50%' }}>
+                  <img
+                    src={product.productImgUrl}
+                    alt={product.productName}
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      objectFit: 'fill',
+                    }}
+                  />
+                </div>
+                <div className='text-center text-sm'>
+                  <p>{product.productName}</p>
+                  <p>{product.productPrice}원</p>
+                </div>
               </div>
-              <div className='text-center text-sm'>
-                <p>{product.productName}</p>
-                <p>{product.productPrice}원</p>
-              </div>
-            </div>
-          ))}
+            ))
+          )}
         </div>
 
         <br />
