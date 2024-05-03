@@ -17,11 +17,16 @@ interface ProductsResDto {
   orderListTotalPrice: number;
 }
 
-const OrderProducts = () => {
+interface OrderProductsProps {
+  orderId: number | null;
+}
+
+const OrderProducts = ({ orderId }: OrderProductsProps) => {
   const navigation = useNavigate();
   const {
     storage: { token },
   } = useStorage();
+
   const [data, setData] = useState<ProductsResDto | null>(null);
   const [category, setCategory] = useState<string | null>('BURGER_SET');
   const [page, setPage] = useState(0);
@@ -261,7 +266,13 @@ const OrderProducts = () => {
       </div>
 
       <div style={{ textAlign: 'right' }}>
-        <button type='button' className='font-bold'>
+        <button
+          type='button'
+          className='font-bold'
+          onClick={() => {
+            navigation('/order/detail');
+          }}
+        >
           주문 상세보기
         </button>
         <br />
@@ -271,12 +282,19 @@ const OrderProducts = () => {
       </div>
 
       <div className='grid grid-cols-2 mt-2 gap-1'>
-        <button className='bg-red-500 text-white text-lg font-bold rounded-lg w-full'>
+        <button
+          className='bg-red-500 text-white text-lg font-bold rounded-lg w-full'
+          onClick={() => {
+            navigation('/placeselection');
+          }}
+        >
           주문 취소
         </button>
         <button
           className='bg-green-700 text-white text-lg font-bold rounded-lg w-full'
-          onClick={() => navigation('/order/recommendation')}
+          onClick={() => {
+            navigation('/order/recommend');
+          }}
         >
           주문 완료
         </button>
