@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 interface OrderDetailItemDto {
   productName: string;
@@ -14,12 +15,13 @@ interface OrderDetailResDto {
 }
 
 const OrderDetail = () => {
+  const location = useLocation();
   const navigation = useNavigate();
   const [data, setData] = useState<OrderDetailResDto | null>(null);
   const [orderListId, setOrderListId] = useState<number | null>(null);
 
   useEffect(() => {
-    // Todo: orderListId 받아오기
+    // Todo: orderListId 받아오기 => location.state.orderListId 로 변경 예정
     setOrderListId(20);
 
     if (orderListId !== null) {
@@ -85,7 +87,7 @@ const OrderDetail = () => {
         </button>
         <button
           onClick={() => {
-            navigation('/order/recommend');
+            navigation('/order/recommend', { state: { orderListId } });
           }}
         >
           결제하기

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 interface RecommendProductDto {
   id: number;
@@ -9,8 +9,10 @@ interface RecommendProductDto {
 }
 
 const OrderRecommend = () => {
+  const location = useLocation();
   const navigation = useNavigate();
   const [data, setData] = useState<RecommendProductDto[] | null>(null);
+  const orderListId = location.state.orderListId;
 
   useEffect(() => {
     fetchData();
@@ -80,7 +82,9 @@ const OrderRecommend = () => {
           </button>
           <button
             className='bg-mcred px-8 text-white rounded-lg'
-            onClick={() => navigation('/order/payment')}
+            onClick={() =>
+              navigation('/order/payment', { state: { orderListId } })
+            }
           >
             선택안함
           </button>

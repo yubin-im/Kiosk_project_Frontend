@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
+import { useStorage } from '../context/storage-context';
 
 interface PaymentResDto {
   orderItemTotalAmount: number;
@@ -7,12 +9,15 @@ interface PaymentResDto {
 }
 
 const OrderPayment = () => {
+  const location = useLocation();
   const navigation = useNavigate();
   const [data, setData] = useState<PaymentResDto | null>(null);
   const [orderListId, setOrderListId] = useState<number | null>(null);
+  const { storage } = useStorage();
+  const userId = storage.token?.userId;
 
   useEffect(() => {
-    // Todo: OrderListID 받아오기
+    // Todo: OrderListID 받아오기 => location.state.orderListId 로 변경 예정
     setOrderListId(20);
 
     if (orderListId !== null) {
@@ -39,7 +44,7 @@ const OrderPayment = () => {
 
   useEffect(() => {
     setTimeout(() => {
-      navigation('/order/submit');
+      navigation('/order/submit', { state: { userId, orderListId } });
     }, 5000);
   }, []);
 

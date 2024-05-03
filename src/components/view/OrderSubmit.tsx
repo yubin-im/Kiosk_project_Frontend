@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 interface SuccessOrderResDto {
   userPoint: number;
@@ -7,6 +8,7 @@ interface SuccessOrderResDto {
 }
 
 const OrderSubmit = () => {
+  const location = useLocation();
   const navigation = useNavigate();
   const [data, setData] = useState<SuccessOrderResDto | null>(null);
   const [userId, setUserId] = useState<number | null>(null);
@@ -14,8 +16,8 @@ const OrderSubmit = () => {
 
   useEffect(() => {
     // Todo: 사용자 ID와 OrderList ID 받아오기
-    setUserId(20);
-    setOrderListId(20);
+    setUserId(location.state.userId);
+    setOrderListId(location.state.orderListId);
 
     if (userId !== null && orderListId !== null) {
       fetchData();
