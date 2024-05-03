@@ -77,11 +77,15 @@ const OrderProducts = () => {
   };
 
   return (
-    <div className='flex flex-col max-w-screen-sm sm min-h-screen  justify-between mx-auto pb-5'>
-      <img
-        src='https://img.insight.co.kr/static/2021/04/13/700/img_20210413151511_h3uakchh.webp'
-        alt='title'
-      ></img>
+    <div className='flex flex-col max-w-screen-sm sm min-h-screen  justify-between mx-auto'>
+      <div>
+        <img
+          src='https://img.insight.co.kr/static/2021/04/13/700/img_20210413151511_h3uakchh.webp'
+          alt='title'
+          className='object-fill w-full h-20'
+        ></img>
+      </div>
+
 
       <div
         style={{
@@ -90,7 +94,7 @@ const OrderProducts = () => {
           alignItems: 'center',
         }}
       >
-        <h2 className='text-xl my-3'>
+        <h2 className='text-md my-3'>
           {token && <span style={{ color: 'red' }}>{token.userId}</span>}{' '}
           {token &&
             `님
@@ -100,7 +104,7 @@ const OrderProducts = () => {
           onClick={() => {
             navigation('/placeselection');
           }}
-          className='bg-mcblack text-white text-lg font-bold rounded-lg px-8 m-2'
+          className='bg-mcblack text-white text-md font-bold rounded-lg px-8 m-2'
         >
           이전
         </button>
@@ -109,7 +113,7 @@ const OrderProducts = () => {
       <div>
         <div className='grid grid-cols-12'>
           <div className='flex flex-col col-span-3 gap-2'>
-            <span className=' text-mcblack font-sans rounded-lg py-2 '>
+            <span className=' text-mcblack font-sans rounded-lg py-1 '>
               You are here with{' '}
               <strong className='text-xl text-mcyellow'>Mcdonald</strong>
             </span>
@@ -119,7 +123,7 @@ const OrderProducts = () => {
                 setCategory('RECOMMENDED');
                 setPage(0);
               }}
-              className={clsx('font-bold rounded-lg py-5', {
+              className={clsx('font-bold rounded-lg py-3 text-sm', {
                 'drop-shadow-lg bg-white': category != 'RECOMMENDED',
                 'bg-mcred text-white ': category == 'RECOMMENDED',
               })}
@@ -131,7 +135,7 @@ const OrderProducts = () => {
                 setCategory('BURGER_SET');
                 setPage(0);
               }}
-              className={clsx('font-bold rounded-lg py-5', {
+              className={clsx('font-bold rounded-lg py-3 text-sm', {
                 'drop-shadow-lg bg-white': category != 'BURGER_SET',
                 'bg-mcred text-white ': category == 'BURGER_SET',
               })}
@@ -143,7 +147,7 @@ const OrderProducts = () => {
                 setCategory('BURGER_SINGLE');
                 setPage(0);
               }}
-              className={clsx('font-bold rounded-lg py-5', {
+              className={clsx('font-bold rounded-lg py-3 text-sm', {
                 'drop-shadow-lg bg-white': category != 'BURGER_SINGLE',
                 'bg-mcred text-white ': category == 'BURGER_SINGLE',
               })}
@@ -155,7 +159,7 @@ const OrderProducts = () => {
                 setCategory('HAPPY_MEAL');
                 setPage(0);
               }}
-              className={clsx('font-bold rounded-lg py-5', {
+              className={clsx('font-bold rounded-lg py-3 text-sm', {
                 'drop-shadow-lg bg-white': category != 'HAPPY_MEAL',
                 'bg-mcred text-white ': category == 'HAPPY_MEAL',
               })}
@@ -167,7 +171,7 @@ const OrderProducts = () => {
                 setCategory('DESSERT');
                 setPage(0);
               }}
-              className={clsx('font-bold rounded-lg py-5', {
+              className={clsx('font-bold rounded-lg py-3 text-sm', {
                 'drop-shadow-lg bg-white': category != 'DESSERT',
                 'bg-mcred text-white ': category == 'DESSERT',
               })}
@@ -179,7 +183,7 @@ const OrderProducts = () => {
                 setCategory('DRINK');
                 setPage(0);
               }}
-              className={clsx('font-bold rounded-lg py-5', {
+              className={clsx('font-bold rounded-lg py-3 text-sm', {
                 'drop-shadow-lg bg-white': category != 'DRINK',
                 'bg-mcred text-white ': category == 'DRINK',
               })}
@@ -223,7 +227,7 @@ const OrderProducts = () => {
 
       <div className='flex justify-center m-2 gap-5'>
         <button
-          className='border border-stone-300 px-5 py-1 rounded-lg'
+          className='border border-stone-300 px-5 py-1 rounded-lg text-sm'
           disabled={page === 0}
           onClick={() => setPage(page - 1)}
         >
@@ -231,7 +235,7 @@ const OrderProducts = () => {
         </button>
         <span>{page}</span>
         <button
-          className='border border-stone-300 px-5 py-1 rounded-lg'
+          className='border border-stone-300 px-5 py-1 rounded-lg text-sm'
           onClick={() => setPage(page + 1)}
         >
           다음
@@ -251,20 +255,23 @@ const OrderProducts = () => {
         }}
       >
         <div>
-          <p className='mx-3'>주문 내역</p>
+          <p className='mx-3 text-md'>주문 내역</p>
         </div>
         <div>
-          <p className='mx-3'>
-            총 가격: {data?.orderListTotalPrice}원 수량:{' '}
-            {data?.orderListTotalAmount}
+
+          <p className='mx-3 text-sm'>
+            총 가격: {data.orderListTotalPrice}원 수량:{' '}
+            {data.orderListTotalAmount}
+
           </p>
         </div>
       </div>
 
       <div style={{ textAlign: 'right' }}>
+
         <button
           type='button'
-          className='font-bold'
+          className='font-bold text-sm'
           onClick={() => {
             navigation('/order/detail');
           }}
@@ -272,12 +279,12 @@ const OrderProducts = () => {
           주문 상세보기
         </button>
         <br />
-        <button className='bg-mcblack text-white px-5 py-1 rounded-lg'>
+        <button className='bg-mcblack text-white px-5 rounded-lg text-sm'>
           비우기
         </button>
       </div>
 
-      <div className='grid grid-cols-2 mt-2 gap-1'>
+      <div className='grid grid-cols-2 mt-1 gap-1'>
         <button
           className='bg-red-500 text-white text-lg font-bold rounded-lg w-full'
           onClick={() => {
@@ -287,7 +294,7 @@ const OrderProducts = () => {
           주문 취소
         </button>
         <button
-          className='bg-green-700 text-white text-lg font-bold rounded-lg w-full'
+          className='bg-green-700 text-white text-md font-bold rounded-lg w-full'
           onClick={() => {
             navigation('/order/recommend');
           }}
