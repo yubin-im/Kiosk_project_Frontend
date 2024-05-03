@@ -144,17 +144,21 @@ export const StorageProvider = ({ children }: providerProps) => {
   };
 
   const addOrder = () => {};
+
   useEffect(() => {
     const storedToken = getStorage<string>('AUTH-TOKEN', '');
     const storedUserId = getStorage<string>('userId', '');
     const storedCart = getStorage<Order[]>('cart', []);
 
-    const userToken: UserToken = { token: storedToken, userId: storedUserId };
-
-    dispatch({
-      type: ACTION.SET,
-      payload: { token: userToken, cart: storedCart },
-    });
+    if (!storedToken.length) {
+      localStorage.clear();
+    } else {
+      const userToken: UserToken = { token: storedToken, userId: storedUserId };
+      dispatch({
+        type: ACTION.SET,
+        payload: { token: userToken, cart: storedCart },
+      });
+    }
   }, []);
 
   return (

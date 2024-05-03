@@ -1,7 +1,6 @@
 import { FormEvent, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router';
 import { useStorage } from '../context/storage-context';
-import { getStorage } from '../util/getStorage';
 
 export const LoginPage = () => {
   const { login } = useStorage();
@@ -56,10 +55,7 @@ export const LoginPage = () => {
   };
 
   useEffect(() => {
-    const userToken = getStorage<string>('AUTH-TOKEN', '');
-    if (userToken) {
-      localStorage.clear();
-    }
+    localStorage.clear();
   }, [navigation]);
 
   return (
@@ -112,8 +108,8 @@ export const LoginPage = () => {
             </div>
             <button
               type='button'
-              onClick={() => navigation('/order')}
-              className='border border-2 bg-mcred text-white rounded-xl px-5 py-1'
+              onClick={() => navigation('/placeselection')}
+              className='border  bg-mcred text-white rounded-xl px-5 py-1'
             >
               비회원 주문
             </button>
