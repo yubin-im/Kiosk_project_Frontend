@@ -41,6 +41,7 @@ const OrderSubmit = () => {
   };
 
   useEffect(() => {
+    localStorage.clear();
     setTimeout(() => {
       navigation('/');
     }, 7000);

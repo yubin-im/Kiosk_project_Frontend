@@ -24,12 +24,8 @@ interface Message {
 const OrderProducts = () => {
   const navigation = useNavigate();
   const {
-    addOrder,
-    removeOrder,
-    emptyCart,
     getCount,
     storage: { token, cart },
-    updateProductAmount,
     setOrders,
   } = useStorage();
 
@@ -48,6 +44,12 @@ const OrderProducts = () => {
 
     console.log('ccacarasdfsadfadscat : ', cart);
   }, [category, page]);
+
+  useEffect(() => {
+    if (cart.length) {
+      setMyCart(cart);
+    }
+  }, []);
 
   // 카테고리 별 메뉴 출력
   const fetchData = () => {
@@ -97,7 +99,6 @@ const OrderProducts = () => {
     updateCount(1);
 
     setMyCart((pre) => [...pre, newOrder]);
-    // addOrder(product, 1);
     console.log('count', getCount());
   };
 
@@ -119,7 +120,6 @@ const OrderProducts = () => {
     const newAmount = ++order.productAmount;
     const newOrder: Order = { ...order, productAmount: newAmount };
 
-    // updateProductAmount(orderId, newOrder);
     setMyCart((pre) => [
       ...pre.slice(0, index),
       newOrder,
@@ -136,7 +136,6 @@ const OrderProducts = () => {
     const newAmount = --order.productAmount;
     const newOrder: Order = { ...order, productAmount: newAmount };
 
-    // updateProductAmount(orderId, newOrder);
     setMyCart((pre) => [
       ...pre.slice(0, index),
       newOrder,
