@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { useStorage } from '../context/storage-context';
 import { useNavigate } from 'react-router-dom';
 import { Product } from './AdminPageList';
+import { useCount } from '../util/use-count';
 
 enum CATEGORY {
   BURGER_SET = 'BURGER_SET',
@@ -28,11 +29,15 @@ const OrderProducts = () => {
     emptyCart,
     getCount,
     storage: { token, cart },
+    updateProductAmount,
+    setOrders,
   } = useStorage();
 
   const [products, setProducts] = useState<Product[] | null>(null);
   const [category, setCategory] = useState<CATEGORY>(CATEGORY.BURGER_SET);
   const [page, setPage] = useState<number>(0);
+  const [myCart, setMyCart] = useState<Order[]>([]);
+  const [totalCount, updateCount] = useCount(0);
 
   useEffect(() => {
     if (category == CATEGORY.RECOMMENDED) {
@@ -83,7 +88,16 @@ const OrderProducts = () => {
   };
 
   const addItem = (product: Product) => {
-    addOrder(product, 1);
+    const newOrder: Order = {
+      orderId: totalCount,
+      product: { ...product },
+      productAmount: 1,
+      totalPrice: product.productPrice,
+    };
+    updateCount(1);
+
+    setMyCart((pre) => [...pre, newOrder]);
+    // addOrder(product, 1);
     console.log('count', getCount());
   };
 
@@ -97,6 +111,41 @@ const OrderProducts = () => {
             return acc + curr;
           })
           .toLocaleString();
+  };
+
+  const addAmount = (index: number) => {
+    const order: Order = myCart[index];
+
+    const newAmount = ++order.productAmount;
+    const newOrder: Order = { ...order, productAmount: newAmount };
+
+    // updateProductAmount(orderId, newOrder);
+    setMyCart((pre) => [
+      ...pre.slice(0, index),
+      newOrder,
+      ...pre.slice(index + 1),
+    ]);
+  };
+
+  const subAmount = (index: number) => {
+    const order: Order = myCart[index];
+    if (order.productAmount == 1) {
+      setMyCart((pre) => [...pre.slice(0, index), ...pre.slice(index + 1)]);
+      return;
+    }
+    const newAmount = --order.productAmount;
+    const newOrder: Order = { ...order, productAmount: newAmount };
+
+    // updateProductAmount(orderId, newOrder);
+    setMyCart((pre) => [
+      ...pre.slice(0, index),
+      newOrder,
+      ...pre.slice(index + 1),
+    ]);
+  };
+
+  const emptyMyCart = () => {
+    setMyCart([]);
   };
 
   return (
@@ -285,7 +334,7 @@ const OrderProducts = () => {
         </div>
         <div>
           <p className='mx-3 text-md'>
-            총 가격: 원 수량: {getTotalPrice(cart)}
+            총 가격: 원 수량: {getTotalPrice(myCart)}
           </p>
         </div>
       </div>
@@ -296,17 +345,23 @@ const OrderProducts = () => {
       >
         <table className='min-w-full text-start text-sm'>
           <tbody>
-            {cart?.map((item) => (
+            {myCart?.map((item, index) => (
               <tr key={item.orderId} className='flex justify-between'>
-                <td>{item.orderId + 1}</td>
+                <td>{index + 1}</td>
                 <td>{item.product.productName}</td>
                 <td>{item.product.productPrice} 원</td>
                 <td>
-                  <button className='border border-slate-300 rounded-lg px-2'>
+                  <button
+                    className='border border-slate-300 rounded-lg px-2'
+                    onClick={() => subAmount(index)}
+                  >
                     -
                   </button>
                   <span className='mx-2'>{item.productAmount}</span>
-                  <button className='border border-slate-300 rounded-lg px-2'>
+                  <button
+                    className='border border-slate-300 rounded-lg px-2'
+                    onClick={() => addAmount(index)}
+                  >
                     +
                   </button>
                 </td>
@@ -326,7 +381,7 @@ const OrderProducts = () => {
         <br />
         <button
           className='bg-mcblack text-white px-5 rounded-lg text-sm'
-          onClick={() => emptyCart()}
+          onClick={() => emptyMyCart()}
         >
           비우기
         </button>
@@ -344,6 +399,7 @@ const OrderProducts = () => {
         <button
           className='bg-green-700 text-white font-bold rounded-lg w-full'
           onClick={() => {
+            setOrders(myCart);
             navigation('/order/recommend');
           }}
         >

@@ -61,6 +61,8 @@ type StorageContextProp = {
   removeOrder: (orderId: number) => void;
   emptyCart: () => boolean;
   getCount: () => number;
+  updateProductAmount: (orderId: number, order: Order) => void;
+  setOrders: (orders: Order[]) => void;
 };
 
 const SessionContext = createContext<StorageContextProp>({
@@ -77,6 +79,8 @@ const SessionContext = createContext<StorageContextProp>({
     return false;
   },
   getCount: () => 0,
+  updateProductAmount: () => {},
+  setOrders: () => {},
 });
 
 const DefaultStorage: Storage = {
@@ -106,6 +110,10 @@ const reducer = (storage: Storage, { type, payload }: Action) => {
 
     case ACTION.EMPTY_CART:
       newer = { ...storage, cart: [] };
+      break;
+
+    case ACTION.UPDATE_CART:
+      newer = { ...storage, cart: [...payload] };
       break;
 
     default:
@@ -164,6 +172,20 @@ export const StorageProvider = ({ children }: providerProps) => {
     return count;
   };
 
+  const updateProductAmount = (orderId: number, order: Order) => {
+    const newOrderList: Order[] = [
+      ...storage.cart.slice(0, orderId),
+      order,
+      ...storage.cart.slice(orderId + 1),
+    ];
+
+    dispatch({ type: ACTION.UPDATE_CART, payload: newOrderList });
+  };
+
+  const setOrders = (orders: Order[]) => {
+    dispatch({ type: ACTION.UPDATE_CART, payload: orders });
+  };
+
   useEffect(() => {
     const storedToken = getStorage<string>('AUTH-TOKEN', '');
     const storedUserId = getStorage<string>('userId', '');
@@ -191,6 +213,8 @@ export const StorageProvider = ({ children }: providerProps) => {
           removeOrder,
           emptyCart,
           getCount,
+          updateProductAmount,
+          setOrders,
         }}
       >
         {children}
