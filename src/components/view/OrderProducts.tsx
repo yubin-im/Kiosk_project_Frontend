@@ -44,8 +44,6 @@ const OrderProducts = () => {
     } else {
       fetchData();
     }
-
-    console.log('ccacarasdfsadfadscat : ', cart);
   }, [category, page]);
 
   useEffect(() => {
@@ -259,37 +257,10 @@ const OrderProducts = () => {
                 <span className='self-center'>isloading</span>
               ) : (
                 products?.map((product, index) => (
-                  // <button
-                  //   key={product.productCode}
-                  //   className='flex flex-col items-center shadow-md shadow-slate-200 bg-white rounded-lg w-32 h-32'
-                  //   onClick={() => {
-                  //     console.log('hihi', product.productCode);
-                  //     addItem(product);
-                  //   }}
-                  // >
-                  //   <div style={{ height: '50%' }}>
-                  //     <img
-                  //       src={product.productImgUrl}
-                  //       alt={product.productName}
-                  //       style={{
-                  //         width: '100%',
-                  //         height: '100%',
-                  //         objectFit: 'fill',
-                  //       }}
-                  //     />
-                  //   </div>
-
-                  //   <div className='text-sm overflow-hidden'>
-                  //     <p>{product.productName}</p>
-                  //     <p>{product.productPrice}원</p>
-                  //   </div>
-                  // </button>
-
                   <button
                     key={product.productCode}
                     className='flex flex-col items-center shadow-md shadow-slate-200 bg-white rounded-lg w-32 h-32'
                     onClick={() => {
-                      console.log('hihi', product.productCode);
                       addItem(product);
                     }}
                   >

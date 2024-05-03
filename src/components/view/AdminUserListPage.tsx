@@ -32,14 +32,11 @@ export const AdminUserListPage = () => {
   const [data, setData] = useState<User[]>([]);
 
   useEffect(() => {
-    console.log('cat', category);
     fetch(`http://localhost:8080/admin/user`)
       .then((res) => {
         return res.json();
       })
       .then((json) => {
-        console.log(json.result);
-        console.log(json.result.content);
         setData(json.result.content);
       });
   }, [category]);

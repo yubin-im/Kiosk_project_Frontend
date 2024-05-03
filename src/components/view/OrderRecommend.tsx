@@ -33,7 +33,6 @@ const OrderRecommend = () => {
   };
 
   const addItem = (product: Product) => {
-    console.log(cart);
     addOrder(product, 1);
     const totalPrice = getTotalPrice(cart);
     alert(
@@ -58,7 +57,6 @@ const OrderRecommend = () => {
               key={index}
               className='flex flex-col items-center shadow-md shadow-slate-200 bg-white rounded-lg w-32 h-32'
               onClick={() => {
-                console.log('hihi', product.productCode);
                 addItem(product);
               }}
             >
