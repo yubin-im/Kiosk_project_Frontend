@@ -87,8 +87,20 @@ const OrderProducts = () => {
     console.log('count', getCount());
   };
 
+  const getTotalPrice = (cart: Order[]) => {
+    const prices: number[] = cart.map((item) => item.product.productPrice);
+
+    return !prices.length
+      ? 0
+      : prices
+          ?.reduce((acc, curr) => {
+            return acc + curr;
+          })
+          .toLocaleString();
+  };
+
   return (
-    <div className='flex flex-col max-w-screen-sm sm min-h-screen  justify-between mx-auto'>
+    <div className='flex flex-col max-w-screen-sm sm min-h-screen  justify-between mx-auto pb-2'>
       <div>
         <img
           src='https://img.insight.co.kr/static/2021/04/13/700/img_20210413151511_h3uakchh.webp'
@@ -257,7 +269,7 @@ const OrderProducts = () => {
       </div>
 
       <div
-        className='my-3'
+        className='my-1'
         style={{
           display: 'flex',
           justifyContent: 'space-between',
@@ -272,21 +284,36 @@ const OrderProducts = () => {
           <p className='mx-3 text-md'>주문 내역</p>
         </div>
         <div>
-          {/* <p className='mx-3 text-sm'>
-            총 가격: {data?.orderListTotalPrice}원 수량:{' '}
-            {data?.orderListTotalAmount}
-          </p> */}
+          <p className='mx-3 text-md'>
+            총 가격: 원 수량: {getTotalPrice(cart)}
+          </p>
         </div>
       </div>
 
-      <div style={{ textAlign: 'right' }}>
-        {cart?.map((item) => (
-          <div key={item.orderId} className='flex col-span-12'>
-            <span className='col-span-1'>{item.orderId}</span>
-            <span className='col-span-8'>{item.product.productName}</span>
-            <span className='col-span-3'>{item.product.productPrice}</span>
-          </div>
-        ))}
+      <div
+        style={{ textAlign: 'right' }}
+        className='px-5 h-24 overflow-y-scroll'
+      >
+        <table className='min-w-full text-start text-sm'>
+          <tbody>
+            {cart?.map((item) => (
+              <tr key={item.orderId} className='flex justify-between'>
+                <td>{item.orderId + 1}</td>
+                <td>{item.product.productName}</td>
+                <td>{item.product.productPrice} 원</td>
+                <td>
+                  <button className='border border-slate-300 rounded-lg px-2'>
+                    -
+                  </button>
+                  <span className='mx-2'>{item.productAmount}</span>
+                  <button className='border border-slate-300 rounded-lg px-2'>
+                    +
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
         <button
           type='button'
           className='font-bold text-sm'
@@ -307,7 +334,7 @@ const OrderProducts = () => {
 
       <div className='grid grid-cols-2 mt-1 gap-1'>
         <button
-          className='bg-red-500 text-white text-lg font-bold rounded-lg w-full'
+          className='bg-red-500 text-white font-bold rounded-lg w-full'
           onClick={() => {
             navigation('/placeselection');
           }}
@@ -315,7 +342,7 @@ const OrderProducts = () => {
           주문 취소
         </button>
         <button
-          className='bg-green-700 text-white text-md font-bold rounded-lg w-full'
+          className='bg-green-700 text-white font-bold rounded-lg w-full'
           onClick={() => {
             navigation('/order/recommend');
           }}
