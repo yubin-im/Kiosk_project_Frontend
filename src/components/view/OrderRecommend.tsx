@@ -32,25 +32,48 @@ const OrderRecommend = () => {
   }
 
   return (
-    <div>
-      <h1>함께 즐기시면 더욱 좋습니다!</h1>
-      <br />
+    <div className='flex flex-col max-w-screen-sm max-h-screen sm min-h-screen bg-mcyellow justify-between mx-auto p-20'>
+      <div className='flex flex-col gap-2 max-h-fit object-fill bg-white rounded-3xl px-10 py-10 '>
+        <span className='font-bold text-2xl text-mcblack'>
+          함께 즐기시면 더욱 좋습니다!
+        </span>
+        <br />
 
-      <div>
-        {data.map((product, index) => (
-          <div key={index}>
-            <div className='text-center'>
-              <img src={product.productImgUrl} alt={product.productName} />
-              <p>{product.productName}</p>
-              <p>{product.productPrice}원</p>
+        <div className='grid grid-cols-3 gap-2 place-items-center max-h-96'>
+          {data.map((product, index) => (
+            <div
+              key={index}
+              className='shadow-sm shadow-slate-400 rounded-lg w-full h-32'
+            >
+              <div style={{ height: '60%' }}>
+                <img
+                  src={product.productImgUrl}
+                  alt={product.productName}
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'fill',
+                  }}
+                />
+              </div>
+              <div className='text-center text-sm'>
+                <p>{product.productName}</p>
+                <p>{product.productPrice}원</p>
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
 
-      <br />
-      <button className='mx-3'>이전</button>
-      <button>선택안함</button>
+        <br />
+        <div className='flex gap-2 justify-center'>
+          <button className='bg-mcblack px-8 text-white rounded-lg'>
+            이전
+          </button>
+          <button className='bg-mcred px-8 text-white rounded-lg'>
+            선택안함
+          </button>
+        </div>
+      </div>
     </div>
   );
 };
