@@ -29,7 +29,7 @@ export interface Product {
 
 export const AdminPageList = () => {
   const { category } = useParams();
-  const [data, setData] = useState<User[]>([]);
+  const [users, setUsers] = useState<User[]>([]);
 
   useEffect(() => {
     console.log('cat', category);
@@ -39,9 +39,7 @@ export const AdminPageList = () => {
         return res.json();
       })
       .then((json) => {
-        console.log(json.result);
-        console.log(json.result.content);
-        setData(json.result.content);
+        setUsers(json.result.content);
       });
   }, [category]);
 
@@ -58,7 +56,7 @@ export const AdminPageList = () => {
         </tr>
       </thead>
       <tbody>
-        {data?.map((item) => (
+        {users?.map((item) => (
           <tr
             key={item.userId}
             className='border-b border-neutral-200 dark:border-white/10 h-20'

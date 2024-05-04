@@ -19,7 +19,6 @@ function App() {
   return (
     <BrowserRouter>
       <StorageProvider>
-        <Nav />
         <Routes>
           <Route path='/' element={<LandingPage />} />
           <Route path='/login' element={<LoginPage />} />
