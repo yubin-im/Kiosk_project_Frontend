@@ -28,7 +28,7 @@ export const Nav = forwardRef((_, ref: ForwardedRef<NavigationHandler>) => {
         <div
           className={clsx(
             'grid grid-cols-4',
-            'w-5/6 h-full',
+            ' w-3/4 h-full',
             'justify-center content-end'
           )}
         >
