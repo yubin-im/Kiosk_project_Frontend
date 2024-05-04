@@ -12,8 +12,8 @@ import OrderProducts from './components/view/OrderProducts';
 import { PlaceSelectionPage } from './components/view/placeSelectionPage';
 
 import { AdminPage } from './components/view/AdminPage';
-import { AdminPageList } from './components/view/AdminPageList';
 import OrderRecommend from './components/view/OrderRecommend';
+import { AdminUserListPage } from './components/view/AdminUserListPage';
 
 function App() {
   return (
@@ -34,7 +34,8 @@ function App() {
           <Route path='/order/submit' element={<OrderSubmit />} />
           <Route path='/admin/*' element={<AdminPage />}>
             {/* <Route index element={<AdminPageList />} /> */}
-            <Route path=':category' element={<AdminPageList />} />
+            {/* <Route path=':category' element={<AdminPageList />} /> */}
+            <Route path='user' element={<AdminUserListPage />} />
           </Route>
         </Routes>
       </StorageProvider>
