@@ -27,19 +27,60 @@ export type Product = {
   category: ProductCategory;
 };
 
+interface Message {
+  status: string;
+  code: string;
+  message: string;
+  result: unknown;
+}
+
 export const AdminUserListPage = () => {
-  const { category } = useParams();
   const [users, setUsers] = useState<User[]>([]);
 
+  const onDelete = async (userId: string) => {
+    try {
+      const response = await fetch(
+        `http://localhost:8080/admin/user/${userId}`,
+        {
+          method: 'DELETE',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ category: 'BURGER_SET', page: 0 }),
+        }
+      );
+
+      const json: Message = await response.json();
+      const { status, message } = json;
+      if (status == 'USER_DELETE_SUCCESS') {
+        alert(message);
+      } else {
+        alert(message);
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      fetchUsers();
+    }
+  };
+
+  const fetchUsers = async () => {
+    try {
+      const response = await fetch(`http://localhost:8080/admin/user`);
+      const data: Message = await response.json();
+      const { status, message, result } = data;
+      if (status == 'USER_LIST_FOUND_SUCCESS') {
+        console.log('content : ', result);
+        setUsers(result.content);
+      } else {
+        alert(message);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   useEffect(() => {
-    fetch(`http://localhost:8080/admin/user`)
-      .then((res) => {
-        return res.json();
-      })
-      .then((json) => {
-        setUsers(json.result.content);
-      });
-  }, [category]);
+    fetchUsers();
+  }, []);
 
   return (
     <div className=' min-w-full'>
@@ -82,7 +123,10 @@ export const AdminUserListPage = () => {
                   <button className='border border-stone-300 bg-white  rounded-lg'>
                     수정
                   </button>
-                  <button className='border border-stone-300 bg-white rounded-lg'>
+                  <button
+                    className='border border-stone-300 bg-white rounded-lg'
+                    onClick={() => onDelete(item.userId)}
+                  >
                     삭제
                   </button>
                 </div>
