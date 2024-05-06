@@ -1,9 +1,10 @@
-import { useEffect, useRef, useState } from 'react';
+import { Ref, RefObject, useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 type UserRole = 'ADMIN' | 'USER';
 
 type User = {
+  id: number;
   userId: string;
   userName: string;
   userPw: string;
@@ -40,6 +41,7 @@ export const AdminUserEditPage = () => {
   const onUpdateUser = async () => {
     try {
       const updated: User = {
+        id: user!.id,
         userId: idRef.current!.value,
         userPw: user!.userPw,
         userJoinDate: new Date(joinDateRef.current!.value),
@@ -47,9 +49,10 @@ export const AdminUserEditPage = () => {
         userPoint: +pointRef.current!.value,
         userRole: user!.userRole,
       };
+      console.log(updated);
 
       const response = await fetch(
-        `http://localhost:8080/admin/user/${updated.userId}`,
+        `http://localhost:8080/admin/user/${updated.id}`,
         {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
@@ -86,22 +89,36 @@ export const AdminUserEditPage = () => {
         </button>
         {user ? (
           <>
-            <form name='userForm'>
-              <div className='grid grid-cols-2 items-start text-start'>
+            <form>
+              <div className='grid grid-cols-2 items-start border-t border-b text-start divide-y divide-x'>
                 <span>User Id</span>
-                <input type='text' value={user?.userId} ref={idRef} />
+                <input type='text' defaultValue={user?.userId} ref={idRef} />
                 <span>User Name</span>
-                <input type='text' value={user?.userName} ref={nameRef} />
+                <div>
+                  <input
+                    type='text'
+                    defaultValue={user?.userName}
+                    ref={nameRef}
+                  />
+                </div>
                 <span>User Join Date</span>
                 <input
                   type='date'
-                  value={user?.userJoinDate.toString()}
+                  defaultValue={user?.userJoinDate.toString()}
                   ref={joinDateRef}
                 />
                 <span>Point</span>
-                <input type='number' value={user?.userPoint} ref={pointRef} />
+                <input
+                  type='number'
+                  defaultValue={user?.userPoint}
+                  ref={pointRef}
+                />
                 <span>User Role</span>
-                <input type='text' value={user?.userRole} ref={roleRef} />
+                <input
+                  type='text'
+                  defaultValue={user?.userRole}
+                  ref={roleRef}
+                />
               </div>
             </form>
             <br></br>
