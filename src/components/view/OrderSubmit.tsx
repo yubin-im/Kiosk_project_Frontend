@@ -9,34 +9,34 @@ interface SuccessOrderResDto {
 }
 
 const OrderSubmit = () => {
-  const location = useLocation();
   const navigation = useNavigate();
   const [data, setData] = useState<SuccessOrderResDto | null>(null);
   const {
     storage: { token },
   } = useStorage();
-  const [orderListId, setOrderListId] = useState<number | null>(null);
+  // const [orderListId, setOrderListId] = useState<number | null>(null);
   const timerRef = useRef<ReturnType<typeof setTimeout>>();
   const clear = () => clearTimeout(timerRef.current);
 
   useEffect(() => {
-    console.log('주문번호 받아왔는지 확인 :' + location.state.getOrderId);
-    setOrderListId(location.state.getOrderId);
+    // console.log('주문번호 받아왔는지 확인 :' + location.state.getOrderId);
+    // setOrderListId(location.state.getOrderId);
 
-    if (token?.userId && !orderListId) {
+    if (userId) {
+      console.log('userId', userId);
       fetchData();
     }
 
     return clear();
-  }, [orderListId]);
+  }, []);
 
   const fetchData = () => {
     fetch('http://localhost:8080/order/submit', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        userId: token?.userId,
-        orderListId: orderListId,
+        userId: userId,
+        orderListId: 0,
       }),
     })
       .then((res) => res.json())
