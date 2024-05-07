@@ -1,6 +1,7 @@
 import clsx from 'clsx';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Order } from '../OrderPage';
 
 type OrderRevenueList = {
   orderListDate: string;
@@ -35,7 +36,7 @@ export const AdminOrderStatisticsChartPage = () => {
     fetchOrders();
     setTimeout(() => {
       setLoading(true);
-    }, 1000);
+    }, 500);
   }, [searchMonth, year, type]);
   const fetchOrders = () => {
     fetch(`${API}?type=${type}&year=${year}&month=${searchMonth}`, {
@@ -47,9 +48,13 @@ export const AdminOrderStatisticsChartPage = () => {
       })
       .then((json) => {
         console.log(json.result);
-        setOrders(json.result);
+        const copyOrder = json.result;
+
+        setOrders(() => {
+          return { ...copyOrder };
+        });
         const chart: chart = {};
-        orders?.orderRevenueList.forEach((order, idx) => {
+        copyOrder.orderRevenueList.forEach((order, idx) => {
           chart[idx] = `${order.orderListTotalPrice / 1000}px`;
         });
         setChartHeight(chart);

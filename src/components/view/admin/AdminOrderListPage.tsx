@@ -135,7 +135,7 @@ export const AdminOrderListPage = () => {
                 </td>
                 <td>
                   <div className='max-w-30 truncate whitespace-nowrap'>
-                    {item.orderListTime.toString()}
+                    {item.orderListTime.toString().replace('T', '　')}
                   </div>
                 </td>
                 <td>
