@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -24,6 +25,7 @@ export const AdminOrderStatisticsChartPage = () => {
   const [orders, setOrders] = useState<OrderRevenue>();
   const [chartHeight, setChartHeight] = useState<chart>();
   const [isLoading, setLoading] = useState(false);
+  const [type, setType] = useState('month');
   const [year, setYear] = useState('2024');
   const [searchMonth, setMonth] = useState('5');
   const navigation = useNavigate();
@@ -34,9 +36,9 @@ export const AdminOrderStatisticsChartPage = () => {
     setTimeout(() => {
       setLoading(true);
     }, 1000);
-  }, [searchMonth]);
+  }, [searchMonth, year, type]);
   const fetchOrders = () => {
-    fetch(`${API}?type=month&year=${year}&month=${searchMonth}`, {
+    fetch(`${API}?type=${type}&year=${year}&month=${searchMonth}`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     })
@@ -61,11 +63,24 @@ export const AdminOrderStatisticsChartPage = () => {
     <>
       <button
         type='button'
-        className='border bg-red-500 text-white font-medium rounded-lg p-1 m-2'
+        className={clsx({
+          'border font-medium rounded-lg p-1 m-2': true,
+          'bg-red-500 text-white': type == 'month',
+          'text-red-500': type != 'month',
+        })}
+        onClick={() => setType('month')}
       >
         일자별
       </button>
-      <button className='border text-red-500 font-medium rounded-lg p-1 m-2'>
+      <button
+        type='button'
+        className={clsx({
+          'border font-medium rounded-lg p-1 m-2': true,
+          'bg-red-500 text-white': type == 'year',
+          'text-red-500': type != 'year',
+        })}
+        onClick={() => setType('year')}
+      >
         년도별
       </button>
       <div className='grid grid-cols-3 py-5 px-6'>
@@ -92,8 +107,14 @@ export const AdminOrderStatisticsChartPage = () => {
           </button>
         </div>
         <h3 className='col-start-2 w-full md:w-auto mb-4 md:mb-0 text-2xl font-bold'>
-          {orders?.year}. {orders?.month && orders?.month < 10 ? 0 : null}
-          {orders?.month}
+          {type == 'month' ? (
+            <span>
+              {orders?.year}. {orders?.month && orders?.month < 10 ? 0 : null}
+              {orders?.month}
+            </span>
+          ) : (
+            <span>{orders?.year}년</span>
+          )}
         </h3>
         <div className='col-start-3'>
           <div className='inline-block py-2 px-3 border rounded text-xs text-grey-500'>
@@ -107,19 +128,21 @@ export const AdminOrderStatisticsChartPage = () => {
               </option>
             </select>
           </div>
-          <div className='ml-2 inline-block py-2 px-3 border rounded text-xs text-grey-500'>
-            <select
-              className='pr-1'
-              onChange={(e) => setMonth(e.currentTarget.value)}
-            >
-              <option value='none'>month</option>
-              {month.map((m) => (
-                <option key={m} value={m}>
-                  {m}월
-                </option>
-              ))}
-            </select>
-          </div>
+          {type == 'month' ? (
+            <div className='ml-2 inline-block py-2 px-3 border rounded text-xs text-grey-500'>
+              <select
+                className='pr-1'
+                onChange={(e) => setMonth(e.currentTarget.value)}
+              >
+                <option value='none'>month</option>
+                {month.map((m) => (
+                  <option key={m} value={m}>
+                    {m}월
+                  </option>
+                ))}
+              </select>
+            </div>
+          ) : null}
         </div>
       </div>
 
@@ -130,10 +153,19 @@ export const AdminOrderStatisticsChartPage = () => {
         <div className='container mt-5 col-start-1 col-end-4'>
           <div className='flex flex-col items-center justify-center min-w-max px-3 py-5 text-gray-700 bg-gray-100'>
             <div className='flex flex-col items-center p-6 pb-6 bg-white rounded-lg shadow-xl sm:p-8 min-w-full'>
-              <h2 className='text-xl font-bold'>Daily Revenue</h2>
+              <h2 className='text-xl font-bold'>
+                {type == 'month' ? 'Daily' : 'Monthly'} Revenue
+              </h2>
               <span className='text-sm font-semibold text-gray-500'>
-                {orders?.year}. {orders?.month && orders?.month < 10 ? 0 : null}
-                {orders?.month}
+                {type == 'month' ? (
+                  <span>
+                    {orders?.year}.{' '}
+                    {orders?.month && orders?.month < 10 ? 0 : null}
+                    {orders?.month}
+                  </span>
+                ) : (
+                  <span>{orders?.year}년</span>
+                )}
               </span>
               <div className='flex items-end flex-grow w-full mt-10 space-x-2 sm:space-x-3'>
                 {orders?.orderRevenueList.map((order, idx) => (

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Order } from '../OrderPage';
 import { useNavigate } from 'react-router-dom';
+import clsx from 'clsx';
 
 type OrderRevenueList = {
   orderListDate: string;
@@ -23,21 +24,16 @@ const month: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 export const AdminOrderStatisticsPage = () => {
   const API = 'http://localhost:8080/admin/order/statistics/revenue';
   const [orders, setOrders] = useState<OrderRevenue>();
-  const [chartHeight, setChartHeight] = useState<chart>();
-  const [isLoading, setLoading] = useState(false);
+  const [type, setType] = useState('month');
   const [year, setYear] = useState('2024');
   const [searchMonth, setMonth] = useState('5');
   const navigation = useNavigate();
 
   useEffect(() => {
-    setLoading(false);
     fetchOrders();
-    setTimeout(() => {
-      setLoading(true);
-    }, 1000);
-  }, [searchMonth]);
+  }, [searchMonth, type, year]);
   const fetchOrders = () => {
-    fetch(`${API}?type=month&year=${year}&month=${searchMonth}`, {
+    fetch(`${API}?type=${type}&year=${year}&month=${searchMonth}`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     })
@@ -51,7 +47,6 @@ export const AdminOrderStatisticsPage = () => {
         orders?.orderRevenueList.forEach((order, idx) => {
           chart[idx] = `${order.orderListTotalPrice / 1000}px`;
         });
-        setChartHeight(chart);
       })
       .catch((err) => {
         console.error(err);
@@ -62,11 +57,24 @@ export const AdminOrderStatisticsPage = () => {
     <>
       <button
         type='button'
-        className='border bg-red-500 text-white font-medium rounded-lg p-1 m-2'
+        className={clsx({
+          'border font-medium rounded-lg p-1 m-2': true,
+          'bg-red-500 text-white': type == 'month',
+          'text-red-500': type != 'month',
+        })}
+        onClick={() => setType('month')}
       >
         일자별
       </button>
-      <button className='border text-red-500 font-medium rounded-lg p-1 m-2'>
+      <button
+        type='button'
+        className={clsx({
+          'border font-medium rounded-lg p-1 m-2': true,
+          'bg-red-500 text-white': type == 'year',
+          'text-red-500': type != 'year',
+        })}
+        onClick={() => setType('year')}
+      >
         년도별
       </button>
       <div className='grid grid-cols-3 py-5 px-6'>
@@ -93,10 +101,16 @@ export const AdminOrderStatisticsPage = () => {
           </button>
         </div>
         <h3 className='col-start-2 w-full md:w-auto mb-4 md:mb-0 text-2xl font-bold'>
-          {orders?.year}. {orders?.month && orders?.month < 10 ? 0 : null}
-          {orders?.month}
+          {type == 'month' ? (
+            <span>
+              {orders?.year}. {orders?.month && orders?.month < 10 ? 0 : null}
+              {orders?.month}
+            </span>
+          ) : (
+            <span>{orders?.year}년</span>
+          )}
         </h3>
-        <div className='col-start-3'>
+        <div className='col-start-3 text-right'>
           <div className='inline-block py-2 px-3 border rounded text-xs text-grey-500'>
             <select
               className='pr-1'
@@ -108,19 +122,21 @@ export const AdminOrderStatisticsPage = () => {
               </option>
             </select>
           </div>
-          <div className='ml-2 inline-block py-2 px-3 border rounded text-xs text-grey-500'>
-            <select
-              className='pr-1'
-              onChange={(e) => setMonth(e.currentTarget.value)}
-            >
-              <option value='none'>month</option>
-              {month.map((m) => (
-                <option key={m} value={m}>
-                  {m}월
-                </option>
-              ))}
-            </select>
-          </div>
+          {type == 'month' ? (
+            <div className='ml-2 inline-block py-2 px-3 border rounded text-xs text-grey-500'>
+              <select
+                className='pr-1'
+                onChange={(e) => setMonth(e.currentTarget.value)}
+              >
+                <option value='none'>month</option>
+                {month.map((m) => (
+                  <option key={m} value={m}>
+                    {m}월
+                  </option>
+                ))}
+              </select>
+            </div>
+          ) : null}
         </div>
       </div>
       <div className='border min-w-full text-center'>
@@ -139,7 +155,17 @@ export const AdminOrderStatisticsPage = () => {
                   <div className='truncate'>{idx + 1}</div>
                 </td>
                 <td>
-                  <div className='truncate'>{order.orderListDate}</div>
+                  {type == 'month' ? (
+                    <div className='truncate'>{order.orderListDate}</div>
+                  ) : (
+                    <div className='truncate'>
+                      {year}.
+                      {order.orderListDate && order.orderListDate.length < 2
+                        ? 0
+                        : null}
+                      {order.orderListDate}
+                    </div>
+                  )}
                 </td>
                 <td>
                   <div className='truncate'>
