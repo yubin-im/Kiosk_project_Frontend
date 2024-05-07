@@ -59,7 +59,9 @@ export const AdminOrderListPage = () => {
   return (
     <>
       <div className='text-right mb-3'>
-        <p>총 <span className='font-semibold text-red-500'>{totalCount}</span>건</p>
+        <p>
+          총 <span className='font-semibold text-red-500'>{totalCount}</span>건
+        </p>
       </div>
       <div className=' min-w-full'>
         <table className='text-left text-sm font-light text-surface dark:text-white'>
@@ -119,6 +121,14 @@ export const AdminOrderListPage = () => {
         </table>
       </div>
       <div className='grid grid-cols-3 mt-5'>
+        <div className='col-start-1'>
+          <button
+            className='border rounded bg-yellow-500 text-white'
+            onClick={() => navigation('statistics')}
+          >
+            매출 통계
+          </button>
+        </div>
         <div className='flex col-start-2'>
           <button
             onClick={() => setPage(page - 1)}
