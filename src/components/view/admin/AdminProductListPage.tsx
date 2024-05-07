@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Pagination } from '../../util/Pagination';
 
 export type ProductCategory =
   | 'BURGER_SET'
@@ -27,15 +28,25 @@ interface Message {
 export const AdminProductListPage = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const navigation = useNavigate();
+  const [page, setPage] = useState<number>(0);
+  // const [sort, setSort] = useState<string>('productName');
+  // const [totalElement, setTotalElement] = useState<number>(0);
+  const [totalPages, setTotalPages] = useState<number>(0);
 
   const fetchProducts = async () => {
     try {
-      const response = await fetch(`http://localhost:8080/admin/product`);
+      const response = await fetch(
+        `http://localhost:8080/admin/product?page=${page}&sort=${sort}`
+      );
       const data: Message = await response.json();
       const { status, result } = data;
       if (status == 'PRODUCT_CHECK_SUCCESS') {
-        setProducts(result);
+        setProducts(result.content);
+        // setTotalElement(result.totalElement);
+        setTotalPages(result.totalPages);
       } else {
+        console.log(data);
+        console.log(result);
         alert('조회 실패');
       }
     } catch (err) {
@@ -73,12 +84,16 @@ export const AdminProductListPage = () => {
     navigation(`${id}`);
   };
 
+  const onSetPage = (page: number) => {
+    setPage(page);
+  };
+
   useEffect(() => {
     fetchProducts();
-  }, []);
+  }, [page]);
   return (
     <>
-      <div className=' min-w-full'>
+      <div className='flex flex-col justify-center min-w-full'>
         <table className='text-left text-sm font-light text-surface dark:text-white'>
           <thead className='border-b border-neutral-200 font-medium dark:border-white/10'>
             <tr className='min-w-full '>
@@ -135,6 +150,15 @@ export const AdminProductListPage = () => {
             ))}
           </tbody>
         </table>
+        <br></br>
+        <div className='flex justify-center'>
+          <Pagination
+            total={totalPages}
+            page={page}
+            setPage={onSetPage}
+            limit={5}
+          />
+        </div>
       </div>
     </>
   );

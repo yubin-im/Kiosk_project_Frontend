@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Pagination } from '../../util/Pagination';
 
 type UserRole = 'USER' | 'ADMIN';
 
@@ -11,6 +12,7 @@ type ProductCategory =
   | 'DESSERT';
 
 type User = {
+  id: number;
   userId: string;
   userJoinDate: Date;
   userName: string;
@@ -37,6 +39,9 @@ interface Message {
 export const AdminUserListPage = () => {
   const [users, setUsers] = useState<User[]>([]);
   const navigation = useNavigate();
+  const [page, setPage] = useState<number>(0);
+  // const [sort, setSort] = useState<string>('productName');
+  const [totalPages, setTotalPages] = useState<number>(0);
 
   const onDelete = async (userId: string) => {
     try {
@@ -61,18 +66,25 @@ export const AdminUserListPage = () => {
     }
   };
 
-  const onEdit = (userId: string) => {
-    navigation(`${userId}`);
+  const onEdit = (id: number) => {
+    navigation(`${id}`);
+  };
+
+  const onSetPage = (page: number) => {
+    setPage(page);
   };
 
   const fetchUsers = async () => {
     try {
-      const response = await fetch(`http://localhost:8080/admin/user`);
+      const response = await fetch(
+        `http://localhost:8080/admin/user?page=${page}`
+      );
       const data: Message = await response.json();
       const { status, message, result } = data;
       if (status == 'USER_LIST_FOUND_SUCCESS') {
         console.log('content : ', result);
         setUsers(result.content);
+        setTotalPages(result.totalPages);
       } else {
         alert(message);
       }
@@ -83,7 +95,7 @@ export const AdminUserListPage = () => {
 
   useEffect(() => {
     fetchUsers();
-  }, []);
+  }, [page]);
 
   return (
     <div className=' min-w-full'>
@@ -125,7 +137,7 @@ export const AdminUserListPage = () => {
                 <div className='flex flex-col gap-1 min-h-full content-center'>
                   <button
                     className='border border-stone-300 bg-white  rounded-lg'
-                    onClick={() => onEdit(item.userId)}
+                    onClick={() => onEdit(item.id)}
                   >
                     수정
                   </button>
@@ -141,6 +153,17 @@ export const AdminUserListPage = () => {
           ))}
         </tbody>
       </table>
+      <div>
+        <br></br>
+        <div className='flex justify-center'>
+          <Pagination
+            total={totalPages}
+            page={page}
+            setPage={onSetPage}
+            limit={5}
+          />
+        </div>
+      </div>
     </div>
   );
 };

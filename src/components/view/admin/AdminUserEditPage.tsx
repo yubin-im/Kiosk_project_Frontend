@@ -1,4 +1,4 @@
-import { Ref, RefObject, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 type UserRole = 'ADMIN' | 'USER';
