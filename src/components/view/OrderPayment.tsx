@@ -27,6 +27,7 @@ const Order: Order = {
 
 const OrderPayment = () => {
   const navigation = useNavigate();
+  const [orderId, setOrderId] = useState<number | null>(null);
 
   const [cart, setCart] = useState(() => getStorage<Order[]>('cart', [Order]));
   const {
@@ -62,9 +63,10 @@ const OrderPayment = () => {
             console.log('json', json);
             if (json.status == 'ORDER_LIST_PAYMENT_SUCCESS') {
               alert('결제 성공');
-              console.log('확인2: ' + data.orderList[0].orderId);
-              console.log('확인3: ' + data.orderList[1].orderId);
-              console.log('주문번호는 = ', json.result);
+              const getOrderId = json.result;
+              console.log('주문번호는 = ', getOrderId);
+              setOrderId(getOrderId);
+              console.log('orderId set 되었는지 확인: ' + orderId);
             }
           } catch (error) {
             console.error(error);
@@ -78,7 +80,7 @@ const OrderPayment = () => {
 
   useEffect(() => {
     setTimeout(() => {
-      navigation('/order/submit');
+      navigation('/order/submit', { state: { orderId } });
     }, 5000);
   }, [navigation]);
 
