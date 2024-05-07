@@ -37,6 +37,10 @@ const OrderProducts = () => {
   const [page, setPage] = useState<number>(0);
   const [myCart, setMyCart] = useState<Order[]>([]);
   const [totalCount, updateCount] = useCount(0);
+  const totalQuantity = myCart.reduce(
+    (total, item) => total + item.productAmount,
+    0
+  );
 
   useEffect(() => {
     if (category == CATEGORY.RECOMMENDED) {
@@ -307,7 +311,8 @@ const OrderProducts = () => {
         </div>
         <div>
           <p className='mx-3 text-md'>
-            총 가격: 원 수량: {getTotalPrice(myCart).toLocaleString()}
+            총 가격: {getTotalPrice(myCart).toLocaleString()}원 수량:{' '}
+            {totalQuantity}
           </p>
         </div>
       </div>
