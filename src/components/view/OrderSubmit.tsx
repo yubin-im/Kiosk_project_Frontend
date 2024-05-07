@@ -21,6 +21,8 @@ const OrderSubmit = () => {
     if (token?.userId && !orderListId) {
       fetchData();
     }
+
+    return clear();
   }, [orderListId]);
 
   const fetchData = () => {
@@ -43,13 +45,6 @@ const OrderSubmit = () => {
         console.error(err);
       });
   };
-
-  useEffect(() => {
-    localStorage.clear();
-    setTimeout(() => {
-      navigation('/');
-    }, 7000);
-  }, []);
 
   return (
     <div className='flex flex-col max-w-screen-sm sm min-h-screen  justify-center items-center mx-auto p-20'>
@@ -80,7 +75,10 @@ const OrderSubmit = () => {
       <br></br>
       <button
         className='text-xl font-bold bg-mcred rounded-lg px-7 text-white'
-        onClick={() => navigation('/')}
+        onClick={() => {
+          clear();
+          navigation('/');
+        }}
       >
         Home
       </button>
