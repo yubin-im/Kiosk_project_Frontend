@@ -16,6 +16,7 @@ import { AdminUserListPage } from './components/view/admin/AdminUserListPage';
 import { AdminOrderListPage } from './components/view/AdminOrderListPage';
 import { AdminUserEditPage } from './components/view/admin/AdminUserEditPage';
 import OrderDetail from './components/view/OrderDetail';
+import { AdminProductListPage } from './components/view/admin/AdminProductListPage';
 
 function App() {
   return (
@@ -39,6 +40,7 @@ function App() {
             {/* <Route path=':category' element={<AdminPageList />} /> */}
             <Route path='user' element={<AdminUserListPage />} />
             <Route path='user/:userId' element={<AdminUserEditPage />} />
+            <Route path='user' element={<AdminProductListPage />} />
             <Route path='order' element={<AdminOrderListPage />} />
           </Route>
         </Routes>
