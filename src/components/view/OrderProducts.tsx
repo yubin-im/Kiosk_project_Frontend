@@ -41,6 +41,13 @@ const OrderProducts = () => {
     (total, item) => total + item.productAmount,
     0
   );
+  const calculateTotalPrice = () => {
+    let totalPrice = 0;
+    myCart.forEach((item) => {
+      totalPrice += item.product.productPrice * item.productAmount;
+    });
+    return totalPrice;
+  };
 
   useEffect(() => {
     if (category == CATEGORY.RECOMMENDED) {
@@ -311,7 +318,7 @@ const OrderProducts = () => {
         </div>
         <div>
           <p className='mx-3 text-md'>
-            총 가격: {getTotalPrice(myCart).toLocaleString()}원 수량:{' '}
+            총 가격: {calculateTotalPrice().toLocaleString()}원 수량:{' '}
             {totalQuantity}
           </p>
         </div>
