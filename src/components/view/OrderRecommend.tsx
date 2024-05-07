@@ -1,18 +1,19 @@
 import { useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-
-interface RecommendProductDto {
-  id: number;
-  productName: string;
-  productPrice: number;
-  productImgUrl: string;
-}
+import { useNavigate } from 'react-router-dom';
+import { McFrame } from '../util/mcFrame';
+import { ProductBox } from '../util/ProductBox';
+import { Product } from './admin/AdminUserListPage';
+import { useStorage } from '../context/storage-context';
+import { getTotalPrice } from '../util/getTotalPrice';
 
 const OrderRecommend = () => {
-  const location = useLocation();
   const navigation = useNavigate();
-  const [data, setData] = useState<RecommendProductDto[] | null>(null);
-  const orderListId = location.state.orderListId;
+  const [data, setData] = useState<Product[]>([]);
+
+  const {
+    storage: { cart },
+    addOrder,
+  } = useStorage();
 
   useEffect(() => {
     fetchData();
@@ -31,66 +32,58 @@ const OrderRecommend = () => {
       });
   };
 
-  if (!data) {
-    return <div>Loading...</div>;
-  }
+  const addItem = (product: Product) => {
+    addOrder(product, 1);
+    const totalPrice = getTotalPrice(cart);
+    alert(
+      '상품 추가되었습니다.\n 총 결제 금액은 ' +
+        (totalPrice + product.productPrice).toLocaleString() +
+        ' 원 입니다'
+    );
+    navigation('/order/payment');
+  };
 
   return (
-    <div className='flex flex-col max-w-screen-sm max-h-screen sm min-h-screen bg-mcyellow justify-between mx-auto p-20'>
-      <div className='flex flex-col gap-2 max-h-fit object-fill bg-white rounded-3xl px-10 py-10 '>
-        <span className='font-bold text-2xl text-mcblack'>
-          함께 즐기시면 더욱 좋습니다!
-        </span>
-        <br />
+    <McFrame color='yellow'>
+      <span className='font-bold text-2xl text-mcblack'>
+        함께 즐기시면 더욱 좋습니다!
+      </span>
+      <br />
 
-        <div className='grid grid-cols-3 gap-2 place-items-center max-h-96'>
-          {!data ? (
-            <span>isLoading</span>
-          ) : (
-            data.map((product, index) => (
-              <div
-                key={index}
-                className='shadow-sm shadow-slate-400 rounded-lg w-full h-32 overflow-hidden'
-              >
-                <div style={{ height: '50%' }}>
-                  <img
-                    src={product.productImgUrl}
-                    alt={product.productName}
-                    style={{
-                      width: '100%',
-                      height: '100%',
-                      objectFit: 'fill',
-                    }}
-                  />
-                </div>
-                <div className='text-center text-sm'>
-                  <p>{product.productName}</p>
-                  <p>{product.productPrice}원</p>
-                </div>
-              </div>
-            ))
-          )}
-        </div>
-
-        <br />
-        <div className='flex gap-2 justify-center'>
-          <button
-            className='bg-mcblack px-8 text-white rounded-lg'
-            onClick={() => history.back()}
-          >
-            이전
-          </button>
-          <button
-            className='bg-mcred px-8 text-white rounded-lg'
-            onClick={() =>
-              navigation('/order/payment', { state: { orderListId } })
-            }
-          >
-            선택안함
-          </button>
-        </div>
+      <div className='grid grid-cols-3 gap-2 place-items-center max-h-96'>
+        {data ? (
+          data.map((product, index) => (
+            <button
+              key={index}
+              className='flex flex-col items-center shadow-md shadow-slate-200 bg-white rounded-lg w-32 h-32'
+              onClick={() => {
+                addItem(product);
+              }}
+            >
+              <ProductBox product={product} key={index} />
+            </button>
+          ))
+        ) : (
+          <span>isLoading</span>
+        )}
       </div>
-    </div>
+
+      <br />
+      <div className='flex gap-2 justify-center'>
+        <button
+          className='bg-mcblack px-8 text-white rounded-lg'
+          onClick={() => history.back()}
+        >
+          이전
+        </button>
+        <button
+          className='bg-mcred px-8 text-white rounded-lg'
+          onClick={() => navigation('/order/payment')}
+        >
+          선택안함
+        </button>
+      </div>
+    </McFrame>
   );
 };
 

@@ -19,28 +19,27 @@ type User = {
   userRole: UserRole;
 };
 
-export type Product = {
+export interface Product {
   productName: string;
   productPrice: number;
   productCode: string;
   productImgUrl: string;
-  category: ProductCategory;
-};
+  category?: ProductCategory;
+}
 
-export const AdminUserListPage = () => {
+export const AdminPageList = () => {
   const { category } = useParams();
-  const [data, setData] = useState<User[]>([]);
+  const [users, setUsers] = useState<User[]>([]);
 
   useEffect(() => {
     console.log('cat', category);
+
     fetch(`http://localhost:8080/admin/user`)
       .then((res) => {
         return res.json();
       })
       .then((json) => {
-        console.log(json.result);
-        console.log(json.result.content);
-        setData(json.result.content);
+        setUsers(json.result.content);
       });
   }, [category]);
 
@@ -57,7 +56,7 @@ export const AdminUserListPage = () => {
         </tr>
       </thead>
       <tbody>
-        {data?.map((item) => (
+        {users?.map((item) => (
           <tr
             key={item.userId}
             className='border-b border-neutral-200 dark:border-white/10 h-20'

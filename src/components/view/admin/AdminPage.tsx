@@ -1,7 +1,7 @@
 import { useEffect, useReducer, useRef } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
 import clsx from 'clsx';
-import { Nav, NavigationHandler } from '../../Nav';
+import { Nav, NavigationHandler } from '../../../Nav';
 
 export enum PAGE {
   USER = 'user',
