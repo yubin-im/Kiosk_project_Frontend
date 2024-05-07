@@ -46,7 +46,7 @@ const OrderPayment = () => {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data),
-                signal: signal, // Pass the signal to the fetch request
+                signal: signal,
               }
             );
 
