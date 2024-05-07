@@ -18,10 +18,17 @@ type OrderList = {
   orderItems: Order;
 };
 
+const Order: Order = {
+  orderId: 1,
+  product: {},
+  productAmount: 0,
+  totalPrice: 0,
+};
+
 const OrderPayment = () => {
   const navigation = useNavigate();
 
-  const [cart, setCart] = useState(() => getStorage<Order[]>('cart', []));
+  const [cart, setCart] = useState(() => getStorage<Order[]>('cart', [Order]));
   const {
     storage: { token },
   } = useStorage();
@@ -40,6 +47,7 @@ const OrderPayment = () => {
             };
 
             console.log('data', data);
+
             const response = await fetch(
               'http://localhost:8080/order/payment2',
               {
@@ -51,8 +59,12 @@ const OrderPayment = () => {
             );
 
             const json = await response.json();
-            if (json.status === 'ORDER_LIST_PAYMENT_SUCCESS') {
+            console.log('json', json);
+            if (json.status == 'ORDER_LIST_PAYMENT_SUCCESS') {
               alert('결제 성공');
+              console.log('확인2: ' + data.orderList[0].orderId);
+              console.log('확인3: ' + data.orderList[1].orderId);
+              console.log('주문번호는 = ', json.result);
             }
           } catch (error) {
             console.error(error);
