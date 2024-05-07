@@ -83,7 +83,7 @@ export const PlaceSelectionPage = () => {
               type='button'
               onClick={() => {
                 setPlace(RECIEVE.FOR_HERE);
-                navigation('/order/products');
+                navigation('/order/products', { state: { orderListId } });
               }}
               className='flex flex-col border-2 border-mcblack rounded-xl gap-2 justify-center items-center p-7'
             >

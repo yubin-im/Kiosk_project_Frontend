@@ -2,6 +2,7 @@ import clsx from 'clsx';
 import { useState, useEffect } from 'react';
 import { useStorage } from '../context/storage-context';
 import { useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 interface ProductsByCategoryDto {
   productId: number;
@@ -18,6 +19,7 @@ interface ProductsResDto {
 }
 
 const OrderProducts = () => {
+  const location = useLocation();
   const navigation = useNavigate();
   const {
     storage: { token },
@@ -32,6 +34,8 @@ const OrderProducts = () => {
   >(null);
 
   useEffect(() => {
+    setOrderListId(location.state.orderListId);
+
     if (category === 'RECOMMENDED') {
       fetchRecommendData();
     } else {
@@ -53,6 +57,8 @@ const OrderProducts = () => {
       .then((res) => res.json())
       .then((json) => {
         setData(json.result);
+        console.log('데이터 받아왔는지 확인: ' + location.state.orderListId);
+        console.log(orderListId);
       })
       .catch((err) => {
         console.error(err);
@@ -289,7 +295,7 @@ const OrderProducts = () => {
         <button
           className='bg-green-700 text-white text-lg font-bold rounded-lg w-full'
           onClick={() => {
-            navigation('/order/recommend');
+            navigation('/order/recommend', { state: { orderListId } });
           }}
         >
           주문 완료
