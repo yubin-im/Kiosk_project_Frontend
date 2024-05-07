@@ -1,13 +1,14 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-type ProductCategory =
+export type ProductCategory =
   | 'BURGER_SET'
   | 'BURGER_SINGLE'
   | 'HAPPY_MEAL'
   | 'DRINK'
   | 'DESSERT';
 
-type Product = {
+export type Product = {
   productName: string;
   productPrice: number;
   productCode: string;
@@ -24,10 +25,11 @@ interface Message {
 
 export const AdminProductListPage = () => {
   const [products, setProducts] = useState<Product[]>([]);
+  const navigation = useNavigate();
 
   const fetchProducts = async () => {
     try {
-      const response = await fetch(`http://localhost:8080/admin/product/list`);
+      const response = await fetch(`http://localhost:8080/admin/product`);
       const data: Message = await response.json();
       const { status, result } = data;
       if (status == 'PRODUCT_CHECK_SUCCESS') {
@@ -42,6 +44,10 @@ export const AdminProductListPage = () => {
 
   const onDelete = (productCode: string) => {
     alert(productCode + ' 상품을 삭제할 수 없습니다');
+  };
+
+  const onEdit = (productCode: string) => {
+    navigation(`${productCode}`);
   };
 
   useEffect(() => {
@@ -69,7 +75,7 @@ export const AdminProductListPage = () => {
                 className='border-b border-neutral-200 dark:border-white/10 h-16 text-center items-center even:bg-stone-50'
               >
                 <td>{index + 1}</td>
-                <td>{item.productName}</td>
+                <td className='px-2'>{item.productName}</td>
                 <td>
                   <div className='max-w-20 truncate whitespace-nowrap'>
                     {item.productCode}
@@ -82,18 +88,21 @@ export const AdminProductListPage = () => {
                 </td>
                 <td>
                   <div className='truncate'>
-                    {item.productPrice.toLocaleString()} 원
+                    {item.productPrice?.toLocaleString()} 원
                   </div>
                 </td>
                 <td>{item.category}</td>
                 <td>
                   <div className='flex flex-col gap-1 min-h-full content-center'>
-                    <button className='border border-stone-300 bg-white  rounded-lg'>
+                    <button
+                      className='border border-stone-300 bg-white  rounded-lg'
+                      onClick={() => onEdit(item.productCode)}
+                    >
                       수정
                     </button>
                     <button
                       className='border border-stone-300 bg-white rounded-lg'
-                      onClick={() => onDelete(item.productCode)}
+                      onClick={() => onDelete(item.productName)}
                     >
                       삭제
                     </button>
