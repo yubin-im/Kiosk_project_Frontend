@@ -69,12 +69,26 @@ export const AdminOrderStatisticsPage = () => {
       <button className='border text-red-500 font-medium rounded-lg p-1 m-2'>
         년도별
       </button>
-      <div className='grid grid-cols-3 flex flex-wrap items-center py-5 px-6'>
-        <div className='col-start-1 text-left'>
+      <div className='grid grid-cols-3 py-5 px-6'>
+        <div className='col-start-1 flex items-center'>
           <button
-            className='border-yellow-400 bg-yellow-400 text-white rounded-lg m-5 p-2 font-semibold'
+            className='flex text-white bg-[#F7BE38] hover:bg-[#F7BE38]/90 focus:ring-4 focus:outline-none focus:ring-[#F7BE38]/50 font-medium rounded-lg text-sm px-3 py-1 text-center dark:focus:ring-[#F7BE38]/50'
             onClick={() => navigation('chart')}
           >
+            <svg
+              xmlns='http://www.w3.org/2000/svg'
+              fill='none'
+              viewBox='0 0 24 24'
+              strokeWidth='1.5'
+              stroke='currentColor'
+              className='w-5 h-5'
+            >
+              <path
+                strokeLinecap='round'
+                strokeLinejoin='round'
+                d='M7.5 14.25v2.25m3-4.5v4.5m3-6.75v6.75m3-9v9M6 20.25h12A2.25 2.25 0 0 0 20.25 18V6A2.25 2.25 0 0 0 18 3.75H6A2.25 2.25 0 0 0 3.75 6v12A2.25 2.25 0 0 0 6 20.25Z'
+              />
+            </svg>
             그래프 보기
           </button>
         </div>

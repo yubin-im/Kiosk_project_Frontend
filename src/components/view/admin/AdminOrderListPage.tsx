@@ -58,11 +58,45 @@ export const AdminOrderListPage = () => {
   }, [page]);
   return (
     <>
-      <div className='text-right mb-3'>
-        <p>
-          총 <span className='font-semibold text-red-500'>{totalCount}</span>건
-        </p>
+      <div className='grid grid-cols-3 items-end mb-5'>
+        <div className='col-start-1'>
+          <button
+            type='button'
+            className='flex text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700'
+            onClick={() => navigation('statistics')}
+          >
+            <svg
+              xmlns='http://www.w3.org/2000/svg'
+              fill='none'
+              viewBox='0 0 24 24'
+              strokeWidth='1.5'
+              stroke='currentColor'
+              className='w-5 h-5'
+            >
+              <path
+                strokeLinecap='round'
+                strokeLinejoin='round'
+                d='M10.5 6a7.5 7.5 0 1 0 7.5 7.5h-7.5V6Z'
+              />
+              <path
+                strokeLinecap='round'
+                strokeLinejoin='round'
+                d='M13.5 10.5H21A7.5 7.5 0 0 0 13.5 3v7.5Z'
+              />
+            </svg>
+            <span className='ml-2 font-semibold text-sm'>매출 통계</span>
+          </button>
+        </div>
+        <div className='col-start-2'>
+          <h3 className='font-semibold text-3xl pb-10'>Order</h3>
+        </div>
+        <div className='col-start-3 text-right mb-3'>
+          <p>
+            총 <span className='font-semibold text-red-500'>{totalCount}</span>건
+          </p>
+        </div>
       </div>
+      
       <div className=' min-w-full'>
         <table className='text-left text-sm font-light text-surface dark:text-white'>
           <thead className='border-b border-neutral-200 font-medium dark:border-white/10'>
@@ -121,18 +155,10 @@ export const AdminOrderListPage = () => {
         </table>
       </div>
       <div className='grid grid-cols-3 mt-5'>
-        <div className='col-start-1'>
-          <button
-            className='border rounded bg-yellow-500 text-white'
-            onClick={() => navigation('statistics')}
-          >
-            매출 통계
-          </button>
-        </div>
-        <div className='flex col-start-2'>
+        <div className='col-start-2 grid grid-cols-2 place-items-center'>
           <button
             onClick={() => setPage(page - 1)}
-            className='flex items-center justify-center px-4 h-10 me-3 text-base font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white'
+            className='flex items-center justify-center px-4 h-10 text-base font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white'
           >
             <svg
               className='w-3.5 h-3.5 me-2 rtl:rotate-180'
