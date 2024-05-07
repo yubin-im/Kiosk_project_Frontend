@@ -27,7 +27,6 @@ const Order: Order = {
 
 const OrderPayment = () => {
   const navigation = useNavigate();
-  const [orderId, setOrderId] = useState<number | null>(null);
 
   const [cart, setCart] = useState(() => getStorage<Order[]>('cart', [Order]));
   const {
@@ -37,52 +36,37 @@ const OrderPayment = () => {
   useEffect(() => {
     const controller = new AbortController();
     const signal = controller.signal;
+    setTimeout(() => {
+      (async () => {
+        try {
+          const data = {
+            orderList: cart,
+            userId: token?.userId,
+          };
 
-    setTimeout(
-      () =>
-        (async function () {
-          try {
-            const data = {
-              orderList: cart,
-              userId: token?.userId,
-            };
+          console.log('data', data);
 
-            console.log('data', data);
+          const response = await fetch('http://localhost:8080/order/payment2', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data),
+            signal: signal,
+          });
 
-            const response = await fetch(
-              'http://localhost:8080/order/payment2',
-              {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data),
-                signal: signal,
-              }
-            );
-
-            const json = await response.json();
-            console.log('json', json);
-            if (json.status == 'ORDER_LIST_PAYMENT_SUCCESS') {
-              alert('결제 성공');
-              const getOrderId = json.result;
-              console.log('주문번호는 = ', getOrderId);
-              setOrderId(getOrderId);
-              console.log('orderId set 되었는지 확인: ' + orderId);
-            }
-          } catch (error) {
-            console.error(error);
+          const json = await response.json();
+          console.log('json', json);
+          if (json.status == 'ORDER_LIST_PAYMENT_SUCCESS') {
+            alert('결제 성공');
           }
-        })(),
-      3000
-    );
+        } catch (AbortError) {
+          // console.log('abort');
+          // console.error(AbortError);
+        }
+      })();
+    }, 3000);
 
     return () => controller.abort();
-  }, [cart, token]);
-
-  useEffect(() => {
-    setTimeout(() => {
-      navigation('/order/submit', { state: { orderId } });
-    }, 5000);
-  }, [navigation]);
+  }, []);
 
   return (
     <div className='flex flex-col max-w-screen-sm sm min-h-screen bg-mcred justify-between mx-auto p-20'>
