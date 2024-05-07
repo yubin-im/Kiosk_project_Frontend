@@ -45,8 +45,8 @@ export const AdminOrderListPage = () => {
     }
   };
 
-  const onDelete = (productCode: string) => {
-    alert(productCode + ' 상품을 삭제할 수 없습니다');
+  const onDelete = (orderId: string) => {
+    alert(orderId + ' 주문을 삭제할 수 없습니다');
   };
 
   const onEdit = (orderId: number) => {
@@ -96,7 +96,7 @@ export const AdminOrderListPage = () => {
           </p>
         </div>
       </div>
-      
+
       <div className=' min-w-full'>
         <table className='text-left text-sm font-light text-surface dark:text-white'>
           <thead className='border-b border-neutral-200 font-medium dark:border-white/10'>
