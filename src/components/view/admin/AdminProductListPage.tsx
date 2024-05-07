@@ -88,7 +88,7 @@ export const AdminProductListPage = () => {
                 </td>
                 <td>
                   <div className='truncate'>
-                    {item.productPrice.toLocaleString()} 원
+                    {item.productPrice?.toLocaleString()} 원
                   </div>
                 </td>
                 <td>{item.category}</td>
