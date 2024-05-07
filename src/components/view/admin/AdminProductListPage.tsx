@@ -9,6 +9,7 @@ export type ProductCategory =
   | 'DESSERT';
 
 export type Product = {
+  id: number;
   productName: string;
   productPrice: number;
   productCode: string;
@@ -42,12 +43,34 @@ export const AdminProductListPage = () => {
     }
   };
 
-  const onDelete = (productCode: string) => {
-    alert(productCode + ' 상품을 삭제할 수 없습니다');
+  const onDelete = async (productCode: string) => {
+    try {
+      const response = await fetch(
+        'http://localhost:8080/admin/product/remove',
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            productCode: productCode,
+          }),
+        }
+      );
+
+      const data: Message = await response.json();
+
+      if (data.status == 'PRODUCT_REMOVE_SUCCESS') {
+        alert('삭제 성공');
+        fetchProducts();
+      } else {
+        alert('삭제 실패');
+      }
+    } catch (err) {
+      console.error(err);
+    }
   };
 
-  const onEdit = (productCode: string) => {
-    navigation(`${productCode}`);
+  const onEdit = (id: number) => {
+    navigation(`${id}`);
   };
 
   useEffect(() => {
@@ -96,13 +119,13 @@ export const AdminProductListPage = () => {
                   <div className='flex flex-col gap-1 min-h-full content-center'>
                     <button
                       className='border border-stone-300 bg-white  rounded-lg'
-                      onClick={() => onEdit(item.productCode)}
+                      onClick={() => onEdit(item.id)}
                     >
                       수정
                     </button>
                     <button
                       className='border border-stone-300 bg-white rounded-lg'
-                      onClick={() => onDelete(item.productName)}
+                      onClick={() => onDelete(item.productCode)}
                     >
                       삭제
                     </button>

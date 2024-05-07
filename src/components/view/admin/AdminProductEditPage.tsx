@@ -11,7 +11,7 @@ interface Message {
 
 export const AdminProductEditPage = () => {
   const navigation = useNavigate();
-  const { productCode } = useParams();
+  const { id } = useParams();
   const [product, setProduct] = useState<Product | null>(null);
 
   const nameRef = useRef<HTMLInputElement | null>(null);
@@ -21,9 +21,13 @@ export const AdminProductEditPage = () => {
   const imgRef = useRef<HTMLInputElement | null>(null);
 
   const fetchProduct = async () => {
+    console.log(
+      '왜 안 되냐',
+      `http://localhost:8080/admin/product/detail/${id}`
+    );
     try {
       const response = await fetch(
-        `http://localhost:8080/admin/product/detail/${productCode}`
+        `http://localhost:8080/admin/product/detail/${id}`
       );
       const data: Message = await response.json();
       const { status, message, result } = data;
@@ -75,9 +79,9 @@ export const AdminProductEditPage = () => {
   };
 
   useEffect(() => {
-    console.log('productCode', productCode);
-    if (productCode) fetchProduct();
-  }, [productCode]);
+    console.log('productCode', id);
+    fetchProduct();
+  }, [id]);
 
   return (
     <>
