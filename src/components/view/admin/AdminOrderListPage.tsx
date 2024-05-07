@@ -9,16 +9,22 @@ type Order = {
   orderId: number;
 };
 
+type OrderList = {
+  totalCount: number;
+  orderList: Order[];
+};
+
 interface Message {
   status: string;
   code: string;
   message: string;
-  result: unknown;
+  result: OrderList;
 }
 
 export const AdminOrderListPage = () => {
   const [products, setProducts] = useState<Order[]>([]);
   const [page, setPage] = useState(0);
+  const [totalCount, setTotalCount] = useState(0);
   const navigation = useNavigate();
 
   const fetchProducts = async () => {
@@ -29,7 +35,8 @@ export const AdminOrderListPage = () => {
       const data: Message = await response.json();
       const { status, result } = data;
       if (status == 'ORDER_LIST_FOUND_SUCCESS') {
-        setProducts(result as Order[]);
+        setProducts(result.orderList.content as Order[]);
+        setTotalCount(result.totalCount);
       } else {
         alert('조회 실패');
       }
@@ -51,6 +58,9 @@ export const AdminOrderListPage = () => {
   }, [page]);
   return (
     <>
+      <div className='text-right mb-3'>
+        <p>총 <span className='font-semibold text-red-500'>{totalCount}</span>건</p>
+      </div>
       <div className=' min-w-full'>
         <table className='text-left text-sm font-light text-surface dark:text-white'>
           <thead className='border-b border-neutral-200 font-medium dark:border-white/10'>
