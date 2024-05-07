@@ -23,7 +23,7 @@ const OrderSubmit = () => {
     console.log('주문번호 받아왔는지 확인 :' + location.state.getOrderId);
     setOrderListId(location.state.getOrderId);
 
-    if (token?.userId && !orderListId) {
+    if (token?.userId) {
       fetchData();
     }
   }, [orderListId]);
@@ -34,7 +34,7 @@ const OrderSubmit = () => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         userId: token?.userId,
-        orderListId: orderListId,
+        orderListId: location.state.getOrderId,
       }),
     })
       .then((res) => res.json())
