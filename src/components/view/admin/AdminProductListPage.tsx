@@ -29,7 +29,7 @@ export const AdminProductListPage = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const navigation = useNavigate();
   const [page, setPage] = useState<number>(0);
-  // const [sort, setSort] = useState<string>('productName');
+  const [sort, setSort] = useState<string>('productName');
   // const [totalElement, setTotalElement] = useState<number>(0);
   const [totalPages, setTotalPages] = useState<number>(0);
 
