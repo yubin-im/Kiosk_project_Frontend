@@ -1,7 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useStorage } from '../context/storage-context';
-import { useLocation } from 'react-router-dom';
 
 interface SuccessOrderResDto {
   userPoint: number;
@@ -9,21 +8,17 @@ interface SuccessOrderResDto {
 }
 
 const OrderSubmit = () => {
-  const location = useLocation();
   const navigation = useNavigate();
   const [data, setData] = useState<SuccessOrderResDto | null>(null);
   const {
     storage: { token },
   } = useStorage();
   const [orderListId, setOrderListId] = useState<number | null>(null);
+  const timerRef = useRef<ReturnType<typeof setTimeout>>();
+  const clear = () => clearTimeout(timerRef.current);
 
   useEffect(() => {
-    // Todo: 사용자 ID와 OrderList ID 받아오기
-    // setOrderListId(20);
-    console.log('orderListId 받아왔니: ' + location.state.orderId);
-    setOrderListId(location.state.orderId);
-
-    if (token?.userId !== null && orderListId !== null) {
+    if (token?.userId && !orderListId) {
       fetchData();
     }
   }, [orderListId]);
@@ -40,6 +35,9 @@ const OrderSubmit = () => {
       .then((res) => res.json())
       .then((json) => {
         setData(json.result);
+        setTimeout(() => {
+          navigation('/');
+        }, 3000);
       })
       .catch((err) => {
         console.error(err);

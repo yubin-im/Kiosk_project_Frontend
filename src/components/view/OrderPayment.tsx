@@ -1,22 +1,8 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { getStorage } from '../util/getStorage';
 import { useStorage } from '../context/storage-context';
 import { getTotalPrice } from '../util/getTotalPrice';
-
-interface PaymentResDto {
-  orderItemTotalAmount: number;
-  orderListTotalPrice: number;
-}
-
-type OrderList = {
-  id: number;
-  orderListTime: string;
-  orderListTotalPrice: number;
-  orderListStatus: string;
-  userId: number;
-  orderItems: Order;
-};
+import { useNavigate } from 'react-router-dom';
 
 const Order: Order = {
   orderId: 1,
@@ -27,7 +13,6 @@ const Order: Order = {
 
 const OrderPayment = () => {
   const navigation = useNavigate();
-
   const [cart, setCart] = useState(() => getStorage<Order[]>('cart', [Order]));
   const {
     storage: { token },
@@ -57,6 +42,7 @@ const OrderPayment = () => {
           console.log('json', json);
           if (json.status == 'ORDER_LIST_PAYMENT_SUCCESS') {
             alert('결제 성공');
+            navigation('/order/submit');
           }
         } catch (AbortError) {
           // console.log('abort');
