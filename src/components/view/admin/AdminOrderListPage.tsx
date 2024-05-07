@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -119,7 +120,17 @@ export const AdminOrderListPage = () => {
                 <td>{item.userId}</td>
                 <td>
                   <div className=' max-w-30 truncate whitespace-nowrap'>
-                    {item.orderListStatus}
+                    <span
+                      className={clsx({
+                        'border rounded px-1': true,
+                        'bg-green-200': item.orderListStatus == 'RECEIVED',
+                        'bg-yellow-200': item.orderListStatus == 'READY',
+                        'bg-red-200': item.orderListStatus == 'COMPLETED',
+                        'bg-blue-200': item.orderListStatus == 'PREPARING',
+                      })}
+                    >
+                      {item.orderListStatus}
+                    </span>
                   </div>
                 </td>
                 <td>
