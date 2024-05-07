@@ -42,7 +42,9 @@ const OrderPayment = () => {
           console.log('json', json);
           if (json.status == 'ORDER_LIST_PAYMENT_SUCCESS') {
             alert('결제 성공');
-            navigation('/order/submit');
+            const getOrderId = json.result;
+            console.log('주문번호는 = ', getOrderId);
+            navigation('/order/submit', { state: { getOrderId } });
           }
         } catch (AbortError) {
           // console.log('abort');
