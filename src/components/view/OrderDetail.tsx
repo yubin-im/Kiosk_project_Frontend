@@ -33,6 +33,13 @@ const OrderDetail = () => {
   const [data, setData] = useState<OrderDetailResDto | null>(null);
   const [orderListId, setOrderListId] = useState<number | null>(null);
   const [cart, setCart] = useState(() => getStorage<Order[]>('cart', []));
+  const calculateTotalPrice = () => {
+    let totalPrice = 0;
+    cart.forEach((item) => {
+      totalPrice += item.product.productPrice * item.productAmount;
+    });
+    return totalPrice;
+  };
 
   // useEffect(() => {
   //   // Todo: orderListId 받아오기
@@ -142,7 +149,7 @@ const OrderDetail = () => {
         </div>
         <br></br>
         <div className='text-lg font-bold'>
-          총 금액 : {getTotalPrice(cart).toLocaleString()}
+          총 금액 : {calculateTotalPrice().toLocaleString()}
         </div>
         <br></br>
 
