@@ -11,7 +11,7 @@ export const McFrame = ({ children, color }: Prop) => {
     // <div className='flex flex-col max-w-screen-sm sm min-h-screen bg-mcred justify-between mx-auto p-20'>
     <div
       className={clsx(
-        'flex flex-col max-w-screen-sm sm min-h-screen justify-between mx-auto p-20',
+        'flex flex-col max-w-screen-sm min-h-screen sm min-h-screen justify-between mx-auto p-20',
         {
           'bg-mcred': color == 'red',
           'bg-mcyellow': color == 'yellow',
