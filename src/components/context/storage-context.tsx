@@ -90,7 +90,7 @@ const DefaultStorage: Storage = {
 };
 
 const reducer = (storage: Storage, { type, payload }: Action) => {
-  console.log('reducer함수 : ', payload);
+  // console.log('reducer함수 : ', payload);
   let newer: Storage;
   switch (type) {
     case ACTION.LOG_IN:
