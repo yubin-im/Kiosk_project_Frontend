@@ -17,6 +17,17 @@ const OrderPayment = () => {
   const {
     storage: { token },
   } = useStorage();
+  const totalQuantity = cart.reduce(
+    (total, item) => total + item.productAmount,
+    0
+  );
+  const calculateTotalPrice = () => {
+    let totalPrice = 0;
+    cart.forEach((item) => {
+      totalPrice += item.product.productPrice * item.productAmount;
+    });
+    return totalPrice;
+  };
 
   useEffect(() => {
     const controller = new AbortController();
@@ -67,8 +78,8 @@ const OrderPayment = () => {
 
             <br />
             <p>
-              총 수량: {cart.length}개 총 가격:{' '}
-              {getTotalPrice(cart).toLocaleString()}원
+              총 수량: {totalQuantity}개 총 가격:{' '}
+              {calculateTotalPrice().toLocaleString()}원
             </p>
             <br />
             <p>카드를 화살표 방향으로 투입구에 넣어주세요.</p>
