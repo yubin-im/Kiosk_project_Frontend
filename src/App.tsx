@@ -13,7 +13,10 @@ import { PlaceSelectionPage } from './components/view/placeSelectionPage';
 import { AdminPage } from './components/view/AdminPage';
 import OrderRecommend from './components/view/OrderRecommend';
 import { AdminUserListPage } from './components/view/admin/AdminUserListPage';
-import { AdminOrderListPage } from './components/view/AdminOrderListPage';
+import { AdminOrderListPage } from './components/view/admin/AdminOrderListPage';
+import { AdminOrderEditPage } from './components/view/admin/AdminOrderEditPage';
+import { AdminOrderStatisticsPage } from './components/view/admin/AdminOrderStatisticsPage';
+import { AdminOrderStatisticsChartPage } from './components/view/admin/AdminOrderStatisticsChartPage';
 import { AdminUserEditPage } from './components/view/admin/AdminUserEditPage';
 import OrderDetail from './components/view/OrderDetail';
 import { AdminProductListPage } from './components/view/admin/AdminProductListPage';
@@ -44,6 +47,15 @@ function App() {
             <Route path='product' element={<AdminProductListPage />} />
             <Route path='product/:id' element={<AdminProductEditPage />} />
             <Route path='order' element={<AdminOrderListPage />} />
+            <Route path='order/:orderId' element={<AdminOrderEditPage />} />
+            <Route
+              path='order/statistics'
+              element={<AdminOrderStatisticsPage />}
+            />
+            <Route
+              path='order/statistics/chart'
+              element={<AdminOrderStatisticsChartPage />}
+            />
           </Route>
         </Routes>
       </StorageProvider>

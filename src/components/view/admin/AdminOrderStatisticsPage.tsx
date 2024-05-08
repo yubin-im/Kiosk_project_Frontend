@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Order } from '../OrderPage';
+import { useNavigate } from 'react-router-dom';
+import clsx from 'clsx';
 
 type OrderRevenueList = {
   orderListDate: string;
@@ -22,20 +24,16 @@ const month: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 export const AdminOrderStatisticsPage = () => {
   const API = 'http://localhost:8080/admin/order/statistics/revenue';
   const [orders, setOrders] = useState<OrderRevenue>();
-  const [chartHeight, setChartHeight] = useState<chart>();
-  const [isLoading, setLoading] = useState(false);
+  const [type, setType] = useState('month');
   const [year, setYear] = useState('2024');
   const [searchMonth, setMonth] = useState('5');
+  const navigation = useNavigate();
 
   useEffect(() => {
-    setLoading(false);
     fetchOrders();
-    setTimeout(() => {
-      setLoading(true);
-    }, 1000);
-  }, [searchMonth]);
+  }, [searchMonth, type, year]);
   const fetchOrders = () => {
-    fetch(`${API}?type=month&year=${year}&month=${searchMonth}`, {
+    fetch(`${API}?type=${type}&year=${year}&month=${searchMonth}`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     })
@@ -49,7 +47,6 @@ export const AdminOrderStatisticsPage = () => {
         orders?.orderRevenueList.forEach((order, idx) => {
           chart[idx] = `${order.orderListTotalPrice / 1000}px`;
         });
-        setChartHeight(chart);
       })
       .catch((err) => {
         console.error(err);
@@ -60,24 +57,60 @@ export const AdminOrderStatisticsPage = () => {
     <>
       <button
         type='button'
-        className='border bg-red-500 text-white font-medium rounded-lg p-1 m-2'
+        className={clsx({
+          'border font-medium rounded-lg p-1 m-2': true,
+          'bg-red-500 text-white': type == 'month',
+          'text-red-500': type != 'month',
+        })}
+        onClick={() => setType('month')}
       >
         일자별
       </button>
-      <button className='border text-red-500 font-medium rounded-lg p-1 m-2'>
+      <button
+        type='button'
+        className={clsx({
+          'border font-medium rounded-lg p-1 m-2': true,
+          'bg-red-500 text-white': type == 'year',
+          'text-red-500': type != 'year',
+        })}
+        onClick={() => setType('year')}
+      >
         년도별
       </button>
-      <div className='grid grid-cols-3 flex flex-wrap items-center py-5 px-6'>
-        <div className='col-start-1 text-left'>
-          <button className='border-yellow-400 bg-yellow-400 text-white rounded-lg m-5 p-2 font-semibold'>
+      <div className='grid grid-cols-3 py-5 px-6'>
+        <div className='col-start-1 flex items-center'>
+          <button
+            className='flex text-white bg-[#F7BE38] hover:bg-[#F7BE38]/90 focus:ring-4 focus:outline-none focus:ring-[#F7BE38]/50 font-medium rounded-lg text-sm px-3 py-1 text-center dark:focus:ring-[#F7BE38]/50'
+            onClick={() => navigation('chart')}
+          >
+            <svg
+              xmlns='http://www.w3.org/2000/svg'
+              fill='none'
+              viewBox='0 0 24 24'
+              strokeWidth='1.5'
+              stroke='currentColor'
+              className='w-5 h-5'
+            >
+              <path
+                strokeLinecap='round'
+                strokeLinejoin='round'
+                d='M7.5 14.25v2.25m3-4.5v4.5m3-6.75v6.75m3-9v9M6 20.25h12A2.25 2.25 0 0 0 20.25 18V6A2.25 2.25 0 0 0 18 3.75H6A2.25 2.25 0 0 0 3.75 6v12A2.25 2.25 0 0 0 6 20.25Z'
+              />
+            </svg>
             그래프 보기
           </button>
         </div>
         <h3 className='col-start-2 w-full md:w-auto mb-4 md:mb-0 text-2xl font-bold'>
-          {orders?.year}. {orders?.month && orders?.month < 10 ? 0 : null}
-          {orders?.month}
+          {type == 'month' ? (
+            <span>
+              {orders?.year}. {orders?.month && orders?.month < 10 ? 0 : null}
+              {orders?.month}
+            </span>
+          ) : (
+            <span>{orders?.year}년</span>
+          )}
         </h3>
-        <div className='col-start-3'>
+        <div className='col-start-3 text-right'>
           <div className='inline-block py-2 px-3 border rounded text-xs text-grey-500'>
             <select
               className='pr-1'
@@ -89,19 +122,21 @@ export const AdminOrderStatisticsPage = () => {
               </option>
             </select>
           </div>
-          <div className='ml-2 inline-block py-2 px-3 border rounded text-xs text-grey-500'>
-            <select
-              className='pr-1'
-              onChange={(e) => setMonth(e.currentTarget.value)}
-            >
-              <option value='none'>month</option>
-              {month.map((m) => (
-                <option key={m} value={m}>
-                  {m}월
-                </option>
-              ))}
-            </select>
-          </div>
+          {type == 'month' ? (
+            <div className='ml-2 inline-block py-2 px-3 border rounded text-xs text-grey-500'>
+              <select
+                className='pr-1'
+                onChange={(e) => setMonth(e.currentTarget.value)}
+              >
+                <option value='none'>month</option>
+                {month.map((m) => (
+                  <option key={m} value={m}>
+                    {m}월
+                  </option>
+                ))}
+              </select>
+            </div>
+          ) : null}
         </div>
       </div>
       <div className='border min-w-full text-center'>
@@ -120,7 +155,17 @@ export const AdminOrderStatisticsPage = () => {
                   <div className='truncate'>{idx + 1}</div>
                 </td>
                 <td>
-                  <div className='truncate'>{order.orderListDate}</div>
+                  {type == 'month' ? (
+                    <div className='truncate'>{order.orderListDate}</div>
+                  ) : (
+                    <div className='truncate'>
+                      {year}.
+                      {order.orderListDate && order.orderListDate.length < 2
+                        ? 0
+                        : null}
+                      {order.orderListDate}
+                    </div>
+                  )}
                 </td>
                 <td>
                   <div className='truncate'>
@@ -132,49 +177,6 @@ export const AdminOrderStatisticsPage = () => {
           </tbody>
         </table>
       </div>
-
-      {/* 그래프 */}
-      {!isLoading ? (
-        <h1>Loading...</h1>
-      ) : (
-        <div className='container mt-10'>
-          <div className='flex flex-col items-center justify-center w-screen px-3 py-5 text-gray-700 bg-gray-100'>
-            <div className='flex flex-col items-center w-full max-w-screen-md p-6 pb-6 bg-white rounded-lg shadow-xl sm:p-8'>
-              <h2 className='text-xl font-bold'>Daily Revenue</h2>
-              <span className='text-sm font-semibold text-gray-500'>
-                {orders?.year}. {orders?.month && orders?.month < 10 ? 0 : null}
-                {orders?.month}
-              </span>
-              <div className='flex items-end flex-grow w-full mt-10 space-x-2 sm:space-x-3'>
-                {orders?.orderRevenueList.map((order, idx) => (
-                  <div
-                    key={idx}
-                    className='relative flex flex-col items-center flex-grow pb-5 group'
-                  >
-                    <span className='absolute top-0 hidden -mt-6 text-xs font-bold group-hover:block'>
-                      {order.orderListTotalPrice.toLocaleString()}￦
-                    </span>
-                    <div
-                      className={`relative flex justify-center w-full bg-indigo-300`}
-                      style={{ height: chartHeight[idx] }}
-                    ></div>
-                    <span className='absolute bottom-0 text-xs font-bold'>
-                      {order.orderListDate}
-                    </span>
-                  </div>
-                ))}
-              </div>
-              {/* 라벨 */}
-              <div className='flex w-full mt-3'>
-                <div className='flex items-center ml-4'>
-                  <span className='block w-4 h-4 bg-indigo-300'></span>
-                  <span className='ml-1 text-xs font-medium'>매출액</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
     </>
   );
 };

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+
 import { Pagination } from '../../util/Pagination';
 
 export type ProductCategory =
@@ -10,6 +11,7 @@ export type ProductCategory =
   | 'DESSERT';
 
 export type Product = {
+
   id: number;
   productName: string;
   productPrice: number;
@@ -28,6 +30,7 @@ interface Message {
 export const AdminProductListPage = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const navigation = useNavigate();
+
   const [page, setPage] = useState<number>(0);
   const [sort, setSort] = useState<string>('productName');
   // const [totalElement, setTotalElement] = useState<number>(0);
@@ -88,6 +91,10 @@ export const AdminProductListPage = () => {
     setPage(page);
   };
 
+  const onEdit = (productCode: string) => {
+    navigation(`${productCode}`);
+  };
+
   useEffect(() => {
     fetchProducts();
   }, [page]);
@@ -134,13 +141,14 @@ export const AdminProductListPage = () => {
                   <div className='flex flex-col gap-1 min-h-full content-center'>
                     <button
                       className='border border-stone-300 bg-white  rounded-lg'
+
                       onClick={() => onEdit(item.id)}
                     >
                       수정
                     </button>
                     <button
                       className='border border-stone-300 bg-white rounded-lg'
-                      onClick={() => onDelete(item.productCode)}
+                      onClick={() => onDelete(item.productName)}
                     >
                       삭제
                     </button>

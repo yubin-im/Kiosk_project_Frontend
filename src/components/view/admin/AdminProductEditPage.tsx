@@ -1,5 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import {
+  UNSAFE_ViewTransitionContext,
+  useNavigate,
+  useParams,
+} from 'react-router-dom';
+
 import { Product } from './AdminUserListPage';
 
 interface Message {
@@ -21,10 +26,6 @@ export const AdminProductEditPage = () => {
   const imgRef = useRef<HTMLInputElement | null>(null);
 
   const fetchProduct = async () => {
-    console.log(
-      '왜 안 되냐',
-      `http://localhost:8080/admin/product/detail/${id}`
-    );
     try {
       const response = await fetch(
         `http://localhost:8080/admin/product/detail/${id}`
@@ -33,7 +34,7 @@ export const AdminProductEditPage = () => {
       const { status, message, result } = data;
 
       if (status == 'PRODUCT_CHECK_SUCCESS') {
-        console.log('result', result);
+
         setProduct(result);
       }
     } catch (err) {
@@ -108,6 +109,7 @@ export const AdminProductEditPage = () => {
                     type='text'
                     defaultValue={product?.productCode}
                     ref={codeRef}
+
                     disabled
                   />
                 </div>
