@@ -2,11 +2,10 @@ import clsx from 'clsx';
 import { useState, useEffect } from 'react';
 import { useStorage } from '../context/storage-context';
 import { useNavigate } from 'react-router-dom';
-import { Product } from './AdminPageList';
 import { useCount } from '../util/use-count';
 import { ProductBox } from '../util/ProductBox';
-import { getTotalPrice } from '../util/getTotalPrice';
 import { getStorage } from '../util/getStorage';
+import { Product } from './admin/AdminUserListPage';
 
 enum CATEGORY {
   BURGER_SET = 'BURGER_SET',
@@ -329,7 +328,7 @@ const OrderProducts = () => {
       </div>
 
       <div
-        className='my-1'
+        className='mt-1'
         style={{
           display: 'flex',
           justifyContent: 'space-between',
@@ -343,25 +342,20 @@ const OrderProducts = () => {
         <div>
           <p className='mx-3 text-md'>주문 내역</p>
         </div>
-        <div>
-          <p className='mx-3 text-md'>
-            총 가격: {calculateTotalPrice().toLocaleString()}원 &nbsp; 수량:{' '}
-            {totalQuantity}개
-          </p>
+        <div className='flex gap-7 pr-3'>
+          <span>총 가격: {calculateTotalPrice().toLocaleString()}원</span>
+          <span>수량: {totalQuantity}개</span>
         </div>
       </div>
 
-      <div
-        // style={{ textAlign: 'right' }}
-        className='grid grid-cols-12 pl-2 h-24 '
-      >
-        <div className='col-span-10 overflow-y-scroll'>
-          <table className='w-full text-start text-sm'>
-            <tbody>
+      <div className='grid grid-cols-12 pl-2 h-24 '>
+        <div className='col-span-10 mx-2 overflow-y-scroll'>
+          <table className='w-full  text-start text-sm'>
+            <tbody className='divide-y'>
               {myCart?.map((item, index) => (
                 <tr
                   key={item.orderId}
-                  className='grid grid-cols-12 justify-start'
+                  className='grid grid-cols-12 justify-start py-1'
                 >
                   <td className='col-span-1'>{index + 1}</td>
                   <td className='col-span-5'>{item.product.productName}</td>
