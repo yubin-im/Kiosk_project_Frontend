@@ -18,6 +18,10 @@ const OrderSubmit = () => {
   const timerRef = useRef<ReturnType<typeof setTimeout>>();
   const clear = () => clearTimeout(timerRef.current);
 
+  const addCommas = (num: number): string => {
+    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  };
+
   useEffect(() => {
     if (token?.userId) {
       fetchData();
@@ -69,7 +73,8 @@ const OrderSubmit = () => {
         ''
       ) : (
         <h1>
-          회원님의 적립금은 <span className='underline'>{data.userPoint}</span>
+          회원님의 적립금은{' '}
+          <span className='underline'>{addCommas(data.userPoint)}</span>
           원입니다.
         </h1>
       )}
