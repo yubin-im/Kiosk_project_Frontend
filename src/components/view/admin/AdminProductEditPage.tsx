@@ -4,18 +4,19 @@ import {
   useNavigate,
   useParams,
 } from 'react-router-dom';
+
 import { Product } from './AdminUserListPage';
 
 interface Message {
   status: string;
   code: string;
   message: string;
-  result: Product;
+  result?: Product;
 }
 
 export const AdminProductEditPage = () => {
   const navigation = useNavigate();
-  const { productCode } = useParams();
+  const { id } = useParams();
   const [product, setProduct] = useState<Product | null>(null);
 
   const nameRef = useRef<HTMLInputElement | null>(null);
@@ -27,12 +28,13 @@ export const AdminProductEditPage = () => {
   const fetchProduct = async () => {
     try {
       const response = await fetch(
-        `http://localhost:8080/admin/product/detail/${productCode}`
+        `http://localhost:8080/admin/product/detail/${id}`
       );
       const data: Message = await response.json();
       const { status, message, result } = data;
 
       if (status == 'PRODUCT_CHECK_SUCCESS') {
+
         setProduct(result);
       }
     } catch (err) {
@@ -40,15 +42,47 @@ export const AdminProductEditPage = () => {
     }
   };
 
-  //   const onUpdateProduct = () => {
-  //     const data = {
+  const onUpdateProduct = async () => {
+    const conterller = new AbortController();
+    const signal = conterller.signal;
 
-  //     }
-  //   }
+    const data = {
+      productName: nameRef.current?.value,
+      productPrice: priceRef.current?.value,
+      productCode: product?.productCode,
+      productImgUrl: imgRef.current?.value,
+      category: categoryRef.current?.value,
+    };
+
+    console.log('datata', data);
+    try {
+      const response = await fetch(
+        'http://localhost:8080/admin/product/detail/edit',
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data),
+          signal: signal,
+        }
+      );
+
+      const message: Message = await response.json();
+      console.log('message', message);
+      if (message.status == 'PRODUCT_EDIT_SUCCESS') {
+        alert(message.message);
+        // window.location.reload();
+      } else {
+        alert('수정 실패');
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   useEffect(() => {
+    console.log('productCode', id);
     fetchProduct();
-  }, []);
+  }, [id]);
 
   return (
     <>
@@ -75,20 +109,24 @@ export const AdminProductEditPage = () => {
                     type='text'
                     defaultValue={product?.productCode}
                     ref={codeRef}
+
+                    disabled
                   />
                 </div>
                 <span>Price</span>
-                <input
-                  defaultValue={`${product?.productPrice.toLocaleString()} 원`}
-                  ref={priceRef}
-                />
+                <div>
+                  <input
+                    type='number'
+                    defaultValue={product?.productPrice}
+                    min={0}
+                    ref={priceRef}
+                  />{' '}
+                  원
+                </div>
+
                 <span>Category</span>
-                <input
-                  type='number'
-                  defaultValue={product?.category}
-                  ref={categoryRef}
-                />
-                <span>User Role</span>
+                <input defaultValue={product?.category} ref={categoryRef} />
+                <span>IMG</span>
                 <input
                   type='text'
                   defaultValue={product?.productImgUrl}

@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import { Pagination } from '../../util/Pagination';
+
 export type ProductCategory =
   | 'BURGER_SET'
   | 'BURGER_SINGLE'
@@ -9,6 +11,8 @@ export type ProductCategory =
   | 'DESSERT';
 
 export type Product = {
+
+  id: number;
   productName: string;
   productPrice: number;
   productCode: string;
@@ -27,14 +31,25 @@ export const AdminProductListPage = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const navigation = useNavigate();
 
+  const [page, setPage] = useState<number>(0);
+  const [sort, setSort] = useState<string>('productName');
+  // const [totalElement, setTotalElement] = useState<number>(0);
+  const [totalPages, setTotalPages] = useState<number>(0);
+
   const fetchProducts = async () => {
     try {
-      const response = await fetch(`http://localhost:8080/admin/product`);
+      const response = await fetch(
+        `http://localhost:8080/admin/product?page=${page}&sort=${sort}`
+      );
       const data: Message = await response.json();
       const { status, result } = data;
       if (status == 'PRODUCT_CHECK_SUCCESS') {
-        setProducts(result);
+        setProducts(result.content);
+        // setTotalElement(result.totalElement);
+        setTotalPages(result.totalPages);
       } else {
+        console.log(data);
+        console.log(result);
         alert('조회 실패');
       }
     } catch (err) {
@@ -42,8 +57,38 @@ export const AdminProductListPage = () => {
     }
   };
 
-  const onDelete = (productCode: string) => {
-    alert(productCode + ' 상품을 삭제할 수 없습니다');
+  const onDelete = async (productCode: string) => {
+    try {
+      const response = await fetch(
+        'http://localhost:8080/admin/product/remove',
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            productCode: productCode,
+          }),
+        }
+      );
+
+      const data: Message = await response.json();
+
+      if (data.status == 'PRODUCT_REMOVE_SUCCESS') {
+        alert('삭제 성공');
+        fetchProducts();
+      } else {
+        alert('삭제 실패');
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const onEdit = (id: number) => {
+    navigation(`${id}`);
+  };
+
+  const onSetPage = (page: number) => {
+    setPage(page);
   };
 
   const onEdit = (productCode: string) => {
@@ -52,10 +97,10 @@ export const AdminProductListPage = () => {
 
   useEffect(() => {
     fetchProducts();
-  }, []);
+  }, [page]);
   return (
     <>
-      <div className=' min-w-full'>
+      <div className='flex flex-col justify-center min-w-full'>
         <table className='text-left text-sm font-light text-surface dark:text-white'>
           <thead className='border-b border-neutral-200 font-medium dark:border-white/10'>
             <tr className='min-w-full '>
@@ -88,7 +133,7 @@ export const AdminProductListPage = () => {
                 </td>
                 <td>
                   <div className='truncate'>
-                    {item.productPrice.toLocaleString()} 원
+                    {item.productPrice?.toLocaleString()} 원
                   </div>
                 </td>
                 <td>{item.category}</td>
@@ -96,7 +141,8 @@ export const AdminProductListPage = () => {
                   <div className='flex flex-col gap-1 min-h-full content-center'>
                     <button
                       className='border border-stone-300 bg-white  rounded-lg'
-                      onClick={() => onEdit(item.productCode)}
+
+                      onClick={() => onEdit(item.id)}
                     >
                       수정
                     </button>
@@ -112,6 +158,15 @@ export const AdminProductListPage = () => {
             ))}
           </tbody>
         </table>
+        <br></br>
+        <div className='flex justify-center'>
+          <Pagination
+            total={totalPages}
+            page={page}
+            setPage={onSetPage}
+            limit={5}
+          />
+        </div>
       </div>
     </>
   );
