@@ -44,9 +44,9 @@ const OrderRecommend = () => {
     addOrder(product, 1);
     const totalPrice = calculateTotalPrice();
     alert(
-      '상품 추가되었습니다.\n 총 결제 금액은 ' +
+      '상품 1개가 추가되었습니다.\n총 결제 금액은 ' +
         (totalPrice + product.productPrice).toLocaleString() +
-        ' 원 입니다'
+        '원 입니다.'
     );
     navigation('/order/payment');
   };
