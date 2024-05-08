@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useStorage } from '../context/storage-context';
+import { useLocation } from 'react-router-dom';
 
 interface SuccessOrderResDto {
   userPoint: number;
