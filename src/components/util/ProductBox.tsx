@@ -5,6 +5,10 @@ type Prop = {
   id?: undefined | number | string;
 };
 export const ProductBox = ({ product }: Prop) => {
+  const addCommas = (num: number): string => {
+    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  };
+
   return (
     <div className='w-32 h-32'>
       <div style={{ height: '50%' }}>
@@ -21,7 +25,7 @@ export const ProductBox = ({ product }: Prop) => {
 
       <div className='text-sm overflow-hidden'>
         <p>{product.productName}</p>
-        <p>{product.productPrice}원</p>
+        <p>{addCommas(product.productPrice)}원</p>
       </div>
     </div>
   );
