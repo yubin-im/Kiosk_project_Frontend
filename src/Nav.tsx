@@ -5,7 +5,7 @@ import React, {
   useImperativeHandle,
   useState,
 } from 'react';
-import { PAGE } from './components/view/AdminPage';
+import { PAGE } from './components/view/admin/AdminPage';
 
 export interface NavigationHandler {
   onSwitchCategory: (category: PAGE) => void;
