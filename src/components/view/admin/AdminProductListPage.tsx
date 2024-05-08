@@ -91,10 +91,6 @@ export const AdminProductListPage = () => {
     setPage(page);
   };
 
-  const onEdit = (productCode: string) => {
-    navigation(`${productCode}`);
-  };
-
   useEffect(() => {
     fetchProducts();
   }, [page]);
