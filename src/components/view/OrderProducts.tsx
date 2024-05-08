@@ -49,6 +49,25 @@ const OrderProducts = () => {
     return totalPrice;
   };
 
+  const addCommas = (num: number): string => {
+    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  };
+
+  const handleClickOrder = () => {
+    const isConfirmed = window.confirm('주문을 취소하시겠습니까?');
+    if (isConfirmed) {
+      emptyCart();
+      navigation('/placeselection');
+    }
+  };
+
+  const handleClickCart = () => {
+    const isConfirmed = window.confirm('장바구니를 비우시겠습니까?');
+    if (isConfirmed) {
+      emptyMyCart();
+    }
+  };
+
   useEffect(() => {
     if (category == CATEGORY.RECOMMENDED) {
       fetchRecommendData();
@@ -318,8 +337,8 @@ const OrderProducts = () => {
         </div>
         <div>
           <p className='mx-3 text-md'>
-            총 가격: {calculateTotalPrice().toLocaleString()}원 수량:{' '}
-            {totalQuantity}
+            총 가격: {calculateTotalPrice().toLocaleString()}원 &nbsp; 수량:{' '}
+            {totalQuantity}개
           </p>
         </div>
       </div>
@@ -334,7 +353,7 @@ const OrderProducts = () => {
               <tr key={item.orderId} className='flex justify-between'>
                 <td>{index + 1}</td>
                 <td>{item.product.productName}</td>
-                <td>{item.product.productPrice} 원</td>
+                <td>{addCommas(item.product.productPrice)}원</td>
                 <td>
                   <button
                     className='border border-slate-300 rounded-lg px-2'
@@ -367,7 +386,7 @@ const OrderProducts = () => {
         <br />
         <button
           className='bg-mcblack text-white px-5 rounded-lg text-sm'
-          onClick={() => emptyMyCart()}
+          onClick={handleClickCart}
         >
           비우기
         </button>
@@ -375,16 +394,14 @@ const OrderProducts = () => {
 
       <div className='grid grid-cols-2 mt-1 gap-1'>
         <button
-          className='bg-red-500 text-white font-bold rounded-lg w-full'
-          onClick={() => {
-            emptyCart();
-            navigation('/placeselection');
-          }}
+          className='bg-red-500 text-white font-bold rounded-lg  py-2'
+          onClick={handleClickOrder}
+          style={{ margin: '4px' }}
         >
           주문 취소
         </button>
         <button
-          className='bg-green-700 text-white font-bold rounded-lg w-full'
+          className='bg-green-700 text-white font-bold rounded-lg  py-2'
           onClick={() => {
             setOrders(myCart);
             if (myCart.length == 0) {
@@ -393,6 +410,7 @@ const OrderProducts = () => {
             }
             navigation('/order/recommend');
           }}
+          style={{ margin: '4px' }}
         >
           주문 완료
         </button>
