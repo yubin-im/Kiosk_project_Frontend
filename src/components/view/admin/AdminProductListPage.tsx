@@ -34,6 +34,7 @@ export const AdminProductListPage = () => {
   const [sort, setSort] = useState<string>('productName');
   // const [totalElement, setTotalElement] = useState<number>(0);
   const [totalPages, setTotalPages] = useState<number>(0);
+  const [total, setTotal] = useState<number>(0);
 
   const fetchProducts = async () => {
     try {
@@ -44,7 +45,7 @@ export const AdminProductListPage = () => {
       const { status, result } = data;
       if (status == 'PRODUCT_CHECK_SUCCESS') {
         setProducts(result.content);
-        // setTotalElement(result.totalElement);
+        setTotal(result.totalElements);
         setTotalPages(result.totalPages);
       } else {
         console.log(data);
@@ -95,6 +96,16 @@ export const AdminProductListPage = () => {
   }, [page]);
   return (
     <>
+      <div className='grid grid-cols-3 items-end mb-5'>
+        <div className='col-start-2'>
+          <h3 className='font-semibold text-3xl pb-10'>Product</h3>
+        </div>
+        <div className='col-start-3 text-right mb-3'>
+          <p>
+            총 <span className='font-semibold text-red-500'>{total}</span>건
+          </p>
+        </div>
+      </div>
       <div className='flex flex-col justify-center min-w-full'>
         <table className='text-left text-sm font-light text-surface dark:text-white'>
           <thead className='border-b border-neutral-200 font-medium dark:border-white/10'>
