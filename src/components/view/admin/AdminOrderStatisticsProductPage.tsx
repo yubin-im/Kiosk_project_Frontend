@@ -105,7 +105,7 @@ export const AdminOrderStatisticsProductPage = () => {
         <table className='text-left text-sm font-light text-surface dark:text-white'>
           <thead className='border-b border-neutral-200 font-medium dark:border-white/10'>
             <tr className='min-w-full '>
-              <th className=' w-1/12 text-center pb-3'>순위</th>
+              <th className=' w-1/12 text-center pb-3'>판매 순위</th>
               <th className=' w-2/12 text-center pb-3'>상품</th>
               <th className=' w-1/12 text-center pb-3'>판매 개수</th>
             </tr>
@@ -119,7 +119,7 @@ export const AdminOrderStatisticsProductPage = () => {
                 <td>{index + 1}</td>
                 <td>{item.orderProductName}</td>
                 <td>
-                  <div className='text-center'>{item.orderProductCount}</div>
+                  <div className='text-center'>{item.orderProductCount} 개</div>
                 </td>
               </tr>
             ))}
