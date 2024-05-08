@@ -16,6 +16,7 @@ import { AdminOrderListPage } from './components/view/admin/AdminOrderListPage';
 import { AdminOrderEditPage } from './components/view/admin/AdminOrderEditPage';
 import { AdminOrderStatisticsPage } from './components/view/admin/AdminOrderStatisticsPage';
 import { AdminOrderStatisticsChartPage } from './components/view/admin/AdminOrderStatisticsChartPage';
+import { AdminOrderStatisticsProductPage } from './components/view/admin/AdminOrderStatisticsProductPage';
 import { AdminUserEditPage } from './components/view/admin/AdminUserEditPage';
 import OrderDetail from './components/view/OrderDetail';
 import { AdminProductListPage } from './components/view/admin/AdminProductListPage';
@@ -55,6 +56,10 @@ function App() {
             <Route
               path='order/statistics/chart'
               element={<AdminOrderStatisticsChartPage />}
+            />
+            <Route
+              path='order/statistics/product'
+              element={<AdminOrderStatisticsProductPage />}
             />
           </Route>
         </Routes>
