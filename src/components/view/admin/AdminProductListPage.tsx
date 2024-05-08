@@ -11,7 +11,6 @@ export type ProductCategory =
   | 'DESSERT';
 
 export type Product = {
-
   id: number;
   productName: string;
   productPrice: number;
@@ -137,7 +136,6 @@ export const AdminProductListPage = () => {
                   <div className='flex flex-col gap-1 min-h-full content-center'>
                     <button
                       className='border border-stone-300 bg-white  rounded-lg'
-
                       onClick={() => onEdit(item.id)}
                     >
                       수정
