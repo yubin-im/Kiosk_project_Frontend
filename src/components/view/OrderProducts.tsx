@@ -35,6 +35,7 @@ const OrderProducts = () => {
   const [products, setProducts] = useState<Product[] | null>(null);
   const [category, setCategory] = useState<CATEGORY>(CATEGORY.BURGER_SET);
   const [page, setPage] = useState<number>(0);
+  const [totalPage, setTotalPage] = useState<number>(0);
   const [myCart, setMyCart] = useState<Order[]>([]);
   const [totalCount, updateCount] = useCount(0);
   const totalQuantity = myCart.reduce(
@@ -79,7 +80,8 @@ const OrderProducts = () => {
         const message: Message = json;
         const { status, result: products } = message;
         if (status == 'PRODUCT_CHECK_SUCCESS') {
-          setProducts(products);
+          setProducts(products.content);
+          setTotalPage(products.totalPages);
         }
       })
       .catch((err) => console.error(err));
@@ -292,13 +294,19 @@ const OrderProducts = () => {
         >
           이전
         </button>
-        <span>{page}</span>
-        <button
-          className='border border-stone-300 px-5 py-1 rounded-lg text-sm'
-          onClick={() => setPage(page + 1)}
-        >
-          다음
-        </button>
+        <span>
+          {page + 1}/{totalPage}
+        </span>
+        {page + 1 == totalPage ? (
+          ''
+        ) : (
+          <button
+            className='border border-stone-300 px-5 py-1 rounded-lg text-sm'
+            onClick={() => setPage(page + 1)}
+          >
+            다음
+          </button>
+        )}
       </div>
 
       <div
