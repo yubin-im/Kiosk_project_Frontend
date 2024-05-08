@@ -1,9 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import {
-  UNSAFE_ViewTransitionContext,
-  useNavigate,
-  useParams,
-} from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { Product } from './AdminUserListPage';
 
@@ -34,7 +30,6 @@ export const AdminProductEditPage = () => {
       const { status, message, result } = data;
 
       if (status == 'PRODUCT_CHECK_SUCCESS') {
-
         setProduct(result);
       }
     } catch (err) {
@@ -109,7 +104,6 @@ export const AdminProductEditPage = () => {
                     type='text'
                     defaultValue={product?.productCode}
                     ref={codeRef}
-
                     disabled
                   />
                 </div>
