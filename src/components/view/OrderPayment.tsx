@@ -29,43 +29,50 @@ const OrderPayment = () => {
     return totalPrice;
   };
 
-  useEffect(() => {
+  const handlePaymentSuccess = async () => {
     const controller = new AbortController();
     const signal = controller.signal;
-    setTimeout(() => {
-      (async () => {
-        try {
-          const data = {
-            orderList: cart,
-            userId: token?.userId,
-          };
 
-          console.log('data', data);
+    try {
+      const data = {
+        orderList: cart,
+        userId: token?.userId,
+      };
 
-          const response = await fetch('http://localhost:8080/order/payment2', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data),
-            signal: signal,
-          });
+      console.log('data', data);
 
-          const json = await response.json();
-          console.log('json', json);
-          if (json.status == 'ORDER_LIST_PAYMENT_SUCCESS') {
-            alert('결제 성공');
-            const getOrderId = json.result;
-            console.log('주문번호는 = ', getOrderId);
-            navigation('/order/submit', { state: { getOrderId } });
-          }
-        } catch (AbortError) {
-          // console.log('abort');
-          // console.error(AbortError);
-        }
-      })();
-    }, 3000);
+      const response = await fetch('http://localhost:8080/order/payment2', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+        signal: signal,
+      });
 
-    return () => controller.abort();
-  }, []);
+      const json = await response.json();
+      console.log('json', json);
+      if (json.status == 'ORDER_LIST_PAYMENT_SUCCESS') {
+        alert('결제 성공');
+        const getOrderId = json.result;
+        console.log('주문번호는 = ', getOrderId);
+        navigation('/order/submit', { state: { getOrderId } });
+      }
+    } catch (AbortError) {
+      // console.log('abort');
+      // console.error(AbortError);
+    }
+  };
+
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     (async () => {})();
+  //   }, 3000);
+
+  //   return () => controller.abort();
+  // }, []);
+
+  const handlePaymentFailure = () => {
+    alert('결제에 실패하였습니다.\n다른 카드를 사용해주세요.');
+  };
 
   return (
     <div className='flex flex-col max-w-screen-sm sm min-h-screen bg-mcred justify-between mx-auto p-20'>
@@ -88,6 +95,20 @@ const OrderPayment = () => {
               src='https://media.licdn.com/dms/image/D4D12AQFym_70hWOyZg/article-cover_image-shrink_600_2000/0/1685446331482?e=2147483647&v=beta&t=fuITp9VITQaAdGNjomWZkykJGMIoho2qh2SIdDOD1eE'
               alt='pay'
             ></img>
+            <div className='flex gap-4 items-center justify-center'>
+              <button
+                className='bg-red-500 text-white font-bold rounded-lg py-3 px-6 text-lg'
+                onClick={handlePaymentFailure}
+              >
+                결제 실패
+              </button>
+              <button
+                className='bg-green-700 text-white font-bold rounded-lg  py-3 px-6 text-lg'
+                onClick={handlePaymentSuccess}
+              >
+                결제 완료
+              </button>
+            </div>
           </div>
         )}
       </div>
