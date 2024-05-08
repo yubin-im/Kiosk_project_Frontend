@@ -344,59 +344,68 @@ const OrderProducts = () => {
       </div>
 
       <div
-        style={{ textAlign: 'right' }}
-        className='px-5 h-24 overflow-y-scroll'
+        // style={{ textAlign: 'right' }}
+        className='grid grid-cols-12 pl-2 h-24 '
       >
-        <table className='min-w-full text-start text-sm'>
-          <tbody>
-            {myCart?.map((item, index) => (
-              <tr key={item.orderId} className='flex justify-between'>
-                <td>{index + 1}</td>
-                <td>{item.product.productName}</td>
-                <td>{addCommas(item.product.productPrice)}원</td>
-                <td>
-                  <button
-                    className='border border-slate-300 rounded-lg px-2'
-                    onClick={() => subAmount(index)}
-                  >
-                    -
-                  </button>
-                  <span className='mx-2'>{item.productAmount}</span>
-                  <button
-                    className='border border-slate-300 rounded-lg px-2'
-                    onClick={() => addAmount(index)}
-                  >
-                    +
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        <button
-          type='button'
-          className='font-bold text-sm'
-          onClick={() => {
-            setOrders(myCart);
-            navigation(`/order/detail`);
-          }}
-        >
-          주문 상세보기
-        </button>
-        <br />
-        <button
-          className='bg-mcblack text-white px-5 rounded-lg text-sm'
-          onClick={handleClickCart}
-        >
-          비우기
-        </button>
+        <div className='col-span-10 overflow-y-scroll'>
+          <table className='w-full text-start text-sm'>
+            <tbody>
+              {myCart?.map((item, index) => (
+                <tr
+                  key={item.orderId}
+                  className='grid grid-cols-12 justify-start'
+                >
+                  <td className='col-span-1'>{index + 1}</td>
+                  <td className='col-span-5'>{item.product.productName}</td>
+                  <td className='col-span-4'>
+                    {addCommas(item.product.productPrice)}원
+                  </td>
+                  <td className='col-span-2'>
+                    <button
+                      className='border border-slate-300 rounded-lg px-2'
+                      onClick={() => subAmount(index)}
+                    >
+                      -
+                    </button>
+                    <span className='mx-2'>{item.productAmount}</span>
+                    <button
+                      className='border border-slate-300 rounded-lg px-2'
+                      onClick={() => addAmount(index)}
+                    >
+                      +
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        <div className='col-span-2 justify-end'>
+          <button
+            type='button'
+            className='bg-green-700 rounded-lg w-full h-2/5 text-white font-bold text-sm'
+            onClick={() => {
+              setOrders(myCart);
+              navigation(`/order/detail`);
+            }}
+          >
+            주문 상세보기
+          </button>
+
+          <button
+            className='bg-mcred w-full h-2/5 text-white px-5 rounded-lg mt-2 text-sm'
+            onClick={handleClickCart}
+          >
+            비우기
+          </button>
+        </div>
       </div>
 
-      <div className='grid grid-cols-2 mt-1 gap-1'>
+      <div className='grid grid-cols-2 mt-1 p-10 gap-10'>
         <button
           className='bg-red-500 text-white font-bold rounded-lg  py-2'
           onClick={handleClickOrder}
-          style={{ margin: '4px' }}
         >
           주문 취소
         </button>
@@ -410,7 +419,6 @@ const OrderProducts = () => {
             }
             navigation('/order/recommend');
           }}
-          style={{ margin: '4px' }}
         >
           주문 완료
         </button>
