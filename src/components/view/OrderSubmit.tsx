@@ -10,18 +10,15 @@ interface SuccessOrderResDto {
 
 const OrderSubmit = () => {
   const navigation = useNavigate();
+  const location = useLocation();
   const [data, setData] = useState<SuccessOrderResDto | null>(null);
   const {
     storage: { token },
   } = useStorage();
-  // const [orderListId, setOrderListId] = useState<number | null>(null);
   const timerRef = useRef<ReturnType<typeof setTimeout>>();
   const clear = () => clearTimeout(timerRef.current);
 
   useEffect(() => {
-    // console.log('주문번호 받아왔는지 확인 :' + location.state.getOrderId);
-    // setOrderListId(location.state.getOrderId);
-
     if (token?.userId) {
       fetchData();
     }
