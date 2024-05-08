@@ -103,6 +103,12 @@ export const AdminOrderStatisticsPage = () => {
             </svg>
             그래프 보기
           </button>
+          <button
+            onClick={() => navigation('product')}
+            className='border ml-2 rounded-lg text-sm  px-3 py-1'
+          >
+            상품별
+          </button>
         </div>
         <h3 className='col-start-2 w-full md:w-auto mb-4 md:mb-0 text-2xl font-bold'>
           {type == 'month' ? (
