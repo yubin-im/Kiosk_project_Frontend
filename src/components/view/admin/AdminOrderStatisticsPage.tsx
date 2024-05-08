@@ -29,6 +29,10 @@ export const AdminOrderStatisticsPage = () => {
   const [searchMonth, setMonth] = useState('5');
   const navigation = useNavigate();
 
+  const addCommas = (num: number): string => {
+    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  };
+
   useEffect(() => {
     fetchOrders();
   }, [searchMonth, type, year]);
@@ -169,7 +173,7 @@ export const AdminOrderStatisticsPage = () => {
                 </td>
                 <td>
                   <div className='truncate'>
-                    {order.orderListTotalPrice.toLocaleString()}원
+                    {addCommas(order.orderListTotalPrice)} 원
                   </div>
                 </td>
               </tr>
