@@ -1,7 +1,7 @@
-type UserToken = {
-  token: string;
-  userId: string;
-};
+interface UserToken {
+  token: string | undefined;
+  userId: string | undefined;
+}
 
 type Message =
   | {
