@@ -31,6 +31,10 @@ export const AdminOrderStatisticsChartPage = () => {
   const [searchMonth, setMonth] = useState('5');
   const navigation = useNavigate();
 
+  const addCommas = (num: number): string => {
+    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  };
+
   useEffect(() => {
     setLoading(false);
     fetchOrders();
@@ -179,7 +183,7 @@ export const AdminOrderStatisticsChartPage = () => {
                     className='relative flex flex-col items-center flex-grow pb-5 group'
                   >
                     <span className='absolute top-0 hidden -mt-6 text-xs font-bold group-hover:block'>
-                      {order.orderListTotalPrice.toLocaleString()}￦
+                      {addCommas(order.orderListTotalPrice)} ￦
                     </span>
                     <div
                       className={`relative flex justify-center w-full bg-indigo-300`}

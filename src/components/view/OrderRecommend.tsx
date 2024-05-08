@@ -15,6 +15,14 @@ const OrderRecommend = () => {
     addOrder,
   } = useStorage();
 
+  const calculateTotalPrice = () => {
+    let totalPrice = 0;
+    cart.forEach((item) => {
+      totalPrice += item.product.productPrice * item.productAmount;
+    });
+    return totalPrice;
+  };
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -34,11 +42,11 @@ const OrderRecommend = () => {
 
   const addItem = (product: Product) => {
     addOrder(product, 1);
-    const totalPrice = getTotalPrice(cart);
+    const totalPrice = calculateTotalPrice();
     alert(
-      '상품 추가되었습니다.\n 총 결제 금액은 ' +
+      '상품 1개가 추가되었습니다.\n총 결제 금액은 ' +
         (totalPrice + product.productPrice).toLocaleString() +
-        ' 원 입니다'
+        '원 입니다.'
     );
     navigation('/order/payment');
   };

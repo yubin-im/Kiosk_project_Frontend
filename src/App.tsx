@@ -10,7 +10,6 @@ import OrderPayment from './components/view/OrderPayment';
 import OrderProducts from './components/view/OrderProducts';
 import { PlaceSelectionPage } from './components/view/placeSelectionPage';
 
-import { AdminPage } from './components/view/AdminPage';
 import OrderRecommend from './components/view/OrderRecommend';
 import { AdminUserListPage } from './components/view/admin/AdminUserListPage';
 import { AdminOrderListPage } from './components/view/admin/AdminOrderListPage';
@@ -21,6 +20,7 @@ import { AdminUserEditPage } from './components/view/admin/AdminUserEditPage';
 import OrderDetail from './components/view/OrderDetail';
 import { AdminProductListPage } from './components/view/admin/AdminProductListPage';
 import { AdminProductEditPage } from './components/view/admin/AdminProductEditPage';
+import { AdminPage } from './components/view/admin/AdminPage';
 
 function App() {
   return (

@@ -2,11 +2,10 @@ import clsx from 'clsx';
 import { useState, useEffect } from 'react';
 import { useStorage } from '../context/storage-context';
 import { useNavigate } from 'react-router-dom';
-import { Product } from './AdminPageList';
 import { useCount } from '../util/use-count';
 import { ProductBox } from '../util/ProductBox';
-import { getTotalPrice } from '../util/getTotalPrice';
 import { getStorage } from '../util/getStorage';
+import { Product } from './admin/AdminUserListPage';
 
 enum CATEGORY {
   BURGER_SET = 'BURGER_SET',
@@ -35,6 +34,7 @@ const OrderProducts = () => {
   const [products, setProducts] = useState<Product[] | null>(null);
   const [category, setCategory] = useState<CATEGORY>(CATEGORY.BURGER_SET);
   const [page, setPage] = useState<number>(0);
+  const [totalPage, setTotalPage] = useState<number>(0);
   const [myCart, setMyCart] = useState<Order[]>([]);
   const [totalCount, updateCount] = useCount(0);
   const totalQuantity = myCart.reduce(
@@ -47,6 +47,25 @@ const OrderProducts = () => {
       totalPrice += item.product.productPrice * item.productAmount;
     });
     return totalPrice;
+  };
+
+  const addCommas = (num: number): string => {
+    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  };
+
+  const handleClickOrder = () => {
+    const isConfirmed = window.confirm('주문을 취소하시겠습니까?');
+    if (isConfirmed) {
+      emptyCart();
+      navigation('/placeselection');
+    }
+  };
+
+  const handleClickCart = () => {
+    const isConfirmed = window.confirm('장바구니를 비우시겠습니까?');
+    if (isConfirmed) {
+      emptyMyCart();
+    }
   };
 
   useEffect(() => {
@@ -79,7 +98,8 @@ const OrderProducts = () => {
         const message: Message = json;
         const { status, result: products } = message;
         if (status == 'PRODUCT_CHECK_SUCCESS') {
-          setProducts(products);
+          setProducts(products.content);
+          setTotalPage(products.totalPages);
         }
       })
       .catch((err) => console.error(err));
@@ -292,17 +312,23 @@ const OrderProducts = () => {
         >
           이전
         </button>
-        <span>{page}</span>
-        <button
-          className='border border-stone-300 px-5 py-1 rounded-lg text-sm'
-          onClick={() => setPage(page + 1)}
-        >
-          다음
-        </button>
+        <span>
+          {page + 1}/{totalPage}
+        </span>
+        {page + 1 == totalPage ? (
+          ''
+        ) : (
+          <button
+            className='border border-stone-300 px-5 py-1 rounded-lg text-sm'
+            onClick={() => setPage(page + 1)}
+          >
+            다음
+          </button>
+        )}
       </div>
 
       <div
-        className='my-1'
+        className='mt-1'
         style={{
           display: 'flex',
           justifyContent: 'space-between',
@@ -316,75 +342,77 @@ const OrderProducts = () => {
         <div>
           <p className='mx-3 text-md'>주문 내역</p>
         </div>
-        <div>
-          <p className='mx-3 text-md'>
-            총 가격: {calculateTotalPrice().toLocaleString()}원 수량:{' '}
-            {totalQuantity}
-          </p>
+        <div className='flex gap-7 pr-3'>
+          <span>총 가격: {calculateTotalPrice().toLocaleString()}원</span>
+          <span>수량: {totalQuantity}개</span>
         </div>
       </div>
 
-      <div
-        style={{ textAlign: 'right' }}
-        className='px-5 h-24 overflow-y-scroll'
-      >
-        <table className='min-w-full text-start text-sm'>
-          <tbody>
-            {myCart?.map((item, index) => (
-              <tr key={item.orderId} className='flex justify-between'>
-                <td>{index + 1}</td>
-                <td>{item.product.productName}</td>
-                <td>{item.product.productPrice} 원</td>
-                <td>
-                  <button
-                    className='border border-slate-300 rounded-lg px-2'
-                    onClick={() => subAmount(index)}
-                  >
-                    -
-                  </button>
-                  <span className='mx-2'>{item.productAmount}</span>
-                  <button
-                    className='border border-slate-300 rounded-lg px-2'
-                    onClick={() => addAmount(index)}
-                  >
-                    +
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        <button
-          type='button'
-          className='font-bold text-sm'
-          onClick={() => {
-            setOrders(myCart);
-            navigation(`/order/detail`);
-          }}
-        >
-          주문 상세보기
-        </button>
-        <br />
-        <button
-          className='bg-mcblack text-white px-5 rounded-lg text-sm'
-          onClick={() => emptyMyCart()}
-        >
-          비우기
-        </button>
+      <div className='grid grid-cols-12 pl-2 h-24 '>
+        <div className='col-span-10 mx-2 overflow-y-scroll'>
+          <table className='w-full  text-start text-sm'>
+            <tbody className='divide-y'>
+              {myCart?.map((item, index) => (
+                <tr
+                  key={item.orderId}
+                  className='grid grid-cols-12 justify-start py-1'
+                >
+                  <td className='col-span-1'>{index + 1}</td>
+                  <td className='col-span-5'>{item.product.productName}</td>
+                  <td className='col-span-4'>
+                    {addCommas(item.product.productPrice)}원
+                  </td>
+                  <td className='col-span-2'>
+                    <button
+                      className='border border-slate-300 rounded-lg px-2'
+                      onClick={() => subAmount(index)}
+                    >
+                      -
+                    </button>
+                    <span className='mx-2'>{item.productAmount}</span>
+                    <button
+                      className='border border-slate-300 rounded-lg px-2'
+                      onClick={() => addAmount(index)}
+                    >
+                      +
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        <div className='col-span-2 justify-end'>
+          <button
+            type='button'
+            className='bg-green-700 rounded-lg w-full h-2/5 text-white font-bold text-sm'
+            onClick={() => {
+              setOrders(myCart);
+              navigation(`/order/detail`);
+            }}
+          >
+            주문 상세보기
+          </button>
+
+          <button
+            className='bg-mcred w-full h-2/5 text-white px-5 rounded-lg mt-2 text-sm'
+            onClick={handleClickCart}
+          >
+            비우기
+          </button>
+        </div>
       </div>
 
-      <div className='grid grid-cols-2 mt-1 gap-1'>
+      <div className='grid grid-cols-2 mt-1 p-10 gap-10'>
         <button
-          className='bg-red-500 text-white font-bold rounded-lg w-full'
-          onClick={() => {
-            emptyCart();
-            navigation('/placeselection');
-          }}
+          className='bg-red-500 text-white font-bold rounded-lg  py-2'
+          onClick={handleClickOrder}
         >
           주문 취소
         </button>
         <button
-          className='bg-green-700 text-white font-bold rounded-lg w-full'
+          className='bg-green-700 text-white font-bold rounded-lg  py-2'
           onClick={() => {
             setOrders(myCart);
             if (myCart.length == 0) {
