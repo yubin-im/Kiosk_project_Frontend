@@ -41,6 +41,10 @@ const OrderDetail = () => {
     return totalPrice;
   };
 
+  const addCommas = (num: number): string => {
+    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  };
+
   // useEffect(() => {
   //   // Todo: orderListId 받아오기
   //   setOrderListId(20);
@@ -135,7 +139,7 @@ const OrderDetail = () => {
                   +
                 </button>
               </div>
-              <div className='col-span-2'>{item.totalPrice}</div>
+              <div className='col-span-2'>{addCommas(item.totalPrice)}</div>
               <div className='col-span-3'>
                 <button
                   className='border-2 border-mcred px-2 rounded-lg text-mcblack'

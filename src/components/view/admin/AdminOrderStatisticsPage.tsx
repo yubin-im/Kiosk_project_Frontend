@@ -59,28 +59,30 @@ export const AdminOrderStatisticsPage = () => {
 
   return (
     <>
-      <button
-        type='button'
-        className={clsx({
-          'border font-medium rounded-lg p-1 m-2': true,
-          'bg-red-500 text-white': type == 'month',
-          'text-red-500': type != 'month',
-        })}
-        onClick={() => setType('month')}
-      >
-        일자별
-      </button>
-      <button
-        type='button'
-        className={clsx({
-          'border font-medium rounded-lg p-1 m-2': true,
-          'bg-red-500 text-white': type == 'year',
-          'text-red-500': type != 'year',
-        })}
-        onClick={() => setType('year')}
-      >
-        년도별
-      </button>
+      <div className='flex flex-row justify-end'>
+        <button
+          type='button'
+          className={clsx({
+            'border font-medium rounded-lg p-1 m-2': true,
+            'bg-red-500 text-white': type == 'month',
+            'text-red-500': type != 'month',
+          })}
+          onClick={() => setType('month')}
+        >
+          일자별
+        </button>
+        <button
+          type='button'
+          className={clsx({
+            'border font-medium rounded-lg p-1 m-2': true,
+            'bg-red-500 text-white': type == 'year',
+            'text-red-500': type != 'year',
+          })}
+          onClick={() => setType('year')}
+        >
+          년도별
+        </button>
+      </div>
       <div className='grid grid-cols-3 py-5 px-6'>
         <div className='col-start-1 flex items-center'>
           <button
@@ -102,6 +104,12 @@ export const AdminOrderStatisticsPage = () => {
               />
             </svg>
             그래프 보기
+          </button>
+          <button
+            onClick={() => navigation('product')}
+            className='border ml-2 rounded-lg text-sm  px-3 py-1'
+          >
+            상품별
           </button>
         </div>
         <h3 className='col-start-2 w-full md:w-auto mb-4 md:mb-0 text-2xl font-bold'>
@@ -143,7 +151,7 @@ export const AdminOrderStatisticsPage = () => {
           ) : null}
         </div>
       </div>
-      <div className='border min-w-full text-center'>
+      <div className=' min-w-full'>
         <table className='text-left text-sm font-light text-surface dark:text-white'>
           <thead className='border-b border-neutral-200 font-medium dark:border-white/10'>
             <tr className='min-w-full '>
@@ -152,29 +160,28 @@ export const AdminOrderStatisticsPage = () => {
               <th className=' w-1/12 text-center pb-3'>매출액</th>
             </tr>
           </thead>
-          <tbody className=' overflow-y-scroll text-center'>
+          <tbody className=' overflow-y-scroll'>
             {orders?.orderRevenueList.map((order, idx) => (
-              <tr key={idx}>
-                <td>
-                  <div className='truncate'>{idx + 1}</div>
-                </td>
+              <tr
+                key={idx}
+                className='border-b border-neutral-200 dark:border-white/10 h-12 text-center items-center even:bg-stone-50'
+              >
+                <td>{idx + 1}</td>
                 <td>
                   {type == 'month' ? (
-                    <div className='truncate'>{order.orderListDate}</div>
+                    <span>{order.orderListDate}</span>
                   ) : (
-                    <div className='truncate'>
+                    <span>
                       {year}.
                       {order.orderListDate && order.orderListDate.length < 2
                         ? 0
                         : null}
                       {order.orderListDate}
-                    </div>
+                    </span>
                   )}
                 </td>
                 <td>
-                  <div className='truncate'>
-                    {addCommas(order.orderListTotalPrice)} 원
-                  </div>
+                  <div>{addCommas(order.orderListTotalPrice)} 원</div>
                 </td>
               </tr>
             ))}
