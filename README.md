@@ -89,3 +89,113 @@
 
 </div>
 </details>
+
+<br/>
+<br/>
+
+## 🖥️ 프로젝트 실행 방법
+
+### [Back-end]
+
+1. **Git clone 하기**
+
+   a. Git Bash Here로 Git 터미널 열기
+
+   b. 터미널에 **git clone https://github.com/Kiosk-Project/KioskBE** 입력
+
+2. **최초 실행 전 설정**
+
+   a. src/main/resources 경로의 [application.properties](http://application.properties) 파일을 `spring.jpa.hibernate.ddl-auto=create` 로 변경 후 실행하기
+
+   b. 1번 실행 이후는 `spring.jpa.hibernate.ddl-auto=update` 로 변경 후 실행
+
+### [Front-end]
+
+1. **git clone 하기**
+
+   a. Git Bash Here로 Git 터미널 열기
+
+   b. 터미널에 **git clone https://github.com/Kiosk-Project/KioskFE.git** 입력
+
+2. **node_modules 설치**
+
+   a. 명령 프롬프트(cmd) 창 열고 프로젝트 최상단 디렉토리로 이동
+
+   b. 터미널에 **yarn init** 입력
+
+3. **접속하기**
+
+   a. 명령 프롬프트(cmd) 창 열고 프로젝트 최상단 디렉토리로 이동
+
+   b. 터미널에 **yarn update** 입력
+
+   c. 터미널에 **yarn dev** 입력
+
+   d. http://localhost:5173 접속
+
+## 🚀 구현 과정 (임유빈)
+
+### [[키오스크 프로젝트] 구현 과정 (클릭!)](https://unleashed-fire-109.notion.site/Project-1-8c3983bfa8bf49139ce2812ff67dbe2e?pvs=4)
+
+## 🎯 트러블 슈팅 (임유빈)
+
+<details>
+<summary> 리액트 페이지 간에 데이터 넘길 때 undefined 발생</summary>
+<div markdown="1">
+
+- 문제 발생 현상
+
+  - 페이지를 이동할 때 해당 페이지의 값을 하나 함께 보내야 해서, forwardRef를 사용하여 prop을 전달하라고 했다.
+
+  - 하지만 자꾸 넘겨진 값에서 undefined가 떠서 다른 방법을 찾아보니 useNavigate와 useLocation을 사용하여 데이터를 넘길 수 있다고 하였다!
+
+- 문제 발생 이유
+
+  - forwardRef 사용 시 데이터가 자꾸 undefined로 넘겨진 이유는 모르겠다.. 결국 다른 방법을 찾았다.
+
+  - 추측 이유는 useEffect랑 관련되어서 아닐까 한다.
+
+- 해결 방법
+
+  - 데이터를 **넘길 페이지**에서는 **useNavigate**를 사용한다!
+
+    - import { useNavigate } from 'react-router-dom';
+    - 클래스 안에 const navigation = useNavigate(); 입력
+    - **navigation('넘어갈 페이지의 경로', { state: { 넘길 값의 변수명 } });**
+
+  - 데이터를 **받을 페이지**에서는 **useLocation**을 사용한다!
+    - import { useLocation } from 'react-router-dom';
+    - 클래스 안에 const location = useLocation(); 입력
+    - **location.state.변수명** 으로 값을 받아올 수 있다.
+      - 값 확인은 console.log(’데이터 받아왔는지 확인 :' + location.state.변수명 );
+      - 나는 값을 가져와서 setter 함수에 바로 넣어서 set 해줬다!
+
+- 구현 코드
+
+  - 데이터를 넘길 클래스
+
+    ```tsx
+    import { useNavigate } from 'react-router-dom';
+
+    export const PlaceSelectionPage = () => {
+    	 const navigation = useNavigate();
+    	...코드생략...
+    	 return (
+    		 <>
+    			 ...코드생략...
+    			 <button type='button' onClick={() => {
+                 navigation('/order/products', { state: { orderListId } });
+    ```
+  - 데이터를 받아올 클래스
+    ```tsx
+    import { useLocation } from 'react-router-dom';
+
+    const OrderProducts = () => {
+      const location = useLocation();
+      ...코드생략...
+      useEffect(() => {
+      setOrderListId(location.state.orderListId);
+    ```
+  - 콘솔 확인
+</div>
+</details>
